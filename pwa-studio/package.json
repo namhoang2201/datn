@@ -12,7 +12,8 @@
     "packages/upward-spec",
     "packages/venia-concept",
     "packages/venia-styleguide",
-    "packages/venia-ui"
+    "packages/venia-ui",
+    "packages/siminia"
   ],
   "author": "Magento Commerce",
   "license": "SEE LICENSE IN LICENSE.txt",
@@ -42,7 +43,9 @@
     "validate-queries": "yarn venia run validate-queries",
     "venia": "node ./packages/pwa-buildpack/bin/buildpack load-env ./packages/venia-concept && yarn workspace @magento/venia-concept",
     "watch:all": "node scripts/watch-all.js",
-    "watch:venia": "yarn venia run watch"
+    "watch:venia": "yarn venia run watch",
+    "watch:siminia": "yarn workspace @simicart/siminia run watch",
+    "stage:siminia": "yarn workspace @simicart/siminia run start"
   },
   "devDependencies": {
     "@magento/eslint-config": "~1.5.0",
