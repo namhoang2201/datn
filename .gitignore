@@ -1,4 +1,4 @@
-m2/*
-.git/*
+m2/
+.git/
 .DS_Store
-.idea/*
+.idea/
