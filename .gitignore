@@ -2,25 +2,3 @@ m2/*
 .git/*
 .DS_Store
 .idea/*
-pwa-studio/node_modules/*
-pwa-studio/npm-debug.log
-pwa-studio/.DS_Store
-pwa-studio/.vscode/*
-pwa-studio/jsconfig.json
-pwa-studio/coverage/*
-pwa-studio/test-results/*
-pwa-studio/dist/*
-pwa-studio/storybook-dist/*
-pwa-studio/.idea/*
-pwa-studio/test-report.xml
-pwa-studio/test-results.json
-pwa-studio/lerna-debug.log
-pwa-studio/.env
-pwa-studio/yarn-error.log
-# Packages that build partially transpiled ES modules put them here
-pwa-studio/docker/certs/*
-pwa-studio/.history% 
-pwa-studio/packages/siminia/node_modules/*
-pwa-studio/packages/siminia/esm/*
-pwa-studio/packages/siminia/dist/*
-pwa-studio/packages/siminia/lastCachedGraphQLSchema.json% 
