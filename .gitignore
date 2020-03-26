@@ -2,7 +2,6 @@ m2/*
 .git/*
 .DS_Store
 .idea/*
-
 pwa-studio/node_modules
 pwa-studio/npm-debug.log
 pwa-studio/.DS_Store
@@ -21,7 +20,6 @@ pwa-studio/yarn-error.log
 # Packages that build partially transpiled ES modules put them here
 pwa-studio/docker/certs
 pwa-studio/.history% 
-
 pwa-studio/packages/siminia/node_modules
 pwa-studio/packages/siminia/esm
 pwa-studio/packages/siminia/dist
