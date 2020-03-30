@@ -15,7 +15,7 @@ const fetchQuery = query => {
                 'Accept-Encoding': 'gzip'
             },
             body: JSON.stringify({ query }),
-            agent: fetchAgent
+            // agent: fetchAgent
         }
     )
         .then(result => result.json())
