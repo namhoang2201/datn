@@ -1,3 +1,15 @@
 m2/
 .DS_Store
 .idea/
+pwa-studio/node_modules/*
+pwa-studio/packages/babel-preset-peregrine/*
+pwa-studio/packages/create-pwa/*
+pwa-studio/packages/graphql-cli-validate-magento-pwa-queries/*
+pwa-studio/packages/peregrine/*
+pwa-studio/packages/pwa-buildpack/*
+pwa-studio/packages/upward-js/*
+pwa-studio/packages/upward-spec/*
+pwa-studio/packages/venia-concept/*
+pwa-studio/packages/venia-styleguid/*
+pwa-studio/packages/venia-ui/*
+pwa-studio/packages/siminia/node_modules/*
