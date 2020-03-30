@@ -42,8 +42,11 @@ const SearchAutoComplete = props => {
 
     const { data, error, loading } = simiUseQuery(searchQuery, {variables: { inputText: value }});
 
-    if(data)
+    if(data) {
         data.products = applySimiProductListItemExtraField(data.simiproducts)
+        if (data.products.simi_filters)
+            data.products.filters = data.products.simi_filters
+    }
 
     if (error) {
         message = Identify.__('An error occurred while fetching results.');

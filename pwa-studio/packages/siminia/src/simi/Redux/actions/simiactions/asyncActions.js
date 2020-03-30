@@ -17,7 +17,11 @@ import {getAllowedCountries} from 'src/simi/Helper/Countries'
 const { BrowserPersistence } = Util;
 const storage = new BrowserPersistence();
 
-
+export const beginCheckout = () =>
+    async function thunk(dispatch) {
+        dispatch(checkoutActions.begin());
+        dispatch(getShippingMethods());
+    };
 
 export const changeSampleValue = value => async dispatch => {
     dispatch(actions.changeSampleValue(value));
@@ -87,6 +91,12 @@ export const submitShippingAddress = payload =>
         const authedEndpoint =
             '/rest/V1/carts/mine/estimate-shipping-methods';
         const endpoint = user.isSignedIn ? authedEndpoint : guestEndpoint;
+
+        if (address && address.region_code && !address.region) {
+            address['region'] = address.region_code;
+            delete address.region_code;
+        }
+
         const response = await request(endpoint, {
             method: 'POST',
             body: JSON.stringify({address})
@@ -94,6 +104,61 @@ export const submitShippingAddress = payload =>
         dispatch(actions.changeCheckoutUpdating(false));
         dispatch(checkoutActions.getShippingMethods.receive(response));
     };
+
+export const getShippingMethods = () => {
+    return async function thunk(dispatch, getState) {
+        const { cart, user, checkout } = getState();
+        const { cartId } = cart;
+
+        try {
+            // if there isn't a guest cart, create one
+            // then retry this operation
+            if (!cartId) {
+                await dispatch(createCart());
+                return thunk(...arguments);
+            }
+
+            dispatch(checkoutActions.getShippingMethods.request(cartId));
+
+            const guestEndpoint = `/rest/V1/guest-carts/${cartId}/estimate-shipping-methods`;
+            const authedEndpoint =
+                '/rest/V1/carts/mine/estimate-shipping-methods';
+            const endpoint = user.isSignedIn ? authedEndpoint : guestEndpoint;
+            let s_address = {
+                country_id: 'US',
+                postcode: null
+            };
+            if (checkout.shippingAddress) {
+                s_address = checkout.shippingAddress;
+                if (checkout.shippingAddress.region_code && !checkout.shippingAddress.region) {
+                    s_address['region'] = checkout.shippingAddress.region_code;
+                    delete s_address.region_code;
+                }
+            }
+
+            const response = await request(endpoint, {
+                method: 'POST',
+                body: JSON.stringify({
+                    address: s_address
+                })
+            });
+
+            dispatch(checkoutActions.getShippingMethods.receive(response));
+        } catch (error) {
+            const { response } = error;
+
+            dispatch(checkoutActions.getShippingMethods.receive(error));
+
+            // check if the guest cart has expired
+            if (response && response.status === 404) {
+                // if so, clear it out, get a new one, and retry.
+                await clearCartId();
+                await dispatch(createCart());
+                return thunk(...arguments);
+            }
+        }
+    };
+};
 
 export const submitBillingAddress = payload =>
     async function thunk(dispatch, getState) {
@@ -220,7 +285,12 @@ export const submitShippingMethod = payload =>
         const shipping_address = await retrieveShippingAddress();
 
         if (!billing_address || billing_address.sameAsShippingAddress) {
-            billing_address = shipping_address;
+            if (billing_address.sameAsShippingAddress && shipping_address.hasOwnProperty('save_in_address_book') && shipping_address.save_in_address_book) {
+                // avoid duplicate save same address book for both shipping address & billing address
+                billing_address = { ...shipping_address, save_in_address_book: 0 }
+            } else {
+                billing_address = shipping_address;
+            }
         } else {
             const { email, firstname, lastname, telephone } = shipping_address;
 
@@ -231,6 +301,12 @@ export const submitShippingMethod = payload =>
                 telephone,
                 ...billing_address
             };
+        }
+
+        let shipping_addressModify = shipping_address;
+        if (shipping_address.region_code && !shipping_address.region) {
+            shipping_addressModify['region'] = shipping_address.region_code;
+            delete shipping_addressModify.region_code;
         }
 
         try{
@@ -247,7 +323,7 @@ export const submitShippingMethod = payload =>
                 body: JSON.stringify({
                     addressInformation: {
                         billing_address,
-                        shipping_address,
+                        shipping_address : shipping_addressModify,
                         shipping_carrier_code: desiredShippingMethod.carrier_code,
                         shipping_method_code: desiredShippingMethod.method_code
                     }
@@ -276,7 +352,12 @@ export const submitOrder = () =>
         const shipping_address = await retrieveShippingAddress();
 
         if (!billing_address || billing_address.sameAsShippingAddress) {
-            billing_address = shipping_address;
+            if (billing_address.sameAsShippingAddress && shipping_address.hasOwnProperty('save_in_address_book') && shipping_address.save_in_address_book) {
+                // avoid duplicate save same address book for both shipping address & billing address
+                billing_address = { ...shipping_address, save_in_address_book: 0 }
+            } else {
+                billing_address = shipping_address;
+            }
         } else {
             if (shipping_address && shipping_address.email) {
                 const { email, firstname, lastname, telephone } = shipping_address;
@@ -288,6 +369,11 @@ export const submitOrder = () =>
                     ...billing_address
                 };
             }
+        }
+
+        if (!billing_address.region && billing_address.region_code) {
+            billing_address['region'] = billing_address.region_code;
+            delete billing_address.region_code;
         }
 
         try {

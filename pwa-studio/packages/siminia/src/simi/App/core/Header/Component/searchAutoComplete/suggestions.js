@@ -8,19 +8,19 @@ import defaultClasses from './suggestions.css';
 
 const Suggestions = props => {
     const { products, searchValue, setVisible, visible } = props;
-    const { simi_filters, items } = products;
+    const { filters, items } = products;
     const classes = mergeClasses(defaultClasses, props.classes);
 
     const onNavigate = useCallback(() => {
         setVisible(false);
     }, [setVisible]);
 
-    if (!visible || !simi_filters || !items) {
+    if (!visible || !filters || !items) {
         return null;
     }
 
     const categoryFilter =
-        simi_filters.find(({ name }) => name === 'Category') || {};
+        filters.find(({ name }) => name === 'Category') || {};
     const categories = categoryFilter.filter_items || [];
 
     return (
@@ -45,7 +45,7 @@ Suggestions.propTypes = {
         heading: string
     }),
     products: shape({
-        simi_filters: arrayOf(
+        filters: arrayOf(
             shape({
                 filter_items: arrayOf(shape({})),
                 name: string.isRequired

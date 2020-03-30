@@ -5,7 +5,7 @@ import {
     getCartDetails
 } from 'src/actions/cart';
 
-import { beginCheckout, cancelCheckout, editOrder,
+import { /* beginCheckout, */ cancelCheckout, editOrder,
     /* submitOrder, */
     /* submitShippingMethod, */
     submitPaymentMethod
@@ -13,7 +13,7 @@ import { beginCheckout, cancelCheckout, editOrder,
 
 require('./checkout.scss')
 
-import { submitShippingAddress, submitBillingAddress, submitOrder, submitShippingMethod } from 'src/simi/Redux/actions/simiactions';
+import {beginCheckout, submitShippingAddress, submitBillingAddress, submitOrder, submitShippingMethod } from 'src/simi/Redux/actions/simiactions';
 
 import TitleHelper from 'src/simi/Helper/TitleHelper';
 import Identify from 'src/simi/Helper/Identify';

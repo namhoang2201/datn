@@ -29,7 +29,7 @@ class Identify {
         try {
             const languageCode = storeConfig.storeConfig.locale;
             if (config.language.hasOwnProperty(languageCode)) {
-                const {language} = config;
+                const { language } = config;
                 const languageWithCode = language[languageCode];
                 if (languageWithCode.hasOwnProperty(text)) {
                     return languageWithCode[text];
@@ -76,7 +76,7 @@ class Identify {
     static saveStoreConfig(data) {
         //check version
         if (data && data.simiStoreConfig && data.simiStoreConfig.pwa_studio_client_ver_number) {
-            const {pwa_studio_client_ver_number} = data.simiStoreConfig
+            const { pwa_studio_client_ver_number } = data.simiStoreConfig
             const curentVer = this.getDataFromStoreage(Identify.LOCAL_STOREAGE, Constants.CLIENT_VER)
             if (curentVer && curentVer !== pwa_studio_client_ver_number) {
                 console.log('New version released, updating..')
@@ -113,13 +113,13 @@ class Identify {
                 try {
                     let languages = {}
                     if (languages = data['app-configs'][0]['language']) {
-                        for(const locale in languages) {
-                            for(const term in languages[locale]) {
+                        for (const locale in languages) {
+                            for (const term in languages[locale]) {
                                 languages[locale][term.toLowerCase()] = languages[locale][term]
                             }
                         }
                     }
-                } catch (err) {console.log(err)}
+                } catch (err) { console.log(err) }
                 this.storeDataToStoreage(this.SESSION_STOREAGE, Constants.DASHBOARD_CONFIG, data)
             }
         }
@@ -141,7 +141,7 @@ class Identify {
     store/get data from storage
     */
     static storeDataToStoreage(type, key, data) {
-        if (typeof(Storage) !== "undefined") {
+        if (typeof (Storage) !== "undefined") {
             if (!key)
                 return;
             //process data
@@ -165,7 +165,7 @@ class Identify {
         console.log('This Browser dont supported storeage');
     }
     static getDataFromStoreage(type, key) {
-        if (typeof(Storage) !== "undefined") {
+        if (typeof (Storage) !== "undefined") {
             let value = "";
             let data = '';
             if (type === this.SESSION_STOREAGE) {
@@ -184,14 +184,14 @@ class Identify {
         console.log('This browser does not support local storage');
     }
 
-    static ApiDataStorage(key='',type='get',data={}){
-        let api_data = this.getDataFromStoreage(this.SESSION_STOREAGE,key);
-        if(type === 'get'){
+    static ApiDataStorage(key = '', type = 'get', data = {}) {
+        let api_data = this.getDataFromStoreage(this.SESSION_STOREAGE, key);
+        if (type === 'get') {
             return api_data
-        }else if(type === 'update' && data){
+        } else if (type === 'update' && data) {
             api_data = api_data ? api_data : {};
-            api_data = {...api_data,...data}
-            this.storeDataToStoreage(this.SESSION_STOREAGE,key,api_data)
+            api_data = { ...api_data, ...data }
+            this.storeDataToStoreage(this.SESSION_STOREAGE, key, api_data)
         }
     }
 
@@ -225,24 +225,33 @@ class Identify {
 
     static formatAddress(address = {}, countries = []) {
         const country = countries.find(({ id }) => id === address.country_id);
-
         const { available_regions: regions } = country;
-        if (!country.available_regions) {
-            return address
+        if (!regions || (regions instanceof Array && regions.length < 1)) {
+            if (address.hasOwnProperty('region') && address.region instanceof Object && Object.keys(address.region).length) {
+                const regionUnavailable = address.region;
+                const addRtn = { ...address };
+                if (regionUnavailable.hasOwnProperty('region_code')) {
+                    addRtn.region_code = regionUnavailable.region_code;
+                }
+                if (regionUnavailable.hasOwnProperty('region_code')) {
+                    addRtn.region_id = regionUnavailable.region_id;
+                }
+                if (regionUnavailable.hasOwnProperty('region')) {
+                    addRtn.region = regionUnavailable.region;
+                }
+                return addRtn
+            }
+            return address;
         } else {
             let region = {};
             if (address.hasOwnProperty('region_code')) {
                 const { region_code } = address;
                 region = regions.find(({ code }) => code === region_code);
-                if (!region)
-                    region = { region: region_code, region_code: region_code, region_id: region_code };
             } else if (address.hasOwnProperty('region') && !isObjectEmpty(address.region)) {
                 const region_list = address.region;
                 const { region_code } = region_list;
                 if (region_code) {
                     region = regions.find(({ code }) => code === region_code);
-                    if (!region)
-                        region = { region: region_code, region_code: region_code, region_id: region_code };
                 } else {
                     region = { region: "Mississippi", region_code: "MS", region_id: 35 };
                 }
@@ -259,6 +268,7 @@ class Identify {
                 region: region.name
             }
         }
+
         /* let region = {};
         if (regions) {
             region = regions.find(({ code }) => code === region_code);
@@ -266,7 +276,6 @@ class Identify {
             //fake region to accept current shipping address
             region = { region: "Mississippi", region_code: "MS", region_id: 35 };
         }
-
         return {
             ...address,
             country_id: address.country_id,
