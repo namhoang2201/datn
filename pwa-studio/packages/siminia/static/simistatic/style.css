@@ -1,3 +1,7 @@
+@import '../fonts/Arsenal.css';
+@import '../fonts/Linearicons.css';
+@import '../fonts/SimpleLineIcons.css';
+
 @media (min-width: 1920px) {
     .container {
         width: 1430px;
