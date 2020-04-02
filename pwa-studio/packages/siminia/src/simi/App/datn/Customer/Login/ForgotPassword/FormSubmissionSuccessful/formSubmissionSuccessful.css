@@ -4,7 +4,7 @@
     background-color: rgba(71, 200, 89, 0.33);
     padding: 21px 47px 20px 47px !important;
     color: #078018;
-    font-family: Roboto;
+    font-family: arsenal;
     font-size: 14px;
     font-weight: 500;
     line-height: 20px;
@@ -45,7 +45,7 @@
     text-transform: uppercase;
     height: fit-content;
     margin-top: 6px;
-    font-family: Roboto;
+    font-family: arsenal;
 }
 
 @media(max-width: 1023px) {
@@ -62,7 +62,7 @@
         margin: auto;
     }
     .continue {
-        font-family: Roboto;
+        font-family: arsenal;
         font-size: 14px;
         font-weight: 500;
         line-height: 14px;

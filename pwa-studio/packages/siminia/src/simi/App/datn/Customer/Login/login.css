@@ -66,7 +66,7 @@
   text-transform: uppercase;
   text-align: center;
   color: #000;
-  font-family: "Roboto";
+  font-family: "arsenal";
   font-size: 16px;
   font-weight: 600;
   line-height: 19px;
@@ -95,7 +95,7 @@
   width: 100%;
   border: unset;
   margin-bottom: 24px;
-  font-family: "Roboto";
+  font-family: "arsenal";
   font-size: 14px;
   font-weight: 500;
   line-height: 17px;
@@ -103,7 +103,7 @@
 }
 .input::placeholder{
     color: #727272;
-    font-family: "Roboto";
+    font-family: "arsenal";
     font-size: 14px;
     line-height: 17px;
 }
@@ -168,7 +168,7 @@
 .login-background .select-type .register-type .title-register {
   display: inline-block;
   color: #000;
-  font-family: "Roboto";
+  font-family: "arsenal";
   font-size: 20px;
   font-weight: 600;
   letter-spacing: 1px;
@@ -193,7 +193,7 @@
 .login-background .select-type .signin-type .title-signin {
   display: inline-block;
   color: #000;
-  font-family: "Roboto";
+  font-family: "arsenal";
   font-size: 20px;
   font-weight: 600;
   letter-spacing: 1px;
@@ -241,7 +241,7 @@
   min-width: 200px;
   padding-bottom: 14.5px !important;
   color: #FFF;
-  font-family: "Roboto";
+  font-family: "arsenal";
   font-size: 16px;
   font-weight: 600;
   letter-spacing: 1px;
@@ -282,7 +282,7 @@
 
 .login-background .active .signInDivider .signInWidth {
     color: #000;
-    font-family: "Roboto";
+    font-family: "arsenal";
     font-size: 13px;
     font-weight: 500;
     line-height: 17px;
