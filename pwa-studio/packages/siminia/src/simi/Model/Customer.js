@@ -21,3 +21,11 @@ export const checkExistingCustomer = (callBack, email) => {
 export const forgotPassword = (callBack, email) => {
     sendRequest('rest/V1/simiconnector/customers/forgetpassword', callBack, 'GET', {email});
 }
+
+export const logout = (callBack, {}) => {
+    sendRequest('rest/V1/simiconnector/customers/logout', callBack, 'POST', {}, {})
+}
+
+export const createPassword = (callBack, passwordInfo) => {
+    sendRequest('/rest/V1/simiconnector/customers/createpassword', callBack, 'POST', {}, passwordInfo)
+}
