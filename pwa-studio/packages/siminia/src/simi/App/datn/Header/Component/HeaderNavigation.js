@@ -8,6 +8,7 @@ import {cateUrlSuffix} from 'src/simi/Helper/Url'
 
 
 class Navigation extends React.Component{
+
     toggleMegaItemContainer() {
         const { classes } = this.props
         $(`.${classes['main-nav']}`).find(`.${classes['nav-item-container']}`).each(function() {

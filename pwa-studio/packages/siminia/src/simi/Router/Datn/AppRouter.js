@@ -23,9 +23,11 @@ class AppRouter extends Abstract{
                 <Route exact {...router.cart}/>
                 <Route exact {...router.product_detail}/>
                 <Route exact {...router.checkout}/>
+                <Route exact {...router.ppExpress}/>
                 <Route exact {...router.thankyou}/>
                 <Route exact {...router.account}/>
                 <Route exact {...router.address_book}/>
+                <Route exact {...router.new_address_book}/>
                 <Route exact {...router.oder_history}/>
                 <Route exact {...router.order_history_detail}/>
                 <Route exact {...router.newsletter}/>

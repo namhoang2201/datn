@@ -14,28 +14,32 @@ import MyAccount from './Component/MyAccount'
 import Settings from './Component/Settings'
 import { withRouter } from 'react-router-dom';
 import { logoUrl } from 'src/simi/Helper/Url'
+import CompareProduct from 'src/simi/App/datn/BaseComponents/CompareProducts'
 require('./header.scss');
 
 const SearchForm = React.lazy(() => import('./Component/SearchForm'));
 
-class Header extends React.Component{
+class Header extends React.Component {
     constructor(props) {
         super(props);
         this._mounted = true;
-        const isPhone = window.innerWidth < 1024 ;
-        this.state = {isPhone}
+        const isPhone = window.innerWidth < 1024;
+        this.state = {
+            isPhone,
+            openCompareModal: false
+        }
         this.classes = mergeClasses(defaultClasses, this.props.classes)
     }
 
     setMinPhone = () => {
         const width = window.innerWidth;
         const isPhone = width < 1024;
-        if (this.state.isPhone !== isPhone){
-            this.setState({isPhone})
+        if (this.state.isPhone !== isPhone) {
+            this.setState({ isPhone })
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         window.addEventListener('resize', this.setMinPhone);
     }
 
@@ -43,72 +47,85 @@ class Header extends React.Component{
         window.removeEventListener('resize', this.setMinPhone);
     }
 
+    showModalCompare = () => {
+        this.setState({
+            openCompareModal: true
+        })
+    }
+
+    closeCompareModal = () => {
+        this.setState({
+            openCompareModal: false
+        })
+    }
+
 
     renderLogo = () => {
-        const {isPhone} = this.state;
+        const { isPhone } = this.state;
         return (
             <div className={`${this.classes['search-icon']} ${this.classes['header-logo']}`} >
                 <Link to='/'>
                     <img
-                        src={logoUrl()}
-                        alt="siminia-logo" style={!isPhone?{width: 240, height: 40}:{width: 180, height: 30}}/>
+                        src={'logo.png'}
+                        alt="siminia-logo" style={!isPhone ? { width: 240, height: 40 } : { width: 180, height: 30 }} />
                 </Link>
             </div>
         )
     }
 
     renderSearchForm = () => {
-        return(
+        return (
             <div className={`${this.classes['header-search']} header-search ${Identify.isRtl() ? this.classes['header-search-rtl'] : ''}`}>
                 <Suspense fallback={null}>
-                        <SearchForm
-                            history={this.props.history}
-                        />
+                    <SearchForm
+                        history={this.props.history}
+                    />
                 </Suspense>
             </div>
         )
     }
 
     renderRightBar = () => {
-        const {classes} = this
-        return(
+        const { classes } = this
+        const compareData = Identify.getDataFromStoreage(Identify.LOCAL_STOREAGE, 'compare_product')
+        const compareStyle = compareData && compareData.length > 0 ? 'compare-list' : 'non-compare'
+        return (
             <div className={`${classes['right-bar']} ${Identify.isRtl() ? 'right-bar-rtl' : ''}`}>
-                {
-                    !this.state.isPhone && (
-                    <div className={classes['right-bar-item']} id="header-settings">
-                        <Settings classes={classes}/>
-                    </div>
-                    )
-                }
                 <div className={classes['right-bar-item']} id="my-account">
-                    <MyAccount classes={classes}/>
+                    <MyAccount classes={classes} />
                 </div>
                 <div
                     className={classes['right-bar-item']} id="wish-list"
                 >
-                    <Link to={'/wishlist.html'}>
-                        <div className={classes['item-icon']} style={{display: 'flex', justifyContent: 'center'}}>
-                            <WishList style={{width: 30, height: 30, display: 'block'}} />
-                        </div>
-                        <div className={classes['item-text']}>
-                            {Identify.__('Favourites')}
-                        </div>
-                    </Link>
+                    <div className={classes['item-icon']} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        {/* <WishList style={{width: 30, height: 30, display: 'block'}} /> */}
+                        <span
+                            role="presentation"
+                            className="add-to-compare-btn icon-sync2"
+                            onClick={this.showModalCompare}
+                            style={{ width: 30, height: 30, display: 'block', fontSize: '25px' }}
+                        >
+                        </span>
+                        <CompareProduct history={history} openModal={this.state.openCompareModal} closeModal={this.closeCompareModal} />
+                    </div>
+                    <div className={classes['item-text']}>
+                        {Identify.__('Compare')}
+                    </div>
                 </div>
                 <div className={`${classes['right-bar-item']} ${Identify.isRtl() ? 'right-bar-item-rtl' : ''}`}>
-                    <CartTrigger classes={classes}/>
+                    <CartTrigger classes={classes} />
                 </div>
             </div>
         )
     }
 
     renderViewPhone = () => {
-        return(
+        return (
             <div>
                 <div className="container">
                     <div className={this.classes['header-app-bar']}>
                         <NavTrigger>
-                            <MenuIcon color="#333132" style={{width:30,height:30}}/>
+                            <MenuIcon color="#333132" style={{ width: 30, height: 30 }} />
                         </NavTrigger>
                         {this.renderLogo()}
                         <div className={this.classes['right-bar']}>
@@ -120,8 +137,8 @@ class Header extends React.Component{
                 </div>
                 {this.renderSearchForm()}
                 <div id="id-message">
-                    <TopMessage/>
-                    <ToastMessage/>
+                    <TopMessage />
+                    <ToastMessage />
                 </div>
             </div>
 
@@ -129,24 +146,24 @@ class Header extends React.Component{
         )
     }
 
-    render(){
+    render() {
         this.classes = mergeClasses(defaultClasses, this.props.classes);
-        if(this.state.isPhone){
+        if (this.state.isPhone) {
             return this.renderViewPhone()
         }
-        return(
+        return (
             <React.Fragment>
                 <div className="container">
                     <div className={this.classes['header-app-bar']}>
-                        {this.renderLogo()}
                         {this.renderSearchForm()}
+                        {this.renderLogo()}
                         {this.renderRightBar()}
                     </div>
                 </div>
-                {window.innerWidth >= 1024 && <HeaderNavigation classes={this.classes}/>}
+                {window.innerWidth >= 1024 && <HeaderNavigation classes={this.classes} />}
                 <div id="id-message">
-                    <TopMessage/>
-                    <ToastMessage/>
+                    <TopMessage />
+                    <ToastMessage />
                 </div>
             </React.Fragment>
         )

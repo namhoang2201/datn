@@ -41,7 +41,7 @@ export class Trigger extends Component {
                     <Basket style={{width: 30, height: 30, display: 'block', margin: 0}}/>
                 </div>
                 <div className={classes['item-text']}>
-                    {Identify.__('Basket')}
+                    {Identify.__('Cart')}
                 </div>
             </React.Fragment>
         )

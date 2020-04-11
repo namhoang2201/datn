@@ -238,7 +238,7 @@ class Cart extends Component {
                         <div className='cart-title'>
                             <Basket/>
                             <div>
-                                {Identify.__('Your basket contains: %s item(s)').replace('%s', cart.details.items_count)}
+                                {Identify.__('Your shopping cart contains: %s item(s)').replace('%s', cart.details.items_count)}
                             </div>
                         </div>:''
                     }
