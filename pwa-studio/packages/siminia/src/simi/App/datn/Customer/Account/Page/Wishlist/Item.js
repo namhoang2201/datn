@@ -11,8 +11,17 @@ import { resourceUrl } from 'src/simi/Helper/Url'
 import { formatPrice } from 'src/simi/Helper/Pricing';
 import Image from 'src/simi/BaseComponents/Image'
 import {productUrlSuffix} from 'src/simi/Helper/Url';
+import QuickView from 'src/simi/App/datn/BaseComponents/QuickView'
+import { getProductDetail } from 'src/simi/Model/Product';
+import { showToastMessage } from 'src/simi/Helper/Message';
 
 class Item extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            openModal: false
+        }
+    }
     processData(data) {
         hideFogLoading()
         if (data.errors) {
@@ -47,6 +56,7 @@ class Item extends React.Component {
     }
 
     addToCart(id, location = false) {
+        console.log('run');
         const item = this.props.item;
         if (item.type_id !== 'simple') {
             if (location)
@@ -71,13 +81,50 @@ class Item extends React.Component {
         removeWlItem(id, this.processData.bind(this))
     }
 
+    handleQuickView = () => {
+        this.setState({openModal: !this.state.openModal})
+    }
+
+    handleCloseModel = () => {
+        this.setState({openModal: false})
+    }
+
+    addToCompare = () => {
+        const { item } = this.props;
+        const storeageData = Identify.getDataFromStoreage(Identify.LOCAL_STOREAGE, 'compare_product');
+        if (storeageData) {
+            const result = storeageData.find(product => product && product.entity_id == item.product_id)
+            if (result) {
+                showToastMessage(Identify.__('Product has already added'.toUpperCase()))
+            } else {
+                showFogLoading()
+                getProductDetail(this.compareCallBack, item.product_id)
+            }
+        } else {
+            showFogLoading()
+            getProductDetail(this.compareCallBack, item.product_id)
+        }
+    }
+
+    compareCallBack = (data) => {
+        const storeageData = Identify.getDataFromStoreage(Identify.LOCAL_STOREAGE, 'compare_product');
+        let compareProducts = [];
+        if(storeageData) compareProducts = storeageData;
+
+        compareProducts.push(data.product);
+        Identify.storeDataToStoreage(Identify.LOCAL_STOREAGE, 'compare_product', compareProducts);
+        showToastMessage(Identify.__('Product has added to your compare list'.toUpperCase()))
+        hideFogLoading()
+    }
+
     render() {
         const storeConfig = Identify.getStoreConfig()
+        const {openModal} = this.state;
         if (!this.currencyCode)
             this.currencyCode = storeConfig?storeConfig.simiStoreConfig?storeConfig.simiStoreConfig.currency:storeConfig.storeConfig.default_display_currency_code:null
         const {item, classes} = this.props;
         this.location = {
-            pathname: item.product_url_key + productUrlSuffix(),
+            pathname: '/' + item.product_url_key + productUrlSuffix(),
             state: {
                 product_sku: item.product_sku,
                 product_id: item.product_id,
@@ -85,54 +132,39 @@ class Item extends React.Component {
             },
         }
         
-        const addToCartString = Identify.__('Buy Now')
-        
         const image = item.product_image && (
-            <div 
-                className="siminia-product-image"
-                style={{borderColor: configColor.image_border_color,
-                    backgroundColor: 'white'
-                }}>
-                <Link to={this.location}>
-                    <div style={{position:'absolute',top:0,bottom:0,width: '100%', padding: 1}}>
-                        <Image src={resourceUrl(item.product_image, {
+            <div className="product-image">
+                
+                    <div className="wishlist-image">
+                        <Link to={this.location}>
+                            <Image src={resourceUrl(item.product_image, {
                                 type: 'image-product',
                                 width: 100
                             })} alt={item.product_name}/>
+                        </Link>
+                        <div className="my-wishlist-action">
+                            <div className="add-to-cart" onClick={() => this.addToCart(item.wishlist_item_id, this.location)}>
+                                <i className="icon icon-bag2"></i>
+                            </div>
+                            <div className="quickview" onClick={this.handleQuickView}>
+                                <i className="icon icon-eye"></i>
+                            </div>
+                            <div className="compare" onClick={this.addToCompare}>
+                                <i className="icon icon-sync2" ></i>
+                            </div>
+                            <div className="delete" onClick={() => this.handleTrashItem(item.wishlist_item_id)}>
+                                <i className="icon icon-trash" ></i>
+                            </div>
+                        </div>
                     </div>
-                </Link>
-                <span 
-                    role="presentation"
-                    className="trash-item"
-                    style={{
-                        position: 'absolute', bottom: 1, left: 1, width: 30, height: 30, 
-                        cursor: 'pointer', zIndex: 1}} 
-                    onClick={() => this.onTrashItem(item.wishlist_item_id)}>
-                    <Trash style={{fill: '#333132', width: 30, height: 30}} />
-                </span>
+                
             </div>
         );
-
-        const itemAction = 
-            <div className="product-item-action">
-                {
-                    item.type_id === 'simple' &&
-                    <Colorbtn 
-                        style={{backgroundColor: configColor.button_background, color: configColor.button_text_color}}
-                        className="grid-add-cart-btn"
-                        onClick={() => this.addToCart(item.wishlist_item_id, this.location)}
-                        text={addToCartString}/>
-                }
-                <Link 
-                    className="view-link"
-                    to={this.location}
-                >{Identify.__('View')}</Link>
-            </div>
         
         return (
-            <div className={`'product-item siminia-product-grid-item ${item.type_id !== 'simple'?'two-btn': 'one-btn'}`}>
+            <div className={`product-item product-grid-item`}>
                 {image}
-                <div className="siminia-product-des">
+                <div className="product-des">
                     <Link to={this.location} className="product-name">{ReactHTMLParse(item.product_name)}</Link>
                     <div 
                         className="prices-layout"
@@ -141,7 +173,7 @@ class Item extends React.Component {
                         {formatPrice(parseFloat(item.product_price))}
                     </div>
                 </div>
-                {itemAction}
+                {openModal && <QuickView openModal={openModal} product={item} handleCloseModel={this.handleCloseModel} />}
             </div>
         );
     }

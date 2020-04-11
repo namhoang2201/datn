@@ -1,6 +1,6 @@
 import React from 'react';
 import Identify from 'src/simi/Helper/Identify';
-import Price from 'src/simi/BaseComponents/Price';
+import Price from 'src/simi/App/datn/BaseComponents/Price';
 import ObjectHelper from 'src/simi/Helper/ObjectHelper';
 import PropTypes from 'prop-types';
 
@@ -18,7 +18,7 @@ class ProductPrice extends React.Component {
         const {configurableOptionSelection} = props
         this.state = {...initState, ...{sltdConfigOption: ObjectHelper.mapToObject(configurableOptionSelection)}};
     }
-    
+
     setCustomOptionPrice(exclT, inclT) {
         this.setState({
             customOptionPrice: {exclT, inclT}
@@ -49,7 +49,7 @@ class ProductPrice extends React.Component {
             if (configurable_options && configurable_options.index && configurable_options.optionPrices) {
                 let sub_product_id = null
                 for (const index_id in configurable_options.index) {
-                    const index = configurable_options.index[index_id] 
+                    const index = configurable_options.index[index_id]
                     if (ObjectHelper.shallowEqual(index, sltdConfigOption)) {
                         sub_product_id = index_id;
                         break;
@@ -87,14 +87,14 @@ class ProductPrice extends React.Component {
         const {data} = this.props
         if (data.type_id === 'configurable')
             this.calcConfigurablePrice(calculatedPrices)
-        
+
         // custom option
         this.addOptionPrice(calculatedPrices, customOptionPrice)
 
         // downloadable option
         if (data.type_id === 'downloadable')
             this.addOptionPrice(calculatedPrices, downloadableOptionPrice)
-        
+
         return calculatedPrices
     }
 
@@ -107,32 +107,21 @@ class ProductPrice extends React.Component {
         if (simiExtraField) {
             if (parseInt(simiExtraField.attribute_values.is_salable, 10) !== 1)
                 stockLabel = Identify.__('Out of stock');
-            else 
+            else
                 stockLabel = Identify.__('In stock');
         }
-                
+
         const priceLabel = (
             <div className='prices-layout'>
                 {
                     (data.type_id !== "grouped") &&
-                    <Price config={1} key={Identify.randomString(5)} prices={prices} type={data.type_id}/>
+                    <Price config={1} key={Identify.randomString(5)} prices={prices} type={data.type_id} showSalePercent={false} />
                 }
             </div>
         );
         return (
             <div className='prices-container' id={data.type_id}>
                 {priceLabel}
-                <div className='product-stock-status'>
-                    <div className='stock-status'>
-                        {stockLabel}
-                    </div>
-                    {
-                        data.sku && 
-                        <div className={`product-sku flex`} id="product-sku">
-                            <span className='sku-label'>{Identify.__('Sku') + ": "} {data.sku}</span>
-                        </div>
-                    }
-                </div>
             </div>
 
         );

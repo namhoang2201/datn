@@ -1,7 +1,23 @@
 import React from 'react';
 
 const Quantity = props => {
-    const {initialValue, onValueChange } = props;
+    const { initialValue, onValueChange } = props;
+
+    const increaseVal = () => {
+        const qtyField = $('#product-detail-qty')
+        const qty = parseInt(qtyField.val()) + 1
+        onValueChange(qty)
+        $('#product-detail-qty').val(qty)
+    }
+    const reduceVal = () => {
+        const qtyField = $('#product-detail-qty')
+        const qty = parseInt(qtyField.val()) - 1
+        if (qty) {
+            onValueChange(qty)
+            $('#product-detail-qty').val(qty)
+        }
+    }
+
     const changedValue = () => {
         const qtyField = $('#product-detail-qty')
         let qty = parseInt(qtyField.val())
@@ -13,7 +29,9 @@ const Quantity = props => {
     }
     return (
         <div className="product-quantity">
-            <input defaultValue={initialValue} id="product-detail-qty" type="number" onChange={changedValue}/>
+            <div className="minus-quantity" role="presentation" onClick={() => reduceVal()}>-</div>
+            <input defaultValue={initialValue} id="product-detail-qty" type="number" onChange={changedValue} />
+            <div className="increase-quantity" role="presentation" onClick={() => increaseVal()}>+</div>
         </div>
     );
 }

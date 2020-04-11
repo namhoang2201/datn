@@ -6,12 +6,13 @@ import React from 'react'
 import Pagination from 'src/simi/BaseComponents/Pagination'
 import Identify from 'src/simi/Helper/Identify'
 import Arrow from "src/simi/BaseComponents/Icon/Arrow";
+import { smoothScrollToView } from 'src/simi/Helper/Behavior';
 
 class PaginationTable extends Pagination {
     constructor(props) {
         super(props)
         this.startPage = 1;
-        this.endPage = this.startPage + 2;
+        this.endPage = this.startPage + 4;
     }
 
     renderColumnTitle = () => {
@@ -38,6 +39,7 @@ class PaginationTable extends Pagination {
     }
 
     handleChangePage =(next = true, total)=>{
+        smoothScrollToView($("#root"));
         let currentPage = next ? (this.state.currentPage === total?this.state.currentPage: this.state.currentPage + 1) : (this.state.currentPage> 1 ? this.state.currentPage - 1: this.state.currentPage);
         if(currentPage > this.endPage){
             this.startPage = this.startPage + 1;
@@ -104,16 +106,10 @@ class PaginationTable extends Pagination {
         let prevPageIcon = <Arrow style={{width: 20, height: 20, transform: 'rotate(-90deg)'}}/>;
 
         let pagesSelection = (total>1)?(
-            <ul id="page-numbers" style={{
-                border : 'none',
-                padding : 0,
-                display : 'flex',
-                alignItems : 'center',
-                fontSize : 14,
-            }}>
-                <li className="icon-page-number" onClick={()=>this.handleChangePage(false, total)}>{prevPageIcon}</li>
+            <ul id="page-numbers">
+                <li className={`icon-page-number ${this.state.currentPage === 1 ? 'first-page': ''}`} onClick={()=> this.state.currentPage === 1 ? {} : this.handleChangePage(false, total)}>{prevPageIcon}</li>
                 {renderPageNumbers}
-                <li className="icon-page-number" onClick={()=>this.handleChangePage(true, total)}>{nextPageIcon}</li>
+                <li className={`icon-page-number ${this.state.currentPage === total ? 'final-page': ''}`} onClick={()=>this.state.currentPage === total ? {} : this.handleChangePage(true, total)}>{nextPageIcon}</li>
             </ul>
         ):'';
         let {currentPage,limit} = this.state;
@@ -139,11 +135,14 @@ class PaginationTable extends Pagination {
                      clear: 'both'
                  }}
             >
-                <div style={{display:"flex", alignItems:"center"}}>
+                {/* <div style={{display:"flex", alignItems:"center"}}>
                     {itemsPerPage}
                     <div style={{display:"flex"}}>
                         {Identify.__("Show")} {this.renderDropDown()}{Identify.__(" per page")}
                     </div>
+                </div> */}
+                <div className="total-items">
+                    {totalItem} {Identify.__('items ')}
                 </div>
                 {pagesSelection}
             </div>

@@ -5,7 +5,7 @@ import ProductFullDetail from './ProductFullDetail';
 import getUrlKey from 'src/util/getUrlKey';
 import connectorGetProductDetailByUrl from 'src/simi/queries/catalog/getProductDetail.graphql';
 import connectorGetProductDetailBySku from 'src/simi/queries/catalog/getProductDetailBySku.graphql'
-import { Simiquery } from 'src/simi/Network/Query' 
+import { Simiquery } from 'src/simi/Network/Query'
 import {smoothScrollToView} from 'src/simi/Helper/Behavior'
 import { saveDataToUrl, productUrlSuffix } from 'src/simi/Helper/Url';
 
@@ -28,7 +28,7 @@ const Product = props => {
         variables.sku = sku
     else
         variables.urlKey = getUrlKey()
-        
+
     return (
         <Simiquery
             query={productQuery}

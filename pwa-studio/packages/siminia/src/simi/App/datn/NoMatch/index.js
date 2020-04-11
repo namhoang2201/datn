@@ -1,6 +1,6 @@
 import React from 'react'
-import Product from 'src/simi/App/core/RootComponents/Product'
-import Category from 'src/simi/App/core/RootComponents/Category'
+import Product from 'src/simi/App/datn/RootComponents/Product'
+import Category from 'src/simi/App/datn/Components/Category'
 import CMS from 'src/simi/App/core/RootComponents/CMS'
 import Simicms from 'src/simi/App/core/Simicms'
 import Loading from 'src/simi/BaseComponents/Loading'
@@ -14,14 +14,14 @@ const TYPE_CATEGORY = 'CATEGORY'
 const TYPE_CMS_PAGE = 'CMS_PAGE'
 
 const NoMatch = props => {
-    const {location} = props
+    const { location } = props
     const renderByTypeAndId = (type, id, preloadedData = null) => {
         if (type === TYPE_PRODUCT)
-            return <Product {...props} preloadedData={preloadedData}/>
+            return <Product {...props} preloadedData={preloadedData} />
         else if (type === TYPE_CATEGORY)
-            return <Category {...props} id={parseInt(id, 10)}/>
+            return <Category {...props} id={parseInt(id, 10)} />
         else if (type === TYPE_CMS_PAGE)
-            return <CMS {...props} id={parseInt(id, 10)}/>
+            return <CMS {...props} id={parseInt(id, 10)} />
     }
 
     if (
@@ -44,7 +44,7 @@ const NoMatch = props => {
         if (dataFromDict && dataFromDict.id) {
             let type = TYPE_CATEGORY
             const id = dataFromDict.id
-            if (dataFromDict.sku)  {
+            if (dataFromDict.sku) {
                 type = TYPE_PRODUCT
             }
             const result = renderByTypeAndId(type, id, dataFromDict)
@@ -58,21 +58,21 @@ const NoMatch = props => {
             simiStoreConfig.simiStoreConfig.config.cms &&
             simiStoreConfig.simiStoreConfig.config.cms.cmspages &&
             simiStoreConfig.simiStoreConfig.config.cms.cmspages.length
-            ) {
-                let simiCms = null
-                simiStoreConfig.simiStoreConfig.config.cms.cmspages.forEach(simicmspage => {
-                    if (
-                        simicmspage.cms_content && simicmspage.cms_url &&
-                        (simicmspage.cms_url === pathname) || (`/${simicmspage.cms_url}` === pathname)
-                        )
-                        simiCms = simicmspage
-                });
-                if (simiCms)
-                    return <Simicms csmItem={simiCms} />
+        ) {
+            let simiCms = null
+            simiStoreConfig.simiStoreConfig.config.cms.cmspages.forEach(simicmspage => {
+                if (
+                    simicmspage.cms_content && simicmspage.cms_url &&
+                    (simicmspage.cms_url === pathname) || (`/${simicmspage.cms_url}` === pathname)
+                )
+                    simiCms = simicmspage
+            });
+            if (simiCms)
+                return <Simicms csmItem={simiCms} />
         }
 
         //get type from server
-        return <ResolveUrlResult pathname={pathname} renderByTypeAndId={renderByTypeAndId}/>
+        return <ResolveUrlResult pathname={pathname} renderByTypeAndId={renderByTypeAndId} />
     }
 
     parseFromDoc = false

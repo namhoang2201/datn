@@ -1,317 +1,239 @@
-.address-book h1{font-size: 36px;font-weight: normal;}
-.address-book .default-address{
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-.address-book .address-label{
-    font-size: 24px;
-    line-height: normal;
-    font-weight: bold;
-    border-bottom: 1px solid #dcdcdc;
-    color: #2d2d2d;
-    padding: 5px 0px;
-}
-.address-book .address-content{
-    padding: 10px 0px;
-    padding-bottom: 20px;
-    display: flex;
-    flex-wrap: wrap;
-}
-.address-book .billing-address{
-    background-color: #ffffff;
-    padding: 24px;
-    margin-right: 30px;
-    margin-top: 30px;
-    width: 100%;
-    flex: 1 1;
-}
-.address-book .shipping-address{
-    background-color: #ffffff;
-    padding: 24px;
-    margin-right: 30px;
-    margin-top: 30px;
-    width: 100%;
-    flex: 1 1;
-}
-
-.address-book .box-title{
-    color: #2d2d2d;
-    font-weight: bold;
-    font-size: 18px;
-}
-.address-book .box-content{}
-.address-book .box-content > address{
-    font-size: 18px;
-    line-height: 24px;
-    margin: 10px 0px;
-}
-.address-book .box-action{}
-.address-book .box-action > a{}
-.address-book .box-action > a > span{
-    color: #2335c5;
-}
-
-.address-book .address-content .box-title{}
-.address-book .address-content .box-content{}
-.address-book .address-content .box-content > address{}
-.address-book .billing-address .box-title{}
-.address-book .billing-address .box-content{}
-.address-book .billing-address .box-content > address{}
-.address-book .shipping-address .box-title{}
-.address-book .shipping-address .box-content{}
-.address-book .shipping-address .box-content > address{}
-
-.address-book .additional-address{}
-.address-book .additional-address .address-label{}
-.address-book .additional-address .table-wrap{
-    padding: 10px 0px;
-    margin-top: 10px;
-}
-.address-book .additional-address .table-wrap table{
-    font-size: 16px;
-    color: #3d3d3d;
-    background-color: #fafafa;
-    width: 100%;
-}
-.address-book .additional-address .table-wrap table > thead{
-    background-color: #dcdcdc;
-}
-.address-book .additional-address .table-wrap table > tbody{
-}
-.address-book .additional-address .table-wrap table tr{
-}
-.address-book .additional-address .table-wrap table tr:nth-child(2n){
-    background-color: #eaeaea;
-}
-.address-book .additional-address .table-wrap table tr th{
-    padding: 5px;
-    font-size: 14px;
-}
-.address-book .additional-address .table-wrap table tr td{
-    padding: 5px;
-}
-.address-book .additional-address .table-wrap a{
-    padding: 5px;
-    color: #2335c5;
-}
-.address-book .additional-address .table-wrap a.edit{
-    color: #2335c5;
-}
-.address-book .additional-address .table-wrap a.delete{
-    color: #f78787;
-}
-.address-book .additional-address .pagination{
-    width: 100%;
-    text-align: center;
-    display: flex;
-    justify-content: flex-end;
-    flex-wrap: wrap;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-.address-book .additional-address .pagination > ul{
-    display: inline-block;
-    width: 55%;
-    text-align: right;
-}
-.address-book .additional-address .pagination > ul li{
-    min-width: 30px;
-    height: 22px;
-    margin: 5px;
-    display: inline-block;
-    background-color: #ffffff;
-    text-align: center;
-    vertical-align: middle;
-    line-height: 22px;
-}
-.address-book .additional-address .pagination > ul li:hover{
-    background-color: #fbc96a;
-}
-.address-book .additional-address .pagination > ul li.active{
-    background-color: #fbc96a;
-}
-.address-book .additional-address .pagination > ul li.disabled{
-    background-color: #eaeaea;
-    color: #b5b5b5;
-}
-.address-book .additional-address .pagination > ul li.disabled > a{
-    color: #b5b5b5;
-    cursor: auto;
-}
-.address-book .additional-address .pagination > ul li > a{
-    text-decoration: none;
-    user-select: none;
-    display: block;
-    line-height: 22px;
-    padding: 0px;
-}
-.address-book .additional-address .pagination > ul li > a:visited,
-.address-book .additional-address .pagination > ul li > a:visited{
-    text-decoration: none;
-    user-select: none;
-}
-.address-book .additional-address .pagination .info{
-    min-width: 150px;
-    line-height: 32px;
-}
-.address-book .additional-address .pagination .info span{}
-.address-book .additional-address .pagination .options-size{
-    min-width: 150px;
-    line-height: 32px;
-}
-.address-book .additional-address .pagination .options-size > span{}
-.address-book .additional-address .pagination .options-size > select{
-    border: 1px solid #eaeaea;
-    margin: 0px 5px;
-}
-.address-book .additional-address .pagination .options-size > select option{}
-
-.address-book .btn{
-    background-color: #5074c7;
-    color: #ffffff;
-    font-size: 16px;
-    font-weight: bold;
-}
-.address-book .btn.add-new-address{
-    background-color: #5074c7;
-    color: #ffffff;
-    font-size: 16px;
-    font-weight: bold;
-}
-.address-book .btn:hover{
-    opacity: .8;
-}
-
-.address-book .edit-address form{}
-.address-book .edit-address .col-left{
-    margin-top: 0px;
-    margin-bottom: 30px;
-}
-.address-book .edit-address .col-right{
-    margin-top: 0px;
-    margin-bottom: 30px;
-}
-.address-book .edit-address .col-label{
-    font-size: 30px;
-    font-weight: normal;
-    margin-bottom: 10px;
-}
-.address-book .edit-address .form-button{}
-.address-book .edit-address .form-row{
-    min-height: 34px;
-    padding: 2px 0px;
-    margin: 5px 0px;
-}
-.address-book .edit-address .address-field-label {
-    font-size: 14px;
-    margin-right: 10px;
-    margin-bottom: 5px;
-    font-weight: 700;
-}
-.address-book .edit-address .address-field-label.req::after {
-    color: #ee0000;
-    content: " *";
-}
-
-.address-book .edit-address .form-row input.warning, .address-book .edit-address .form-row select.warning {
-    box-shadow: 0 0 5px -2px #ee0000;
-}
-
-.address-book .edit-address .form-row label span{}
-.address-book .edit-address .form-row input{
-    width: 100%;
-    height: 34px;
-    line-height: 30px;
-    margin: 2px 0px;
-    padding: 2px 10px;
-    user-select: none;
-    outline: none;
-    border: 1px solid rgb(112, 112, 112);
-    &:focus {
-        outline: none;
-        border-color: rgb(0, 115, 120);
-        box-shadow: 0 0 0 2px rgb(212, 243, 238), 0 0 0.5rem 2px rgba(0, 115, 120, 0.2);
+.address-book {
+    color: #000000;
+    .default-address {
+        margin-top: 4px;
+        margin-bottom: 30px;
     }
-}
-.address-book .edit-address .form-row select{
-    user-select: none;
-    outline: none;
-    border: 1px solid rgb(112, 112, 112);
-    border-radius: 2px;
-    color: rgb(33, 33, 33);
-    display: inline-flex;
-    flex: 0 0 100%;
-    font-size: 1rem;
-    height: 2.25rem;
-    margin: 0;
-    padding: calc(0.375rem - 1px) calc(2.25rem - 1px) calc(0.375rem - 1px) calc(0.625rem - 1px);
-    width: 100%;
-    -webkit-appearance: button;
-    background: white url(https://d30y9cdsu7xlg0.cloudfront.net/png/221782-200.png);
-    background-position: 97% center;
-    background-repeat: no-repeat;
-    background-size: 18px;
-
-    &:focus {
-        outline: none;
-        border-color: rgb(0, 115, 120);
-        box-shadow: 0 0 0 2px rgb(212, 243, 238), 0 0 0.5rem 2px rgba(0, 115, 120, 0.2);
+    .address-label {
+        font-size: 14px;
+        line-height: 14px;
+        text-transform: uppercase;
+        font-weight: 300;
+        margin-bottom: 16px;
     }
-}
-.address-book .edit-address .form-row select option{}
-.address-book .edit-address .form-row .checkbox{
-    padding: 5px 10px;
-    margin: 0px;
-}
-.address-book .edit-address .form-row .checkbox input{
-    width: auto;
-    height: 22px;
-    padding: 0px;
-    margin: 0px;
-    margin-right: 5px;
-    vertical-align: middle;
-}
-.address-book .edit-address .form-row .checkbox label{
-    margin-bottom: 0px;
-    vertical-align: middle;
-}
+    .address-content {
+        display: flex;
+        > div {
+            border: 1px solid #bdbdbd;
+            padding: 24px 16px 24px 24px;
+            font-weight: 300;
+            flex-basis: 50%;
+            display: flex;
+            justify-content: space-between;
+            &.shipping-address {
+                margin-left: 16px;
+            }
+        }
+        .edit-address-item {
+            margin-left: 5px;
+            color: #000000;
+            text-decoration: none;
+            align-self: baseline;
+            [class*='icon-'] {
+                font-size: 16px;
+            }
+        }
+    }
+    @media screen and (max-width: 767px) {
+        .address-content {
+            flex-wrap: wrap;
+            > div {
+                flex-basis: 100%;
+                &.shipping-address {
+                    margin-left: 0;
+                    margin-top: 16px;
+                }
+            }
+        }
+    }
+    .box-title {
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 19px;
+    }
+    .add-new-address {
+        height: 40px;
+        padding: 11px 18px;
+        background-color: #000000;
+        color: #ffffff;
+        font-size: 14px;
+        line-height: 17px;
+        text-transform: uppercase;
+        font-weight: 500;
+        display: inline-block;
+        margin-top: 50px;
+        float: right;
+        border: 0;
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+    .additional-address-contain {
+        display: grid;
+        grid-area: items;
+        grid-gap: 16px;
+        grid-template-columns: repeat(2, 1fr);
+        > .address-box-col {
+            border: 1px solid #bdbdbd;
+            padding: 24px 16px 24px 24px;
+            font-weight: 300;
+            display: flex;
+            justify-content: space-between;
+        }
+        .additional-item-actions {
+            align-self: baseline;
+            margin-left: 5px;
+            > a,
+            > div {
+                color: #000000;
+                text-decoration: none;
+                cursor: pointer;
+                display: block;
+                [class*='icon-'] {
+                    font-size: 16px;
+                }
+                &:not(:first-child) {
+                    margin-top: 24px;
+                }
+            }
+        }
+    }
+    @media screen and (max-width: 767px) {
+        .additional-address-contain {
+            grid-template-columns: repeat(1, 1fr);
+        }
+    }
+    form#address-form {
+        margin-top: 4px;
+        clear: both;
+        display: inline-block;
+        width: 100%;
+        .address-form-container {
+            display: flex;
+            > div {
+                flex-basis: 50%;
+                &:not(:last-child) {
+                    margin-right: 16px;
+                }
+            }
 
-.form-row.state-province .state-option {display: flex;flex-wrap: wrap;}
-.form-row.state-province .state-option > div {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    flex-wrap: wrap;
-}
-
-@media (max-width: 1444px){
-    .address-book .additional-address {
-        .col.phone, .row.phone,
-        .col.zip, .row.zip,
-        .col.lastname, .row.lastname,
-        .col.state, .row.state
-        {
-            display: none;
+            .form-group {
+                margin-bottom: 20px;
+                label {
+                    font-size: 10px;
+                    line-height: 12px;
+                    text-transform: uppercase;
+                    font-weight: 300;
+                    margin-bottom: 6px;
+                    color: #000;
+                }
+                .form-control {
+                    height: 48px;
+                    border-color: #e0e0e0;
+                    border-radius: 0;
+                    box-shadow: none;
+                    font-size: 14px;
+                    line-height: 17px;
+                    font-weight: 300;
+                    color: #727272;
+                    &.warning {
+                        border-color: #ff0000;
+                    }
+                }
+                select {
+                    width: 100%;
+                    height: 48px;
+                    border: 1px solid #e0e0e0;
+                    border-radius: 0;
+                    background: #fff;
+                    color: #727272;
+                    font-weight: 300;
+                    outline: none;
+                    -webkit-appearance: none;
+                    -moz-appearance: none;
+                    background-position: right 50%;
+                    background-repeat: no-repeat;
+                    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAMCAYAAABSgIzaAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NDZFNDEwNjlGNzFEMTFFMkJEQ0VDRTM1N0RCMzMyMkIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NDZFNDEwNkFGNzFEMTFFMkJEQ0VDRTM1N0RCMzMyMkIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo0NkU0MTA2N0Y3MUQxMUUyQkRDRUNFMzU3REIzMzIyQiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo0NkU0MTA2OEY3MUQxMUUyQkRDRUNFMzU3REIzMzIyQiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PuGsgwQAAAA5SURBVHjaYvz//z8DOYCJgUxAf42MQIzTk0D/M+KzkRGPoQSdykiKJrBGpOhgJFYTWNEIiEeAAAMAzNENEOH+do8AAAAASUVORK5CYII=);
+                    padding: 10px 16px;
+                    cursor: pointer;
+                }
+            }
+        }
+        @media screen and (max-width: 767px) {
+            .address-form-container {
+                flex-wrap: wrap;
+                > div {
+                    flex-basis: 100%;
+                    &:not(:last-child) {
+                        margin-right: 0;
+                    }
+                }
+            }
+        }
+        .checkbox-customize {
+            margin-top: 16px;
+            display: inline-block;
+            > span:not(.checkmark-custom) {
+                display: inline-block;
+                margin-top: -10px;
+            }
+        }
+        @media screen and (max-width: 767px) {
+            .checkbox-customize {
+                display: block;
+            }
+        }
+        .save-address {
+            background-color: #000000;
+            color: #fff;
+            padding: 11.5px;
+            min-width: 193px;
+            text-align: center;
+            font-size: 14px;
+            line-height: 17px;
+            font-weight: 500;
+            display: inline-block;
+            text-transform: uppercase;
+            float: right;
+            margin-top: 50px;
         }
     }
 }
 
-@media (max-width: 1024px){
-    .address-book .additional-address .table-wrap table > thead {
-        display: none;
-    }
-    .address-book .additional-address tr {
-        display: flex;
-        flex-wrap: wrap;
-        padding: 16px;
-        flex-direction: column;
-    }
-}
-@media (max-width: 768px){
-    .address-book .billing-address{
-        margin-right: 0px;
-    }
-    .address-book .shipping-address{
-        margin-right: 0px;
+.rtl-root {
+    .address-book {
+        .address-content {
+            > div.shipping-address {
+                margin-left: unset;
+                margin-right: 16px;
+            }
+            @media screen and (max-width: 767px) {
+                > div.shipping-address {
+                    margin-right: 0;
+                }
+            }
+            .edit-address-item {
+                margin-left: unset;
+                margin-right: 5px;
+            }
+        }
+        .additional-address-contain {
+            .additional-item-actions {
+                margin-right: 5px;
+                margin-left: unset;
+            }
+        }
+        .add-new-address {
+            float: left;
+        }
+        form#address-form {
+            .address-form-container > div:not(:last-child) {
+                margin-right: unset;
+                margin-left: 16px;
+            }
+            .save-address {
+                float: left;
+            }
+        }
     }
 }

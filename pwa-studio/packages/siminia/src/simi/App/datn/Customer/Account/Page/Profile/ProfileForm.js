@@ -1,27 +1,27 @@
 import React, { useEffect, useState } from 'react';
-
 import TextBox from 'src/simi/BaseComponents/TextBox';
 import Identify from 'src/simi/Helper/Identify';
 import Checkbox from 'src/simi/BaseComponents/Checkbox';
-import { Whitebtn } from 'src/simi/BaseComponents/Button';
+import { Colorbtn } from 'src/simi/BaseComponents/Button';
 import { editCustomer } from 'src/simi/Model/Customer';
-import {showFogLoading, hideFogLoading} from 'src/simi/BaseComponents/Loading/GlobalLoading'
+import { showFogLoading, hideFogLoading } from 'src/simi/BaseComponents/Loading/GlobalLoading';
+import RadioCheckbox from 'src/simi/App/datn/BaseComponents/RadioCheckbox';
 const $ = window.$;
 
 const ProfileForm = props => {
-    const {history, isPhone, data} = props;
+    const { history, isPhone, data } = props;
     // const [data, setData] = useState(data);
     const [changeForm, handleChangeForm] = useState(false);
 
     useEffect(() => {
-        if(
+        if (
             history.location.state
-            && history.location.state.hasOwnProperty('profile_edit') 
+            && history.location.state.hasOwnProperty('profile_edit')
             && history.location.state.profile_edit
         ) {
-            const {profile_edit} = history.location.state;
+            const { profile_edit } = history.location.state;
             handleChangeForm(profile_edit);
-        } 
+        }
     })
 
     const scorePassword = pass => {
@@ -31,7 +31,7 @@ const ProfileForm = props => {
 
         // award every unique letter until 5 repetitions
         let letters = {};
-        for (let i=0; i<pass.length; i++) {
+        for (let i = 0; i < pass.length; i++) {
             letters[pass[i]] = (letters[pass[i]] || 0) + 1;
             score += 5.0 / letters[pass[i]];
         }
@@ -50,25 +50,25 @@ const ProfileForm = props => {
         }
         score += (variationCount - 1) * 10;
 
-        return parseInt(score,10);
+        return parseInt(score, 10);
     }
 
     const checkPassStrength = pass => {
         let score = scorePassword(pass);
-        switch (true){
+        switch (true) {
             case score > 70:
-                return "Strong";
+                return Identify.__("Strong");
             case score > 50:
-                return "Good";
+                return Identify.__("Good");
             case (score >= 30):
-                return "Weak";
+                return Identify.__("Weak");
             default:
                 return "no password"
         }
     }
 
     const handleOnChange = (e) => {
-        if(e.target.name === 'new_password'){
+        if (e.target.name === 'new_password') {
             let str = checkPassStrength(e.target.value);
             $('#strength-value').html(Identify.__(str))
         }
@@ -82,7 +82,7 @@ const ProfileForm = props => {
         let msg = "";
         $("#harlows-edit-profile")
             .find(".required")
-            .each(function() {
+            .each(function () {
                 if ($(this).val() === "" || $(this).val().length === 0) {
                     formCheck = false;
                     $(this).addClass("is-invalid");
@@ -97,14 +97,14 @@ const ProfileForm = props => {
                             msg = Identify.__("Email field is invalid");
                         }
                     }
-                    if($(this).attr("name") === "new_password" && new_pass_val && new_pass_val.length < 6){
+                    if ($(this).attr("name") === "new_password" && new_pass_val && new_pass_val.length < 6) {
                         formCheck = false;
                         $(this).addClass("is-invalid");
                         msg = Identify.__("Password need least 6 characters!");
                     }
                     if ($(this).attr("name") === "com_password") {
                         if (
-                            $(this).val() !== new_pass_val ) {
+                            $(this).val() !== new_pass_val) {
                             formCheck = false;
                             $(this).addClass("is-invalid");
                             msg = Identify.__("Confirm password is not match");
@@ -114,21 +114,21 @@ const ProfileForm = props => {
             });
 
         if (!formCheck) {
-            props.toggleMessages([{type: 'error', message: msg, auto_dismiss: true}]);
+            props.toggleMessages([{ type: 'error', message: msg, auto_dismiss: true }]);
         }
 
         return formCheck;
     };
 
     const processData = (data) => {
-        if(data.hasOwnProperty('errors') && data.errors) {
+        if (data.hasOwnProperty('errors') && data.errors) {
             const messages = data.errors.map(value => {
-                return {type: 'error', message: value.message, auto_dismiss: true}
+                return { type: 'error', message: value.message, auto_dismiss: true }
             })
             props.toggleMessages(messages)
-        } else if(data.message && data.hasOwnProperty('customer')) {
+        } else if (data.message && data.hasOwnProperty('customer')) {
             props.getUserDetails();
-            props.toggleMessages([{type: 'success', message: data.message, auto_dismiss: true}])
+            props.toggleMessages([{ type: 'success', message: data.message, auto_dismiss: true }])
         }
         hideFogLoading()
     }
@@ -141,10 +141,10 @@ const ProfileForm = props => {
             let params = {
                 email: data.email
             }
-            if(changeForm === 'password'){
+            if (changeForm === 'password') {
                 params['change_password'] = 1;
             }
-            if(changeForm === 'email'){
+            if (changeForm === 'email') {
                 params['change_email'] = 1;
             }
             for (let index in formValue) {
@@ -157,58 +157,65 @@ const ProfileForm = props => {
     }
 
     const renderAlternativeForm = () => {
-        switch(changeForm) {
+        switch (changeForm) {
             case 'email':
                 return (
                     <React.Fragment>
-                        {/* <h4 className={classes["title"]}>{Identify.__("Change Email")}</h4>
+                        <h4 className='title'>{Identify.__("Change Email")}</h4>
                         <TextBox
                             label={Identify.__("Email")}
+                            placeholder={Identify.__("Email")}
                             name="new_email"
                             type="email"
                             className="required"
+                            required={true}
                             defaultValue={data.email}
                             onChange={e => handleOnChange(e)}
                         />
                         <TextBox
                             label={Identify.__("Current Password")}
+                            placeholder={Identify.__("Current Password")}
                             name="old_password"
                             type="password"
-                            className={`${classes["required"]} required`}
+                            className='required'
+                            required={true}
                             onChange={e => handleOnChange(e)}
-                        /> */}
-                        <div className='email-not-edit'>{Identify.__('Email cannot be edit')}</div>
+                        />
+                        {/* <div className='email-not-edit'>{Identify.__('Email cannot be edit')}</div> */}
                     </React.Fragment>
                 );
-            case 'password': 
+            case 'password':
                 return (
                     <React.Fragment>
                         <h4 className="title">{Identify.__("Change Password")}</h4>
                         <TextBox
                             label={Identify.__("Current Password")}
+                            placeholder={Identify.__("Current Password")}
                             name="old_password"
                             type="password"
                             className="required"
-                            required
+                            required={true}
                             onChange={e => handleOnChange(e)}
                         />
                         <div className="group-password-strong">
                             <TextBox
                                 label={Identify.__("New password")}
+                                placeholder={Identify.__("New password")}
                                 name="new_password"
                                 type="password"
                                 className="required"
-                                required
+                                required={true}
                                 onChange={e => handleOnChange(e)}
                             />
-                            <div className="password-strength"><span>{Identify.__('Password strength:')}</span><span id="strength-value" style={{marginLeft: 3}}>{Identify.__('no password')}</span></div>
+                            <div className="password-strength"><span>{Identify.__('Password strength:')}</span><span id="strength-value" style={{ marginLeft: 3 }}>{Identify.__('no password')}</span></div>
                         </div>
                         <TextBox
                             label={Identify.__("Confirm new password")}
+                            placeholder={Identify.__("Confirm new password")}
                             name="com_password"
                             type="password"
                             className="required"
-                            required
+                            required={true}
                             onChange={e => handleOnChange(e)}
                         />
                     </React.Fragment>
@@ -221,11 +228,12 @@ const ProfileForm = props => {
             <div className='row-edit-profile'>
                 <div className="main__edit-column">
                     <h4 className="title">
-                        {Identify.__("Edit account information")}
+                        {Identify.__("Account information")}
                     </h4>
                     <TextBox
                         defaultValue={data.firstname}
                         label={Identify.__("First name")}
+                        placeholder={Identify.__("First name")}
                         name="firstname"
                         className="required"
                         required={true}
@@ -234,39 +242,24 @@ const ProfileForm = props => {
                     <TextBox
                         defaultValue={data.lastname}
                         label={Identify.__("Last name")}
+                        placeholder={Identify.__("Last name")}
                         name="lastname"
                         className="required"
                         required={true}
                         onChange={handleOnChange}
                     />
-                    <Checkbox
-                        className="first"
-                        label={Identify.__("Change email")}
-                        onClick={() => handleChangeForm(changeForm === 'email' ? false : 'email')}
-                        selected={changeForm === 'email'}
-                    />
-                    <Checkbox
-                        className=""
-                        label={Identify.__("Change password")}
-                        onClick={() => handleChangeForm(changeForm === 'password' ? false : 'password')}
-                        selected={changeForm === 'password'}
-                    />
-                    {!isPhone && <Whitebtn
-                                text={Identify.__("Save")}
-                                className="save-profile"
-                                type="submit"
-                            />}
+                    <RadioCheckbox key={Identify.randomString(2)} className="first" defaultChecked={changeForm === 'email' ? true : false} title={Identify.__("Change email")} id='checkbox-change-email' onClick={() => handleChangeForm(changeForm === 'email' ? false : 'email')} />
+                    <RadioCheckbox key={Identify.randomString(2)} defaultChecked={changeForm === 'password' ? true : false} title={Identify.__("Change password")} id='checkbox-change-password' onClick={() => handleChangeForm(changeForm === 'password' ? false : 'password')} />
                 </div>
                 <div className='alternative__edit-column'>
                     {renderAlternativeForm()}
                 </div>
-                {isPhone && <Whitebtn
-                                text={Identify.__("Save")}
-                                className="save-profile"
-                                type="submit"
-                            />}
             </div>
-            
+            <Colorbtn
+                text={Identify.__("Save")}
+                className="save-profile"
+                type="submit"
+            />
         </form>
     )
 }

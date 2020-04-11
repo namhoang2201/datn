@@ -51,7 +51,7 @@ class Currency extends StoreView {
     }
 
     renderItem() {
-        const {classes} = this.props
+        const {classes, currencyLabel} = this.props
         if (typeof(Storage) !== "undefined") {
             const merchantConfigs = Identify.getStoreConfig();
             const currencies = merchantConfigs.simiStoreConfig.config.base.currencies;
@@ -63,7 +63,7 @@ class Currency extends StoreView {
                         className={this.props.className}
                     >
                         <ListItemNested
-                            primarytext={<div className={`${classes["menu-title"]} menu-title`} style={{color:configColor.menu_text_color}}>{Identify.__('Currency')}</div>}
+                            primarytext={<div className={`${classes["menu-title"]} menu-title`} style={{color:configColor.menu_text_color}}>{currencyLabel?currencyLabel:Identify.__('Currency')}</div>}
                             className={this.props.className}
                         >
                             {this.renderSubItem()}
@@ -85,12 +85,13 @@ class Currency extends StoreView {
         
         if (currencyList !== null) {
             storesRender = currencyList.map((currency) => {
-                const isSelected = currency.value === this.getSelectedCurrency() ? 
+                const isSelected = currency.value === this.getSelectedCurrency()
+                const selectedSign = isSelected ? 
                     <Check color={configColor.button_background} style={{width: 18, height: 18}} /> : 
                     <span className={`${classes["not-selected"]} not-selected`} style={{borderColor : configColor.menu_text_color, width: 18, height: 18}}></span>;
-                    const currencyItem =<span className={`${classes["currency-item"]} currency-item`} style={{display: 'flex'}}>
+                    const currencyItem =<span className={`${classes["currency-item"]} currency-item  ${isSelected && 'selected'}`} style={{display: 'flex'}}>
                                     <div className={`${classes["selected"]} selected`}>
-                                        {isSelected}
+                                        {selectedSign}
                                     </div>
                                     <div className={`${classes["currency-name"]} currency-name`}>
                                         {currency.title}
@@ -101,7 +102,9 @@ class Currency extends StoreView {
                     role="presentation"
                     key={Identify.randomString(5)}
                     style={{marginLeft: 5,marginRight:5}}
-                    onClick={() => this.chosedCurrency(currency.value)}>
+                    onClick={() => this.chosedCurrency(currency.value)}
+                    className={`store-item-ctn ${isSelected && 'selected'}`}
+                    >
                     <MenuItem title={currencyItem}
                               className={this.props.className}
                     />

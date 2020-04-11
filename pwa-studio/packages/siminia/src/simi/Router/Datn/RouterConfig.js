@@ -7,11 +7,15 @@ const Home = (props) => {
 }
 
 const Checkout = (props) => {
-    return <LazyComponent component={() => import(/* webpackChunkName: "Checkout"*/'src/simi/App/datn/Checkout')} {...props}/>
+    return <LazyComponent component={() => import(/* webpackChunkName: "Checkout"*/'src/simi/App/core/Checkout')} {...props}/>
+}
+
+const PaypalExpress = (props) => {
+    return <LazyComponent component={() => import(/* webpackChunkName: "PaypalExpress"*/'src/simi/App/core/Payment/Paypalexpress')} {...props}/>
 }
 
 const Thankyou = (props) => {
-    return <LazyComponent component={() => import(/* webpackChunkName: "Thankyou"*/'src/simi/App/datn/Checkout/Thankyou')} {...props}/>
+    return <LazyComponent component={() => import(/* webpackChunkName: "Thankyou"*/'src/simi/App/core/Checkout/Thankyou')} {...props}/>
 }
 
 const Login = (props) => {
@@ -23,7 +27,7 @@ const Cart = (props) => {
 }
 
 const Contact = (props) => {
-    return <LazyComponent component={() => import(/* webpackChunkName: "Contact"*/'src/simi/App/datn/Contact/Contact')} {...props}/>
+    return <LazyComponent component={() => import(/* webpackChunkName: "Contact"*/'src/simi/App/core/Contact/Contact')} {...props}/>
 }
 
 const Product = (props) => {
@@ -40,10 +44,6 @@ const Logout = (props) => {
 
 const ResetPassword = (props) => {
     return <LazyComponent component={() => import(/* webpackChunkName: "ResetPassword"*/'src/simi/App/datn/Customer/ResetPassword')} {...props}/>
-}
-
-const PaypalExpress = (props) => {
-    return <LazyComponent component={() => import(/* webpackChunkName: "PaypalExpress"*/'src/simi/App/datn/Payment/Paypalexpress')} {...props}/>
 }
 
 const NoMatch = (props) => {
@@ -76,6 +76,10 @@ const router = {
         path: '/checkout.html',
         render : (location) => <Checkout {...location}/>
     },
+    ppExpress: {
+        path: '/paypal_express.html',
+        render : location => <PaypalExpress {...location}/>
+    },
     thankyou : {
         path: '/thankyou.html',
         render : (location) => <Thankyou {...location}/>
@@ -97,8 +101,12 @@ const router = {
         render : (location) => <Account {...location} page='dashboard'/>
     },
     address_book : {
-        path : '/addresses.html/:id?',
+        path : '/addresses.html',
         render : location => <Account {...location} page={`address-book`} />
+    },
+    new_address_book : {
+        path : '/new-address.html/:addressId?',
+        render : location => <Account {...location} page={`new-address-book`} />
     },
     oder_history : {
         path : '/orderhistory.html',
@@ -123,10 +131,6 @@ const router = {
     contact: {
         path: '/contact.html',
         render : location => <Contact {...location} page={`contact`}/>
-    },
-    contact: {
-        path: '/paypal_express.html',
-        render : location => <PaypalExpress {...location} page={`contact`}/>
     },
     noMatch: {
         component : location => <NoMatch {...location} />

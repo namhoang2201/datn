@@ -1,10 +1,26 @@
+@import '../fonts/Didot.css';
+@import '../fonts/MaterialDesignIconicFont.css';
 @import '../fonts/Arsenal.css';
 @import '../fonts/Linearicons.css';
 @import '../fonts/SimpleLineIcons.css';
+#root.rtl-root {
+    direction: rtl;
+}
+body {
+    font-family: "Arsenal";
+}
+.siminia-main-page {
+    min-height: 20vh;
+}
 
 @media (min-width: 1920px) {
     .container {
         width: 1430px;
+    }
+}
+@media (min-width: 1200px) and (max-width: 1440px){
+    .container {
+        width: 1190px;
     }
 }
 .flex {
@@ -32,14 +48,17 @@ div#app-loading {
  * */
 
 .siminia-breadcrumb {
-    padding-top: 8px;
-    padding-bottom: 8px;
+    padding: unset;
+    color: #727272;
+    font-family: "Arsenal";
     font-size: 12px;
+    line-height: 12px;
 }
 .breadcrumb-item {
     cursor: pointer;
-    line-height: 20px;
+    line-height: 12px;
     display: inline-block;
+    color: #727272;
 }
 .breadcrumb-item:hover {
     color: #d7272e;
@@ -77,7 +96,7 @@ div#app-loading {
     text-align: center;
 }
 
-/** 
+/**
  * Pb page
 */
 .pb-page .pb-item {
@@ -104,6 +123,13 @@ div#app-loading {
 
 .pb-page .pb-item-button {
     cursor: pointer;
+}
+
+@media(max-width: 1023px){
+    .siminia-breadcrumb {
+        padding-top: 30px;
+        padding-bottom: 10px;
+    }
 }
 
 /*

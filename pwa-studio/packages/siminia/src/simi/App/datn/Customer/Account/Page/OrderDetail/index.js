@@ -2,12 +2,11 @@
 import React, { useState, useEffect } from "react";
 import Identify from "src/simi/Helper/Identify";
 import { formatPrice } from "src/simi/Helper/Pricing";
-import { Whitebtn } from "src/simi/BaseComponents/Button";
 import Loading from "src/simi/BaseComponents/Loading";
 import ReactHTMLParse from "react-html-parser";
 import { Link } from "react-router-dom";
 import "./../../style.scss";
-import { getOrderDetail, getReOrder } from 'src/simi/Model/Orders';
+import { getOrderDetail } from 'src/simi/Model/Orders';
 import { showFogLoading, hideFogLoading } from 'src/simi/BaseComponents/Loading/GlobalLoading'
 import { toggleMessages } from 'src/simi/Redux/actions/simiactions';
 import { connect } from 'src/drivers';
@@ -17,6 +16,24 @@ const Detail = (props) => {
     const [loaded, setLoaded] = useState(false)
     const { history, isPhone } = props
     const id = history.location.state.orderData.increment_id || null;
+
+    // small phone
+    const [isSmallPhone, setIsSmallPhone] = useState(window.innerWidth < 601)
+
+    const resizePhone = () => {
+        window.onresize = function () {
+            const width = window.innerWidth;
+            // small phone
+            const newIsPhone = width < 601
+            if (isSmallPhone !== newIsPhone) {
+                setIsSmallPhone(newIsPhone)
+            }
+        }
+    }
+
+    useEffect(() => {
+        resizePhone();
+    }, [isSmallPhone])
 
     useEffect(() => {
         const api = Identify.ApiDataStorage('quoteOrder') || {}
@@ -30,12 +47,6 @@ const Detail = (props) => {
         }
     }, [])
 
-    const getDataReOrder = (data) => {
-        if (data) {
-            hideFogLoading();
-            props.toggleMessages([{ type: 'success', message: data.message ,auto_dismiss:true}])
-        }
-    }
 
     const processData = (data) => {
         let dataArr = {}
@@ -49,13 +60,51 @@ const Detail = (props) => {
     const getDateFormat = dateData => {
         const date = new Date(dateData);
         const day = date.getDate();
-        const month =
+        let month =
             date.getMonth() + 1 < 10
-                ? "0" + (date.getMonth() + 1)
+                ? '0' + (date.getMonth() + 1)
                 : date.getMonth() + 1;
         const year = date.getFullYear();
+        switch (month) {
+            case '01':
+                month = 'January';
+                break;
+            case '02':
+                month = 'February';
+                break;
+            case '03':
+                month = 'March';
+                break;
+            case '04':
+                month = 'April';
+                break;
+            case '05':
+                month = 'May';
+                break;
+            case '06':
+                month = 'June';
+                break;
+            case '07':
+                month = 'July';
+                break;
+            case '08':
+                month = 'August';
+                break;
+            case '09':
+                month = 'September';
+                break;
+            case '10':
+                month = 'October';
+                break;
+            case '11':
+                month = 'November';
+                break;
+            case '12':
+                month = 'December';
+                break;
+        }
 
-        return day + "/" + month + "/" + year;
+        return month + ' ' + day + ', ' + year;
     };
 
     const getFormatPrice = value => {
@@ -66,73 +115,7 @@ const Detail = (props) => {
         history.push({ pathname: '/orderhistory.html' });
     }
 
-    const renderSummary = () => {
-        let html = null;
-        if (data) {
-            html = (
-                <div className="order-detail__summary">
-                    <div className="detail-col">
-                        <div className="line-num">
-                            <b>{Identify.__("Order Number:")}</b>
-                            <span style={{ marginLeft: 26 }}>
-                                {data.increment_id}
-                            </span>
-                        </div>
-                        <div className="line-num">
-                            <b>{Identify.__("Order placed on:")}</b>
-                            <span style={{ marginLeft: 16 }}>
-                                {getDateFormat(data.created_at)}
-                            </span>
-                        </div>
-                        <div className="line-num">
-                            <b>{Identify.__("Order status:")}</b>
-                            <span
-                                className="green"
-                                style={{
-                                    marginLeft: 42,
-                                    textTransform: "capitalize"
-                                }}
-                            >
-                                {data.status}
-                            </span>
-                        </div>
-                    </div>
-                    {data.shipping_address &&
-                        Object.keys(data.shipping_address).length > 0 && (
-                            <div className="detail-col">
-                                <div className="line-num">
-                                    <b>{Identify.__("Delivery Address:")}</b>
-                                    <div className="address green">
-                                        {data.shipping_address.street && (
-                                            <span style={{ display: "block" }}>
-                                                {ReactHTMLParse(
-                                                    data.shipping_address
-                                                        .street
-                                                )}
-                                            </span>
-                                        )}
-                                        {data.shipping_address.city && (
-                                            <span style={{ display: "block" }}>
-                                                {data.shipping_address.city}
-                                            </span>
-                                        )}
-                                        {data.shipping_address.postcode && (
-                                            <span style={{ display: "block" }}>
-                                                {data.shipping_address.postcode}
-                                            </span>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-                </div>
-            );
-        }
-        return html;
-    };
-
     const renderItem = items => {
-        console.log(items);
         let html = null;
         const totalPrice = data.total;
 
@@ -145,83 +128,48 @@ const Detail = (props) => {
                         let option = options[i];
                         optionText.push(
                             <div key={Identify.makeid()}>
-                                <b>{option.option_title}</b> :{" "}
+                                <b>{option.option_title}</b> :{' '}
                                 {ReactHTMLParse(option.option_value)}
                             </div>
                         );
                     }
                 }
 
-                const location = `/product.html?sku=${item.simi_sku?item.simi_sku:item.sku}`
+                const location = `/product.html?sku=${
+                    item.simi_sku ? item.simi_sku : item.sku
+                    }`;
 
                 return (
-                    <div className="order-detail-line" key={index}>
-                        <div className="detail-order__col img-item">
-                            {isPhone && <b>{Identify.__('Item')}</b>}
-                            <Link
-                                to={location}
-                                className="img-name-col"
-                            >
-                                <div
-                                    className="img-order-container"
-                                    style={{}}
-                                >
-                                    <img src={item.image} alt={item.name} />
-                                </div>
-                                <div className="order-item-info">
-                                    <div
-                                        className="des-order"
-                                        style={{}}
-                                    >
-                                        <div className="item-name">
-                                            {ReactHTMLParse(item.name)}
+                    <React.Fragment key={Identify.randomString(5)}>
+                        <tr key={Identify.randomString(5)} className={(index + 1) == items.length ? 'last-tr' : ''}>
+                            <td className="colName" data-title="Product name">
+                                <Link to={location} className="img-name-col">
+                                    {ReactHTMLParse(item.name)}
+                                    {optionText.length > 0 && (
+                                        <div className="item-options">
+                                            {optionText}
                                         </div>
-                                        {optionText.length > 0 && (
-                                            <div className="item-options">
-                                                {optionText}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            </Link>
-                        </div>
-                        <div className="detail-order__col product-code">
-                            {isPhone && <b>{Identify.__('Product code')}</b>}
-                            {item.sku}
-                        </div>
-                        <div className="detail-order__col item-size">
-                            {isPhone && <b>{Identify.__('Size')}</b>}
-                            {optionText}
-                        </div>
-                        <div className="detail-order__col item-qty">
-                            {isPhone && <b>{Identify.__('Quantity')}</b>}
-                            <span>{parseInt(item.qty_ordered, 10)}</span>
-                        </div>
-                        <div className="detail-order__col">
-                            {isPhone && <b>{Identify.__('Unit Price')}</b>}
-                            <div
-                                className="cart-item-value"
-                                style={{}}
-                            >
-                                {
-                                    totalPrice.tax ? getFormatPrice(item.price_incl_tax) : getFormatPrice(item.price)
-                                }
-                            </div>
-                        </div>
-                        <div className="detail-order__col">
-                            {isPhone && <b>{Identify.__('Total Price')}</b>}
-                            <div
-                                className="cart-item-value"
-                                style={{}}
-                            >
-                                {
-                                    totalPrice.tax
-                                        ? getFormatPrice(item.row_total_incl_tax)
-                                        : getFormatPrice(item.row_total)
-                                }
-                            </div>
-                        </div>
-                    </div>
+                                    )}
+                                </Link>
+                            </td>
+                            <td data-title="SKU">{item.sku}</td>
+                            <td style={{ textAlign: 'right' }} data-title="Price">
+                                {totalPrice.tax
+                                    ? getFormatPrice(item.price_incl_tax, data.order_currency_code)
+                                    : getFormatPrice(item.price, data.order_currency_code)}
+                            </td>
+                            <td style={{ textAlign: 'right', minWidth: '10%' }} data-title="Qty">
+                                <span className="qty" >
+                                    {parseInt(item.qty_ordered, 10)}
+                                </span>
+                            </td>
+                            <td style={{ textAlign: 'right' }} data-title="Subtotal">
+                                {totalPrice.tax
+                                    ? getFormatPrice(item.row_total_incl_tax, data.order_currency_code)
+                                    : getFormatPrice(item.row_total, data.order_currency_code)}
+                            </td>
+                        </tr>
+                    </React.Fragment>
                 );
             });
         }
@@ -230,35 +178,56 @@ const Detail = (props) => {
 
     const renderTableItems = () => {
         let html = null;
-
         if (data) {
+            const totalPrice = data.total;
             html = (
                 <div className="order-detail-table">
-                    {!isPhone && <div className="order-header">
-                        <div className="detail-order__col">
-                            {Identify.__("Item")}
-                        </div>
-                        <div className="detail-order__col">
-                            {Identify.__("Product Code")}
-                        </div>
-                        <div className="detail-order__col">
-                            {Identify.__("Size")}
-                        </div>
-                        <div className="detail-order__col">
-                            {Identify.__("Quantity")}
-                        </div>
-                        <div className="detail-order__col">
-                            {Identify.__("Unit Price")}
-                        </div>
-                        <div className="detail-order__col">
-                            {Identify.__("Total price")}
-                        </div>
-                    </div>}
-                    <div className="order-body">
-                        {data.order_items.length > 0
-                            ? renderItem(data.order_items)
-                            : Identify.__("No product found!")}
-                    </div>
+                    {
+                        <table className={isSmallPhone ? "col-xs-12 table-striped table-siminia" : ""}>
+                            <thead>
+                                <tr>
+                                    <th className="colName">Product Name</th>
+                                    <th>SKU</th>
+                                    <th style={{ textAlign: 'right' }}>
+                                        Price
+                                    </th>
+                                    <th style={{ textAlign: 'center' }}>Qty</th>
+                                    <th style={{ textAlign: 'right' }}>
+                                        Subtotal
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {data.order_items.length > 0
+                                    ? renderItem(data.order_items)
+                                    : Identify.__('No product found!')}
+                                <tr className="special-row" data-title="Subtotal">
+                                    <td colSpan="5">
+                                        {Identify.__('Subtotal: ')}
+                                        {totalPrice.tax
+                                            ? getFormatPrice(
+                                                totalPrice.subtotal_incl_tax, data.order_currency_code
+                                            )
+                                            : getFormatPrice(
+                                                totalPrice.subtotal_excl_tax, data.order_currency_code
+                                            )}
+                                    </td>
+                                </tr>
+                                <tr className="special-row grand-total">
+                                    <td className="super-special" colSpan="5">
+                                        {Identify.__('Grand Total: ')}
+                                        {totalPrice.tax
+                                            ? getFormatPrice(
+                                                totalPrice.grand_total_incl_tax, data.order_currency_code
+                                            )
+                                            : getFormatPrice(
+                                                totalPrice.shipping_hand_excl_tax, data.order_currency_code
+                                            )}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    }
                 </div>
             );
         }
@@ -270,31 +239,17 @@ const Detail = (props) => {
 
         return (
             <div className="detail-order-footer">
-                <div className="delivery-restrictions">
-                    <b className="title" style={{ display: 'block' }}>{Identify.__('Delivery Restrictions')}</b>
-                    <textarea name="delevery_retriction" readOnly defaultValue={data.shipping_restriction} placeholder={Identify.__('e.g. no through route, low bridges etc.')}/>
-                </div>
                 <div className="box-total-price">
                     {totalPrice && <div className="total-sub-price-container">
                         <div className="summary-price-line">
                             <span className="bold">{Identify.__('Subtotal')}</span>
                             <span className="price">{totalPrice.tax ? getFormatPrice(totalPrice.subtotal_incl_tax) : getFormatPrice(totalPrice.subtotal_excl_tax)}</span>
                         </div>
-                        <div className="summary-price-line">
-                            <span className="bold">{Identify.__('Delivery')}</span>
-                            <span className="price">{totalPrice.tax ? getFormatPrice(totalPrice.shipping_hand_incl_tax) : getFormatPrice(totalPrice.shipping_hand_excl_tax)}</span>
-                        </div>
-                        <div className="summary-price-line">
-                            <span className="bold">{Identify.__('VAT')}</span>
-                            <span className="price">{getFormatPrice(totalPrice.tax)}</span>
-                        </div>
                         <div className="summary-price-line total">
                             <span className="bold">{Identify.__('Total')}</span>
                             <span className="price">{totalPrice.tax ? getFormatPrice(totalPrice.grand_total_incl_tax) : getFormatPrice(totalPrice.shipping_hand_excl_tax)}</span>
                         </div>
                     </div>}
-
-                    <Whitebtn className="back-all-orders" text={Identify.__('Back to all orders')} onClick={onBackOrder} />
                 </div>
             </div>
         )
@@ -303,26 +258,80 @@ const Detail = (props) => {
     if (!data) {
         return <Loading />;
     }
-
     return (
         <div className="dashboard-acc-order-detail">
-            <div className="customer-page-title">
-                {Identify.__("Order overview")}
+            <div className="order-detail-page-title">
+                {Identify.__("Order ") + "#" + data.entity_id}
             </div>
-            {renderSummary()}
-            <Whitebtn
-                className="back-all-orders"
-                text={Identify.__('Re-order')}
-                style={{ width: "20%", marginBottom: "10px" }}
-                onClick={() => {
-                    showFogLoading();
-                    getReOrder(id, getDataReOrder)
-                }}
-            />
+            <div className="order-date">
+                {!isPhone && getDateFormat(data.created_at)}
+            </div>
             {renderTableItems()}
-            {renderFooter()}
+            {/* {renderFooter()} */}
+            <div className="order-information-title">
+                {Identify.__('Order Information')}
+            </div>
+            <div className="order-information-detail">
+                <div className="container order-detail-container">
+                    <div className="row detail-row">
+                        <div className="col-md-3 col-sm-6 detail-col">
+                            <div className="title">
+                                {Identify.__('Shipping Address')}
+                            </div>
+                            <div className="detail">
+                                <address>
+                                    {Identify.__(data.shipping_address.firstname)}{' '}
+                                    {Identify.__(data.shipping_address.lastname)}
+                                    <br />
+                                    {Identify.__(data.shipping_address.email)} <br />
+                                    {Identify.__(data.shipping_address.company)} <br />
+                                    {Identify.__(data.shipping_address.street)} <br />
+                                    {Identify.__(data.shipping_address.city)},{' '}
+                                    {Identify.__(data.shipping_address.region)},{' '}
+                                    {Identify.__(data.shipping_address.postcode)} <br />
+                                    +{Identify.__(data.shipping_address.telephone)}
+                                </address>
+                            </div>
+                        </div>
+                        <div className="col-md-3 col-sm-6 detail-col">
+                            <div className="title">
+                                {Identify.__('Shipping Method')}
+                            </div>
+                            <div className="detail">
+                                {Identify.__(data.shipping_method)}
+                            </div>
+                        </div>
+                        <div className="col-md-3 col-sm-6 detail-col">
+                            <div className="title">
+                                {Identify.__('Billing Address')}
+                            </div>
+                            <div className="detail">
+                                <address>
+                                    {Identify.__(data.billing_address.firstname)}{' '}
+                                    {Identify.__(data.billing_address.lastname)}
+                                    <br />
+                                    {Identify.__(data.billing_address.email)} <br />
+                                    {Identify.__(data.billing_address.company)} <br />
+                                    {Identify.__(data.billing_address.street)} <br />
+                                    {Identify.__(data.billing_address.city)},{' '}
+                                    {Identify.__(data.billing_address.region)},{' '}
+                                    {Identify.__(data.billing_address.postcode)} <br />
+                                    +{Identify.__(data.billing_address.telephone)}
+                                </address>
+                            </div>
+                        </div>
+                        <div className="col-md-3 col-sm-6 detail-col">
+                            <div className="title">
+                                {Identify.__('Payment Method')}
+                            </div>
+                            <div className="detail">
+                                {Identify.__(data.payment_method)}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        // <div>Hello</div>
     );
 }
 

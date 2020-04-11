@@ -4,9 +4,9 @@ import Identify from 'src/simi/Helper/Identify'
 require('./techspec.scss');
 
 const Techspec = props => {
-    const {product} = props
+    const { product } = props
     if (product && product.simiExtraField && product.simiExtraField.additional) {
-        const additional = product.simiExtraField.additional
+        const additional = product.simiExtraField.additional;
         const tspecitems = []
         for (const i in additional) {
             const additional_detail = additional[i]

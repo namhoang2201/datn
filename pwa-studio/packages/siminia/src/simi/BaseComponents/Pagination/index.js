@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Identify from 'src/simi/Helper/Identify';
 import BackIcon from 'src/simi/BaseComponents/Icon/TapitaIcons/Back'
 import NextIcon from 'src/simi/BaseComponents/Icon/TapitaIcons/Next'
+import { smoothScrollToView } from 'src/simi/Helper/Behavior';
 
 class Pagination extends React.Component {
     constructor(props){
@@ -24,6 +25,7 @@ class Pagination extends React.Component {
         if (this.props.changedPage) {
             this.props.changedPage(event.target.id)
         }
+        smoothScrollToView($("#root"));
     }
 
     changeLimit = (event) => {

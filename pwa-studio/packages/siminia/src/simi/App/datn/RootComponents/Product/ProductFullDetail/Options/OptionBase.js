@@ -31,7 +31,6 @@ class OptionBase extends React.Component {
     };
 
     updatePrices=(selected = this.selected) =>{
-        console.log(selected)
         return <div></div>;
     };
 

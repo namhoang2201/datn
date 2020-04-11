@@ -8,7 +8,7 @@ const StaticRate = props => {
     const height = size
     const width = 5 * height
     const rateWidth = width * rate / 5
-    
+
     return (
         <div className={`${classes["static-rate"]} static-rate`} style={{width: width, height: height, position:'relative'}}>
             <FiveStars style={{width: width, height: height, fill:fillColor?fillColor:'#e0e0e0'}}/>

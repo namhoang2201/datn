@@ -2,7 +2,7 @@ import React from 'react'
 import { PbPageHoc } from 'src/simi/BaseComponents/Pbpage'
 import Identify from 'src/simi/Helper/Identify'
 import TitleHelper from 'src/simi/Helper/TitleHelper'
-import DefaultHome from 'src/simi/App/core/Home'
+import DefaultHome from 'src/simi/App/datn/Home'
 
 const Home = props => {
     const jsonSimiCart = Identify.getAppDashboardConfigs();

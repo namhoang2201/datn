@@ -58,7 +58,7 @@ class Storeview extends React.Component {
     }
 
     renderItem() {
-        const {classes} = this.props
+        const {classes, storeviewLabel} = this.props
         if (typeof(Storage) !== "undefined") {
             const merchantConfigs = Identify.getStoreConfig();
             const storeList = merchantConfigs.simiStoreConfig.config.stores.stores;
@@ -73,7 +73,7 @@ class Storeview extends React.Component {
                         className={this.props.className}
                     >
                         <ListItemNested
-                            primarytext={<div className={`${classes["menu-title"]} menu-title`} style={{color:configColor.menu_text_color}}>{Identify.__('Language')}</div>}
+                            primarytext={<div className={`${classes["menu-title"]} menu-title`} style={{color:configColor.menu_text_color}}>{storeviewLabel?storeviewLabel:Identify.__('Language')}</div>}
                             className={this.props.className}
                         >
                             {this.renderSubItem(storeViews)}
@@ -92,13 +92,14 @@ class Storeview extends React.Component {
         
         storesRender = storeViews.map((store) => {
             if(parseInt(store.is_active,10) !== 1 ) return null;
-            const isSelected = parseInt(store.store_id, 10) === this.getSelectedStoreId() ? 
+            const isSelected = parseInt(store.store_id, 10) === this.getSelectedStoreId()
+            const selectedSign = isSelected?
                 <Check color={configColor.button_background} style={{width: 18, height: 18}}/> : 
                 <span className={`${classes["not-selected"]} not-selected`} style={{borderColor : configColor.menu_text_color, width: 18, height: 18}}></span>;
             const storeItem =  (
-                <div className={`${classes["store-item"]} store-item`} style={{display: 'flex'}}>
+                <div className={`${classes["store-item"]} store-item ${isSelected && 'selected'}`} style={{display: 'flex'}}>
                     <div className={`${classes["selected"]} selected`}>
-                        {isSelected}
+                        {selectedSign}
                     </div>
                     <div className={`${classes["store-name"]} store-name`}>
                         {store.name}
@@ -110,7 +111,9 @@ class Storeview extends React.Component {
                     role="presentation"
                     key={Identify.randomString(5)}
                     style={{marginLeft: 5,marginRight:5}}
-                    onClick={() => this.selectedStore(store)}>
+                    onClick={() => this.selectedStore(store)}
+                    className={`store-item-ctn ${isSelected && 'selected'}`}
+                    >
                     <MenuItem title={storeItem}
                                 className={this.props.className}
                     />

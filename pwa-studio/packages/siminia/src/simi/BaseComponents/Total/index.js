@@ -7,10 +7,10 @@ import {configColor} from 'src/simi/Config'
 const Total = props => {
     const { currencyCode, data } = props
     if (!data.total_segments)
-        return
+        return ''
     const total_segments = data.total_segments
     const totalRows = []
-
+    total_segments.sort((a, b)=> (a.code === 'grand_total') ? 1 : -1)
     total_segments.forEach((item, index) => {
         let className = 'custom'
         if (item.code == 'subtotal')
@@ -20,6 +20,7 @@ const Total = props => {
         else if (item.code == 'grand_total')
             className = "grand_total"
 
+        if (item.value || (item.code == 'grand_total'))
         totalRows.push(
             <div key={index} className={className}>
                 <div>

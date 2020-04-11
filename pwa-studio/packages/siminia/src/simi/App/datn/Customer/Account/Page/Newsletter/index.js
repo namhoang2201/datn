@@ -1,15 +1,16 @@
 import React from 'react';
-import { compose } from 'redux';
-import classify from 'src/classify';
 import Identify from 'src/simi/Helper/Identify'
-import TitleHelper from 'src/simi/Helper/TitleHelper'
 import Loading from "src/simi/BaseComponents/Loading";
 import { connect } from 'src/drivers';
 import { Simiquery, SimiMutation } from 'src/simi/Network/Query'
 import CUSTOMER_NEWSLETTER from 'src/simi/queries/customerNewsletter.graphql';
 import CUSTOMER_NEWSLETTER_UPDATE from 'src/simi/queries/customerNewsletterUpdate.graphql';
-import defaultClasses from './style.scss';
 import { toggleMessages } from 'src/simi/Redux/actions/simiactions';
+import PageTitle from 'src/simi/App/datn/Customer/Account/Components/PageTitle';
+import { Colorbtn } from 'src/simi/BaseComponents/Button';
+import RadioCheckbox from 'src/simi/App/datn/BaseComponents/RadioCheckbox';
+
+const $ = window.$;
 
 class Newsletter extends React.Component {
 
@@ -18,11 +19,10 @@ class Newsletter extends React.Component {
     }
 
     render() {
-        const {user, } = this.props;
+        const { user } = this.props;
         return (
             <div className='newsletter-wrap'>
-                {TitleHelper.renderMetaHeader({title:Identify.__('Newsletter')})}
-                <h1>{Identify.__('Newsletter Subscription')}</h1>
+                <PageTitle title={Identify.__("Newsletter Subscription ")} />
                 <div className='subscription-title'>{Identify.__('Subscription option')}</div>
                 <Simiquery query={CUSTOMER_NEWSLETTER}>
                     {({ loading, error, data }) => {
@@ -37,32 +37,36 @@ class Newsletter extends React.Component {
                                     if (data && data.updateCustomer && data.updateCustomer.customer) {
                                         if (data.updateCustomer.customer.is_subscribed === true) {
                                             this.props.toggleMessages([{
-                                                    type: 'success',
-                                                    message: "Newsletter is subcribed successfully!",
-                                                    auto_dismiss: true
+                                                type: 'success',
+                                                message: Identify.__("You have been subscribed from the newsletter"),
+                                                auto_dismiss: true
                                             }]);
                                         } else {
                                             this.props.toggleMessages([{
-                                                    type: 'success',
-                                                    message: "Newsletter is unsubcribed successfully!",
-                                                    auto_dismiss: true
+                                                type: 'success',
+                                                message: Identify.__("You have been unsubscribed from the newsletter"),
+                                                auto_dismiss: true
                                             }]);
                                         }
                                     }
                                     return (
-                                    <>
-                                        <div className="account-newsletter">
-                                            <input id="checkbox-subscribe" type="checkbox" onChange={(e)=> {
-                                                if (!user.email) return false;
-                                                clicked = true;
-                                                let isSubscribed = e.target.checked ? true : false;
-                                                updateCustomer({ variables: { email: user.email, isSubscribed: isSubscribed } });
-                                            }}
-                                            checked={is_subscribed} value={1} />
-                                            <label htmlFor="checkbox-subscribe">&nbsp;{Identify.__('General Subscription')}</label>
-                                        </div>
-                                        {(data === undefined && clicked) && <Loading />}
-                                    </>
+                                        <>
+                                            <div className="account-newsletter">
+                                                <RadioCheckbox defaultChecked={is_subscribed} title={Identify.__('General Subscription')} id='checkbox-subscribe' />
+
+                                                <div className="dash-action-buttons">
+                                                    <Colorbtn text={Identify.__("Save")} className="save-subscription" onClick={() => {
+                                                        if (!user.email) return false;
+                                                        clicked = true;
+                                                        const checkbox = $('.account-newsletter').find('input#checkbox-subscribe');
+                                                        const isChecked = checkbox.is(":checked") ? true : false;
+                                                        if (isChecked === is_subscribed) return false;
+                                                        updateCustomer({ variables: { email: user.email, isSubscribed: isChecked } });
+                                                    }} />
+                                                </div>
+                                            </div>
+                                            {(data === undefined && clicked) && <Loading />}
+                                        </>
                                     )
                                 }}
                             </SimiMutation>
@@ -85,10 +89,7 @@ const mapDispatchToProps = {
     toggleMessages,
 }
 
-export default compose(
-    classify(defaultClasses),
-    connect(
-        mapStateToProps,
-        mapDispatchToProps
-    )
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
 )(Newsletter);

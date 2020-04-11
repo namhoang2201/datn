@@ -13,7 +13,7 @@ class Profile extends Component {
     render() {
         return (
             <div className='account-information-area'>
-                <PageTitle title={'Account Information'}/>
+                <PageTitle title={'Edit Account Information'}/>
                 <ProfileForm {...this.props}/>
             </div>
         )

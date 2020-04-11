@@ -1,29 +1,272 @@
 .new-review {
+    margin-top: 30px;
     .review-list-title {
-        font-size: 20px;
-        margin-bottom: 20px;
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 22px;
+        margin-bottom: 22px;
     }
     .review-form {
-        max-width: 600px;
-    }
-    .your-rating-title {
-        font-size: 20px;
-        font-weight: 600;
-        margin-bottom: 10px;
-    }
-    .table {
-        margin-bottom: 10px;
-    }
-    .form-group {
-        margin-bottom: 10px;
-    }
-    .label-item {
-        margin-bottom: 5px;
+        max-width: 573px;
+        .your-rating-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .rate-table {
+            margin-bottom: 25px;
+            .rate-item {
+                display: flex;
+                justify-content: start;
+                align-items: center;
+            }
+            .rate-cell {
+                border-top: none;
+                padding-left: 0;
+                vertical-align: middle;
+                padding: 0;
+                font-size: 16px;
+                line-height: 16px;
+                min-width: 70px;
+                &.label-item {
+                    padding-right: 10px;
+                }
+                .rate-star {
+                    margin-right: 5px;
+                }
+            }
+        }
     }
     .rq {
         color: red;
     }
-    .btn-submit-review-ctn {
-        margin-top: 15px;
+    .form-content {
+        .form-group {
+            margin-bottom: 25px;
+            .label-item {
+                margin-bottom: 10px;
+                font-size: 16px;
+                line-height: 19px;
+            }
+            .form-control {
+                border: none !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+                color: #101820;
+                height: 48px;
+                padding: 17px 16px;
+                &::-webkit-input-placeholder,
+                &:-ms-input-placeholder,
+                &::placeholder {
+                    /* Edge */
+                    color: #727272;
+                }
+            }
+            textarea.form-control {
+                height: 208px;
+            }
+        }
+        .btn-submit-review-ctn {
+            .btn-submit-review {
+                width: 207px;
+                height: 40px;
+                background-color: #101820;
+                color: #fff;
+                font-weight: 500;
+                text-transform: uppercase;
+                font-size: 16px;
+                font-weight: 600;
+                line-height: 19px;
+                text-align: center;
+                padding-top: 0px;
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                &:hover {
+                    opacity: 0.8;
+                }
+            }
+        }
+    }
+    #review-require-login-popup {
+        &.app-modal-popup .modal-content {
+            max-width: 565px;
+            padding: 60px 86.5px 50px;
+            .icon-cross {
+                position: absolute;
+                right: 30px;
+                top: 30px;
+            }
+            .popup-main-content {
+                text-align: center;
+                .confirm-ck-title {
+                    font-size: 20px;
+                    font-weight: 600;
+                    line-height: 24px;
+                    color: #000000;
+                }
+                .confirm-ck-desc {
+                    font-size: 14px;
+                    line-height: 17px;
+                    text-align: center;
+                    margin-top: 12px;
+                    color: #727272;
+                }
+                .form-control-pl {
+                    .item-form-control {
+                        position: relative;
+                    }
+                    &:first-child {
+                        margin-top: 20px;
+                    }
+                    &:not(:first-child) {
+                        margin-top: 18px;
+                    }
+                    span {
+                        left: 16px;
+                        position: absolute;
+                        top: 50%;
+                        transform: translateY(-50%);
+                    }
+                    input {
+                        width: 100%;
+                        height: 48px;
+                        background-color: #f2f2f2;
+                        color: #000000;
+                        padding: 15px 16px 15px 46px;
+                        border: 0;
+                        font-size: 14px;
+                        line-height: 17px;
+                        outline: none;
+                    }
+                    div.mage-error {
+                        padding-top: 6px;
+                        color: #f0251c;
+                        font-size: 14px;
+                        line-height: 17px;
+                        text-align: left;
+                    }
+                }
+                .popup-forgot-pw {
+                    float: right;
+                    margin-top: 16px;
+                    color: #000;
+                    font-size: 16px;
+                    font-weight: 600;
+                    line-height: 19px;
+                }
+                button.popup-signin-btn {
+                    height: 48px;
+                    display: inline-block;
+                    clear: both;
+                    width: 100%;
+                    margin-top: 30px;
+                    font-size: 16px;
+                    font-weight: 600;
+                    letter-spacing: 1px;
+                    line-height: 19px;
+                    padding: 14px;
+                    text-transform: uppercase;
+                    outline: none;
+                }
+            }
+        }
+    }
+    @media screen and (max-width: 639px) {
+        #review-require-login-popup {
+            &.app-modal-popup .modal-content {
+                padding: 20px 15px;
+                .icon-cross {
+                    top: 10px;
+                    right: 10px;
+                }
+            }
+        }
+        .review-form {
+            .form-content {
+                .form-group {
+                    margin-bottom: 20px;
+                }
+                .btn-submit-review-ctn {
+                    margin-top: 20px;
+                    .btn-submit-review {
+                        min-width: 145px;
+                        min-height: 36px;
+                        font-size: 12px;
+                        line-height: 12px;
+                        padding: 12px;
+                        width: fit-content;
+                        height: fit-content;
+                    }
+                }
+            }
+        }
+    }
+}
+.mobile {
+    .new-review {
+        .review-form {
+            .your-rating-title {
+                font-size: 14px;
+                line-height: 14px;
+                margin-bottom: 10px;
+            }
+            .rate-table {
+                margin-bottom: 20px;
+                .label-item {
+                    font-size: 14px;
+                    line-height: 14px;
+                    padding: 0px;
+                    padding-inline-end: 5px;
+                }
+                span svg {
+                    height: 20px !important;
+                    width: 20px !important;
+                }
+            }
+            .form-content {
+                .btn-submit-review-ctn {
+                    margin-top: 30px;
+                    margin-bottom: 17px;
+                    .btn-submit-review {
+                        min-width: 161px;
+                        min-height: 40px;
+                        line-height: 14px;
+                        .siminia-btn {
+                            font-size: 14px;
+                            line-height: 14px;
+                            font-weight: 600;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.rtl-root {
+    .new-review {
+        .review-form .rate-table .label-item {
+            padding-left: 12px;
+            padding-right: 0px;
+        }
+        #review-require-login-popup.app-modal-popup {
+            .modal-content {
+                .popup-main-content {
+                    .form-control-pl {
+                        span{
+                            left: unset;
+                            right: 16px;
+                        }
+                        input{
+                            padding-right: 46px;
+                            padding-left: 16px;
+                        }
+                    }
+                    .popup-forgot-pw{
+                        float: left;
+                    }
+                }
+            }
+        }
     }
 }

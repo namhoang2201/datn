@@ -2,9 +2,25 @@
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    .product-prices span.price {
-        font-size: 28px;
-        font-weight: 800;
+    .product-prices {
+        display: flex;
+        span.price {
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 20px;
+            color: #000000;
+        }
+        strike {
+            color: #727272;
+            .regular-price-value {
+                color: #727272;
+                > span.price {
+                    color: #727272 !important;
+                    font-weight: 400;
+                    margin-left: 9px;
+                }
+            }
+        }
     }
     .product-stock-status {
         margin-top: 16px;
@@ -12,7 +28,7 @@
         text-align: right;
     }
     .prices-layout {
-        margin-top: 16px;
+        margin-top: 20px;
     }
     .stock-status {
         font-weight: 600;
@@ -22,5 +38,19 @@
     .product-sku span {
         text-transform: uppercase;
         font-size: 14px;
+    }
+}
+.rtl-root{
+    .prices-container {
+        .product-prices {
+            strike {
+                .regular-price-value {
+                    > span.price {
+                        margin-right: 9px;
+                        margin-left: unset;
+                    }
+                }
+            }
+        }
     }
 }

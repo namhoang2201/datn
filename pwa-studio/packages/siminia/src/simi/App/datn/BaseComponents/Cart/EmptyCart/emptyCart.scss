@@ -1,0 +1,46 @@
+.empty_cart_root {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1rem;
+    text-align: center;
+
+    .emptyTitle {
+        font-size: 16px;
+        line-height: 19px;
+        margin-bottom: 39px;
+        font-weight: 500;
+        margin-top: 20px;
+    }
+
+    .continue {
+        background: none;
+        border: 0;
+        cursor: pointer;
+        padding: 0;
+        touch-action: manipulation;
+        user-select: none;
+        -webkit-appearance: none;
+        span {
+            color: white;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 17px;
+            background-color: #101820;
+            border-radius: 0;
+            height: 44px;
+            min-width: 221px;
+            width: auto;
+            padding: 0 1rem;
+            display: block;
+            text-align: center;
+            text-transform: uppercase;
+            padding-top: 14px;
+            :hover {
+                cursor: pointer;
+            }        
+        }
+    }
+
+}

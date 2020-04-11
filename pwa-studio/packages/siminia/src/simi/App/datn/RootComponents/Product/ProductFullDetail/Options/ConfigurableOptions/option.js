@@ -29,10 +29,10 @@ class Option extends Component {
 
     render() {
         const { handleSelectionChange, props } = this;
-        const { classes, label, values } = props;
+        const { classes, label, values, attribute_code } = props;
 
         return (
-            <div className={classes.root}>
+            <div className={`${classes.root} option-item-type option-item-type-${attribute_code}`}>
                 <h3 className={classes.title}>
                     <span>{label}</span>
                 </h3>

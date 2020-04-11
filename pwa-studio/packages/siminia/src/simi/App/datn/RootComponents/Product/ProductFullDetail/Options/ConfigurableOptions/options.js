@@ -24,7 +24,8 @@ class Options extends Component {
     render() {
         const { handleSelectionChange, props } = this;
         const { options } = props;
-
+        // sort attribute size to first
+        options.unshift(options.splice(options.findIndex(elt => elt.attribute_code === "size"), 1)[0]);
         return options.map(option => (
             <Option
                 {...option}

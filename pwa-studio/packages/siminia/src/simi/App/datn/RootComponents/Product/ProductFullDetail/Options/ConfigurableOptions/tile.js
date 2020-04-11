@@ -40,7 +40,7 @@ class Tile extends Component {
         const { label } = item;
 
         return (
-            <button {...restProps} className={className}>
+            <button {...restProps} className={`${className} ${isSelected ? 'selected': ''}`} style={{backgroundColor: label}}>
                 <span>{label}</span>
             </button>
         );

@@ -1,22 +1,26 @@
 import ProductFullDetail from './ProductFullDetail';
+import { withRouter } from 'react-router-dom';
+import { compose } from 'redux';
 
 import { connect } from 'src/drivers';
 import { addItemToCart, updateItemInCart } from 'src/actions/cart';
-import { toggleMessages } from 'src/simi/Redux/actions/simiactions';
+import { toggleMessages, simiSignedIn } from 'src/simi/Redux/actions/simiactions';
 
 const mapDispatchToProps = {
     addItemToCart,
     updateItemInCart,
-    toggleMessages
+    toggleMessages,
+    simiSignedIn
 };
 
-const mapStateToProps = ({ user }) => { 
-    const { isSignedIn } = user;
+const mapStateToProps = ({ user, cart }) => {
+    const { isSignedIn, currentUser } = user;
+    const { cartId } = cart
     return {
-        isSignedIn
-    }; 
+        isSignedIn,
+        cartId,
+        currentUser
+    };
 };
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ProductFullDetail);
+
+export default compose(connect(mapStateToProps, mapDispatchToProps), withRouter)(ProductFullDetail);

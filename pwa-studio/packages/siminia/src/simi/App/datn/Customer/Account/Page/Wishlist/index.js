@@ -6,7 +6,7 @@ import Item from "./Item";
 import {getWishlist} from 'src/simi/Model/Wishlist'
 import { toggleMessages } from 'src/simi/Redux/actions/simiactions';
 import { getCartDetails } from 'src/actions/cart';
-import Pagination from 'src/simi/BaseComponents/Pagination';
+import Pagination from 'src/simi/App/datn/BaseComponents/Pagination';
 import Loading from 'src/simi/BaseComponents/Loading'
 import {hideFogLoading} from 'src/simi/BaseComponents/Loading/GlobalLoading'
 import {smoothScrollToView} from 'src/simi/Helper/Behavior'
@@ -16,6 +16,7 @@ require("./index.scss");
 const Wishlist = props => {    
     const { history, toggleMessages, getCartDetails} = props    
     const [data, setData] = useState(null)
+    const [loading, setLoading] = useState(null)
 
     const gotWishlist = (data) => {
         hideFogLoading()
@@ -45,16 +46,11 @@ const Wishlist = props => {
         return (
             <div
                 key={item.wishlist_item_id}
-                className={`${
-                    index % 4 === 0 ? "first" : ""
-                } 'siminia-wishlist-item'`}
+                className={`siminia-wishlist-item`}
             >
                 <Item
                     item={item}
                     lazyImage={true}
-                    className={`${
-                        index % 4 === 0 ? "first" : ""
-                    }`}
                     showBuyNow={true}
                     parent={this}
                     getWishlist={getWishlistItem}
@@ -75,7 +71,9 @@ const Wishlist = props => {
                     data={wishlistitems} 
                     renderItem={renderItem}  
                     itemsPerPageOptions={[8, 16, 32]} 
-                    limit={8}
+                    showItemPerPage={false}
+                    showInfoItem={false}
+                    limit={4}
                     itemCount={total}
                     changedPage={()=>smoothScrollToView($('#root'))}
                     changeLimit={()=>smoothScrollToView($('#root'))}
@@ -88,23 +86,21 @@ const Wishlist = props => {
     return (
         <div className="account-my-wishlist">
             {TitleHelper.renderMetaHeader({
-                    title:Identify.__('Favourites')
+                    title:Identify.__('My Wish List')
             })}
             <div className="customer-page-title">
-                {Identify.__("Favourites")}
+                {Identify.__("My Wish List")}
             </div>
-            <div className="account-favourites">
-                <div className="product-grid">
-                    {rows ? rows : (
-                        <div className="no-product">
-                            <p>
-                                {Identify.__(
-                                    "There are no products matching the selection"
-                                )}
-                            </p>
-                        </div>
-                    )}
-                </div>
+            <div className="my-wishlist-grid">
+                {rows ? rows : (
+                    <div className="no-product">
+                        <p>
+                            {Identify.__(
+                                "There are no products matching the selection"
+                            )}
+                        </p>
+                    </div>
+                )}
             </div>
         </div>
     )

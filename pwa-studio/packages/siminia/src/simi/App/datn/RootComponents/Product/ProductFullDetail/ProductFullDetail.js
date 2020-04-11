@@ -1,27 +1,30 @@
 import React, { Component, Suspense } from 'react';
 import { arrayOf, bool, number, shape, string, object } from 'prop-types';
-import {smoothScrollToView} from 'src/simi/Helper/Behavior'
+import { smoothScrollToView } from 'src/simi/Helper/Behavior'
 import Loading from 'src/simi/BaseComponents/Loading'
 import { Colorbtn, Whitebtn } from 'src/simi/BaseComponents/Button'
-import {showFogLoading, hideFogLoading} from 'src/simi/BaseComponents/Loading/GlobalLoading'
+import { showFogLoading, hideFogLoading } from 'src/simi/BaseComponents/Loading/GlobalLoading'
 import ProductImage from './ProductImage';
 import Quantity from './ProductQuantity';
 import isProductConfigurable from 'src/util/isProductConfigurable';
 import Identify from 'src/simi/Helper/Identify';
 import TitleHelper from 'src/simi/Helper/TitleHelper'
-import {prepareProduct} from 'src/simi/Helper/Product'
+import { prepareProduct } from 'src/simi/Helper/Product'
 import ProductPrice from '../Component/Productprice';
 import { addToCart as simiAddToCart } from 'src/simi/Model/Cart';
 import { addToWishlist as simiAddToWishlist } from 'src/simi/Model/Wishlist';
-import {configColor} from 'src/simi/Config'
-import {showToastMessage} from 'src/simi/Helper/Message';
+import { configColor } from 'src/simi/Config'
+import { showToastMessage } from 'src/simi/Helper/Message';
 import ReactHTMLParse from 'react-html-parser';
-import BreadCrumb from "src/simi/BaseComponents/BreadCrumb"
+import BreadCrumb from 'src/simi/App/datn/BaseComponents/BreadCrumb'
 import { TopReview, ReviewList, NewReview } from './Review/index'
 import SocialShare from 'src/simi/BaseComponents/SocialShare';
 import Description from './Description';
 import Techspec from './Techspec';
 import LinkedProduct from './LinkedProduct';
+import Tabs from "src/simi/App/datn/BaseComponents/Tabs";
+import { getProductDetail } from 'src/simi/Model/Product';
+import CompareProduct from 'src/simi/App/datn/BaseComponents/CompareProducts';
 
 const ConfigurableOptions = React.lazy(() => import('./Options/ConfigurableOptions'));
 const CustomOptions = React.lazy(() => import('./Options/CustomOptions'));
@@ -31,13 +34,15 @@ const DownloadableOptions = React.lazy(() => import('./Options/DownloadableOptio
 
 require('./productFullDetail.scss');
 
-class ProductFullDetail extends Component {  
+class ProductFullDetail extends Component {
     state = {
         optionCodes: new Map(),
         optionSelections: new Map(),
+        showModalCompare: false,
+        isPhone: window.innerWidth < 1024
     };
     quantity = 1
-      
+
     static getDerivedStateFromProps(props, state) {
         const { configurable_options } = props.product;
         const optionCodes = new Map(state.optionCodes);
@@ -59,7 +64,7 @@ class ProductFullDetail extends Component {
         const { optionSelections } = state;
         const { product } = props;
 
-        const params = {product: String(product.id), qty: quantity?String(quantity):'1'}
+        const params = { product: String(product.id), qty: quantity ? String(quantity) : '1' }
         if (this.customOption) {
             const customOptParams = this.customOption.getParams()
             if (customOptParams && customOptParams.options) {
@@ -100,9 +105,19 @@ class ProductFullDetail extends Component {
         return params
     }
 
+    resizePhone = () => {
+        window.onresize = () => {
+            const isPhone = window.innerWidth < 1024;
+            this.setState({ isPhone });
+        }
+    }
+    componentDidMount() {
+        this.resizePhone();
+    }
+
     addToCart = () => {
         const { props } = this;
-        const {  product } = props;
+        const { product } = props;
         if (product && product.id) {
             this.missingOption = false
             const params = this.prepareParams()
@@ -126,7 +141,7 @@ class ProductFullDetail extends Component {
     }
 
     addToWishlist = () => {
-        const {product, isSignedIn, history} = this.props
+        const { product, isSignedIn, history } = this.props;
         if (!isSignedIn) {
             history.push('/login.html')
         } else if (product && product.id) {
@@ -150,6 +165,56 @@ class ProductFullDetail extends Component {
         }
     }
 
+    addToCompare = () => {
+        const { product } = this.props;
+        const compareData = Identify.getDataFromStoreage(Identify.LOCAL_STOREAGE, 'compare_product');
+        let compareProducts;
+        if (compareData) {
+            compareProducts = compareData;
+            const result = compareProducts.find(item => item.entity_id == product.id)
+            if (result) {
+                this.showModalCompare();
+                showToastMessage(Identify.__('Product exist in compare list!'))
+            } else {
+                showFogLoading();
+                getProductDetail(this.compareCallBack, product.id)
+            }
+        } else {
+            showFogLoading();
+            getProductDetail(this.compareCallBack, product.id)
+        }
+    }
+
+    showModalCompare = () => {
+        this.setState({ showModalCompare: true });
+    }
+
+    closeModalCompare = () => {
+        this.setState({ showModalCompare: false });
+    }
+
+    compareCallBack = (data) => {
+        const compareData = Identify.getDataFromStoreage(Identify.LOCAL_STOREAGE, 'compare_product');
+        let compareProducts;
+
+        if (compareData) {
+            compareProducts = compareData;
+            compareProducts.push(data.product);
+            Identify.storeDataToStoreage(Identify.LOCAL_STOREAGE, 'compare_product', compareProducts);
+            showToastMessage(Identify.__('Product has added to your compare list'.toUpperCase()))
+            hideFogLoading();
+            this.showModalCompare();
+        } else {
+            compareProducts = [];
+            compareProducts.push(data.product);
+            Identify.storeDataToStoreage(Identify.LOCAL_STOREAGE, 'compare_product', compareProducts);
+            showToastMessage(Identify.__('Product has added to your compare list'.toUpperCase()))
+            hideFogLoading();
+            document.getElementById('compare-list-product').style.display = 'inline';
+            this.showModalCompare();
+        }
+    }
+
     showError(data) {
         if (data.errors.length) {
             const errors = data.errors.map(error => {
@@ -167,7 +232,7 @@ class ProductFullDetail extends Component {
         if (data.message) {
             this.props.toggleMessages([{
                 type: 'success',
-                message: Array.isArray(data.message)?data.message[0]:data.message,
+                message: Array.isArray(data.message) ? data.message[0] : data.message,
                 auto_dismiss: true
             }])
         }
@@ -211,7 +276,7 @@ class ProductFullDetail extends Component {
                 }
                 {
                     type_id === 'bundle' &&
-                    <BundleOptions 
+                    <BundleOptions
                         key={Identify.randomString(5)}
                         app_options={simiExtraField.app_options}
                         product_id={this.props.product.entity_id}
@@ -221,9 +286,9 @@ class ProductFullDetail extends Component {
                 }
                 {
                     type_id === 'grouped' &&
-                    <GroupedOptions 
+                    <GroupedOptions
                         key={Identify.randomString(5)}
-                        app_options={props.product.items?props.product.items:[]}
+                        app_options={props.product.items ? props.product.items : []}
                         product_id={this.props.product.entity_id}
                         ref={e => this.groupedOption = e}
                         parent={this}
@@ -231,7 +296,7 @@ class ProductFullDetail extends Component {
                 }
                 {
                     type_id === 'downloadable' &&
-                    <DownloadableOptions 
+                    <DownloadableOptions
                         key={Identify.randomString(5)}
                         app_options={simiExtraField.app_options}
                         product_id={this.props.product.entity_id}
@@ -240,8 +305,8 @@ class ProductFullDetail extends Component {
                     />
                 }
                 {
-                    ( simiExtraField && simiExtraField.app_options && simiExtraField.app_options.custom_options) &&
-                    <CustomOptions 
+                    (simiExtraField && simiExtraField.app_options && simiExtraField.app_options.custom_options) &&
+                    <CustomOptions
                         key={Identify.randomString(5)}
                         app_options={simiExtraField.app_options}
                         product_id={this.props.product.entity_id}
@@ -258,90 +323,135 @@ class ProductFullDetail extends Component {
         const lastCatePathArray = Identify.getDataFromStoreage(Identify.SESSION_STOREAGE, 'last_viewed_cate_path_array');
         if (product && product.simiExtraField && product.simiExtraField.attribute_values &&
             product.simiExtraField.attribute_values.category_ids && Array.isArray(product.simiExtraField.attribute_values.category_ids)
-            ) {
+        ) {
             if (product.simiExtraField.attribute_values.category_ids.includes(String(lastCateId))) {
-                lastCatePathArray.push({name:product.name})
-                return <BreadCrumb breadcrumb={lastCatePathArray} history={this.props.history}/>
+                lastCatePathArray.push({ name: product.name })
+                return <BreadCrumb breadcrumb={lastCatePathArray} history={this.props.history} />
             }
         }
-        return <BreadCrumb breadcrumb={[{name:'Home',link:'/'},{name:product.name}]} history={this.props.history}/>
+        return <BreadCrumb breadcrumb={[{ name: 'Home', link: '/' }, { name: product.name }]} history={this.props.history} />
     }
-    
+
+    handleAddYourReview = () => {
+        if (this.tabs) {
+            this.tabs.openTab(2);
+        }
+    }
+
     render() {
         hideFogLoading()
-        const { addToCart, productOptions, props, state, addToWishlist } = this;
-        const { optionCodes, optionSelections, } = state
+        const { addToCart, productOptions, props, state, addToWishlist, addToCompare } = this;
+        const { optionCodes, optionSelections, isPhone } = state
         const product = prepareProduct(props.product)
-        const { type_id, name, simiExtraField } = product;
-        const short_desc = (product.short_description && product.short_description.html)?product.short_description.html:''
-        const hasReview = simiExtraField && simiExtraField.app_reviews && simiExtraField.app_reviews.number
+        const { type_id, name, simiExtraField, sku } = product;
+        const short_desc = (product.short_description && product.short_description.html) ? product.short_description.html : ''
+        const hasReview = simiExtraField && simiExtraField.app_reviews && simiExtraField.app_reviews.number;
+        let stockLabel = '';
+        let hasStock = true;
+        if (simiExtraField) {
+            if (parseInt(simiExtraField.attribute_values.is_salable, 10) !== 1) {
+                stockLabel = Identify.__('Out of stock');
+                hasStock = false
+            } else {
+                stockLabel = Identify.__('In stock');
+                hasStock = true;
+            }
+        }
+
         return (
             <div className="container product-detail-root">
                 {this.breadcrumb(product)}
                 {TitleHelper.renderMetaHeader({
-                    title: product.meta_title?product.meta_title:product.name?product.name:'',
-                    desc: product.meta_description?product.meta_description:product.description?product.description:''
+                    title: product.meta_title ? product.meta_title : product.name ? product.name : '',
+                    desc: product.meta_description ? product.meta_description : product.description ? product.description : ''
                 })}
-                <div className="title">
-                    <h1 className="product-name">
-                        <span>{ReactHTMLParse(name)}</span>
-                    </h1>
-                </div>
                 <div className="image-carousel">
-                    <ProductImage 
+                    <ProductImage
                         optionCodes={optionCodes}
                         optionSelections={optionSelections}
                         product={product}
+                        showStatus={false}
+                        hasStock={hasStock}
                     />
                 </div>
                 <div className="main-actions">
-                    {hasReview ? <div className="top-review"><TopReview app_reviews={product.simiExtraField.app_reviews}/></div> : ''}
-                    <div role="presentation" className="review-btn" onClick={()=>smoothScrollToView($('#product-detail-new-review'))}>
-                        {hasReview ? Identify.__('Submit Review') : Identify.__('Be the first to review this product')}
+                    <div className="title">
+                        <h1 className="product-name">
+                            <span>{ReactHTMLParse(name)}</span>
+                        </h1>
                     </div>
+                    {sku &&
+                        <div className={`product-sku flex`} id="product-sku">
+                            <span className='sku-label'>{Identify.__('Sku') + ": "} {sku}</span>
+                        </div>
+                    }
+                    <div role="presentation" className="review-btn" onClick={this.handleAddYourReview}>
+                        {Identify.__('Be the first to review this product')}
+                    </div>
+                    {hasReview ? <div className="top-review"><TopReview app_reviews={product.simiExtraField.app_reviews} />
+                        {stockLabel && <div className="product-stock-status">{stockLabel}</div>}
+                    </div> : ''}
                     <div className="product-price">
-                        <ProductPrice ref={(price) => this.Price = price} data={product} configurableOptionSelection={optionSelections}/>
+                        <ProductPrice ref={(price) => this.Price = price} data={product} configurableOptionSelection={optionSelections} />
                     </div>
                     <div className="product-short-desc">{ReactHTMLParse(short_desc)}</div>
                     <div className="options">{productOptions}</div>
+                    {
+                        type_id !== 'grouped' && hasStock ?
+                            <div className="product-qty-content">
+                                <span className="amount-qty">{Identify.__("Amount")}</span>
+                                <Quantity
+                                    initialValue={this.quantity}
+                                    onValueChange={this.setQuantity}
+                                />
+                            </div> : ''
+                    }
                     <div className="cart-actions">
-                        {
-                            type_id !== 'grouped' &&
-                            <Quantity
-                                initialValue={this.quantity}
-                                onValueChange={this.setQuantity}
-                            />
-                        }
-                        <div 
-                            className="add-to-cart-ctn" 
+                        <div
+                            className="add-to-cart-ctn"
                             style={{
-                                borderColor:  configColor.button_background, borderWidth: '1px', borderStyle: 'solid'
+                                borderColor: configColor.button_background, borderWidth: '1px', borderStyle: 'solid'
                             }}>
-                            <Colorbtn 
-                                style={{backgroundColor: configColor.button_background, color: configColor.button_text_color}}
+                            <Colorbtn
+                                style={{ backgroundColor: configColor.button_background, color: configColor.button_text_color }}
                                 className="add-to-cart-btn"
                                 onClick={addToCart}
-                                text={Identify.__('Add to Cart')}/>
+                                text={Identify.__('Add to Cart')} />
                         </div>
+                        <div className="wishlist-actions" onClick={addToWishlist}>
+                            <span className="icon-heart" />
+                        </div>
+                        <div className="compare-actions">
+                            <div onClick={addToCompare}>
+                                <span className="icon-sync" />
+                            </div>
+                            <CompareProduct openModal={this.state.showModalCompare} closeModal={this.closeModalCompare} history={this.props.history} />
+                        </div>
+
                     </div>
-                    <div className="wishlist-actions">
-                        <Whitebtn 
-                            className="add-to-wishlist-btn"
-                            onClick={addToWishlist}
-                            text={Identify.__('Add to Favourites')}/>
-                    </div>
-                    <div className="social-share"><SocialShare id={product.id} className="social-share-item" /></div>
+                    {/* <div className="social-share"><SocialShare id={product.id} className="social-share-item" /></div> */}
                 </div>
-                {product.description && <div className="description"><Description product={product}/></div>}
-                {(simiExtraField && simiExtraField.additional && simiExtraField.additional.length) ?
-                    <div className="techspec"><Techspec product={product}/></div> : ''}
-                <div className="review-list"><ReviewList product_id={product.id}/></div>
-                <div className="new-review" id="product-detail-new-review">
-                    <NewReview product={product} toggleMessages={this.props.toggleMessages}/>
-                </div>
-                <LinkedProduct product={product} link_type="related" history={this.props.history}/>
-                <LinkedProduct product={product} link_type="crosssell" history={this.props.history}/>
-            </div>
+                <div className="product-informations">
+                    <Tabs activeItem={0}
+                        scrollTo={() => smoothScrollToView($('#product-detail-new-review'))}
+                        objRef={(tabs) => this.tabs = tabs}>
+                        <div label={Identify.__('Detail')}>
+                            {product.description && <div className="description"><Description product={product} /></div>}
+                        </div>
+                        <div label={Identify.__('More Information')}>
+                            {(simiExtraField && simiExtraField.additional && Object.keys(simiExtraField.additional).length) ? <div className="techspec"><Techspec product={product} /></div> : ''}
+                        </div>
+                        <div label={Identify.__('Reviews')}>
+                            <div className="review-list"><ReviewList product_id={product.id} /></div>
+                            <div className="new-review" id="product-detail-new-review">
+                                <NewReview product={product} toggleMessages={this.props.toggleMessages} />
+                            </div>
+                        </div>
+                    </Tabs>
+                </div >
+                <LinkedProduct product={product} link_type="related" history={this.props.history} showCarousel={true} isPhone={isPhone} />
+                {/* <LinkedProduct product={product} link_type="crosssell" history={this.props.history} /> */}
+            </div >
         );
     }
 }

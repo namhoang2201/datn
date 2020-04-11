@@ -1,5 +1,5 @@
 import React from 'react';
-import {Carousel} from 'react-responsive-carousel';
+import { Carousel } from 'react-responsive-carousel';
 import Identify from "src/simi/Helper/Identify";
 import ImageLightbox from "./ImageLightbox";
 import memoize from 'memoize-one';
@@ -22,7 +22,7 @@ class ProductImage extends React.Component {
         this.showArrows = this.props.showArrows || true;
         this.showIndicators = this.props.showIndicators || false;
         this.autoPlay = this.props.autoPlay || true;
-        this.showStatus = this.props.showStatus || true;
+        this.showStatus = this.props.hasOwnProperty('showStatus') ? this.props.showStatus : true;
         this.itemClick = this.props.itemClick || function (e) {
         };
         this.onChange = this.props.onChange || function (e) {
@@ -45,13 +45,13 @@ class ProductImage extends React.Component {
         let images = this.images
         images = images.map((item) => {
             return item.file
-            ? resourceUrl(item.file, { type: 'image-product', width: 640 })
-            : transparentPlaceholder
+                ? resourceUrl(item.file, { type: 'image-product', width: 640 })
+                : transparentPlaceholder
         });
         return (
             <ImageLightbox ref={(lightbox) => {
                 this.lightbox = lightbox
-            }} images={images}/>
+            }} images={images} />
         );
     }
 
@@ -59,12 +59,12 @@ class ProductImage extends React.Component {
         const width = $('.left-layout.product-media').width();
         return this.images.map(function (item) {
             const src = item.file
-            ? resourceUrl(item.file, { type: 'image-product', width: 640 })
-            : transparentPlaceholder
+                ? resourceUrl(item.file, { type: 'image-product', width: 640 })
+                : transparentPlaceholder
             return (
-                <div key={Identify.randomString(5)} style={{cursor: 'pointer', backgroundColor: '#ffffff'}} className="carousel-image-container">
+                <div key={Identify.randomString(5)} style={{ cursor: 'pointer', backgroundColor: '#ffffff' }} className="carousel-image-container">
                     <img width={width} src={src} height={width} alt={item.url}
-                         style={{objectFit: 'scale-down'}}
+                        style={{ objectFit: 'scale-down' }}
                     />
                 </div>
             );
@@ -72,11 +72,11 @@ class ProductImage extends React.Component {
     }
 
     onChangeItemDefault = () => {
-        
+
     }
 
     onClickThumbDefault = () => {
-        
+
     }
 
     sortAndFilterImages = memoize(items =>
@@ -95,10 +95,10 @@ class ProductImage extends React.Component {
         const { variants } = product;
         const isConfigurable = isProductConfigurable(product);
 
-        const media_gallery_entries = product.media_gallery_entries ? 
-                product.media_gallery_entries :  product.small_image ? 
-                    [{file: product.small_image, disabled: false, label: '', position: 1}] : []
-                    
+        const media_gallery_entries = product.media_gallery_entries ?
+            product.media_gallery_entries : product.small_image ?
+                [{ file: product.small_image, disabled: false, label: '', position: 1 }] : []
+
         if (
             !isConfigurable ||
             (isConfigurable && optionSelections.size === 0)
@@ -122,7 +122,7 @@ class ProductImage extends React.Component {
         ];
         const returnedImages = []
         var obj = {};
-        images.forEach(image=> {
+        images.forEach(image => {
             if (!obj[image.file]) {
                 obj[image.file] = true
                 returnedImages.push(image)
@@ -134,7 +134,7 @@ class ProductImage extends React.Component {
 
 
     sortedImages() {
-        const images= this.mediaGalleryEntries();
+        const images = this.mediaGalleryEntries();
         return this.sortAndFilterImages(images);
     }
 
@@ -149,24 +149,35 @@ class ProductImage extends React.Component {
 
     render() {
         this.images = this.sortedImages()
-        const {images} = this
+        const { images } = this;
+        const { hasStock } = this.props;
+
+        let selectedItem = 0;
+        let renderImages = this.renderImage()
+        if (Identify.isRtl()) {
+            renderImages.reverse();
+            selectedItem = (renderImages.length - 1)
+        }
+
         return (
             <div className="product-detail-carousel">
-                <Carousel 
-                        key={(images && images[0] && images[0].file) ? images[0].file : Identify.randomString(5)}
-                        showArrows={this.showArrows}  
-                        showThumbs={this.showThumbs}
-                        showIndicators={this.showIndicators}
-                        showStatus={this.showStatus}
-                        onClickItem={(e) => this.openImageLightbox(e)}
-                        onClickThumb={(e) => this.onClickThumbDefault(e)}
-                        onChange={(e) => this.onChangeItemDefault(e)}
-                        infiniteLoop={true}
-                        autoPlay={this.autoPlay}
-                        thumbWidth={80}
-                        statusFormatter={this.statusFormatter}
+                {!hasStock && <span className="out-of-stock-img">{Identify.__("Out of stock")}</span>}
+                <Carousel
+                    key={(images && images[0] && images[0].file) ? images[0].file : Identify.randomString(5)}
+                    showArrows={this.showArrows}
+                    showThumbs={this.showThumbs}
+                    showIndicators={this.showIndicators}
+                    showStatus={this.showStatus}
+                    onClickItem={(e) => this.openImageLightbox(e)}
+                    onClickThumb={(e) => this.onClickThumbDefault(e)}
+                    onChange={(e) => this.onChangeItemDefault(e)}
+                    infiniteLoop={true}
+                    autoPlay={this.autoPlay}
+                    thumbWidth={80}
+                    statusFormatter={this.statusFormatter}
+                    selectedItem={selectedItem}
                 >
-                    {this.renderImage()}
+                    {renderImages}
                 </Carousel>
                 {this.renderImageLighboxBlock()}
                 {this.renderJs()}

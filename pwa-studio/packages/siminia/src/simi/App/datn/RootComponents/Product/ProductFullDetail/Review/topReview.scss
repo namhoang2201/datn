@@ -2,13 +2,15 @@
     margin-top: 3px;
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
 }
 .rate-review {
     display: inline-block;
 }
 .review-count {
     display: inline-block;
-    font-size: 15px;
-    margin: 0 5px;
-    line-height: 15px;
+    margin: 0 9px;
+    font-size: 12px;
+    font-weight: 300;
+    line-height: 12px;
 }

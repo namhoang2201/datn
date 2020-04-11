@@ -11,7 +11,7 @@ const Description = props => {
             <h2 className="description-title">
                 <span>{Identify.__('Description')}</span>
             </h2>
-            <RichText content={product.description.html} />
+            <RichText className="description-content" content={product.description.html} />
         </React.Fragment>
     )
 }

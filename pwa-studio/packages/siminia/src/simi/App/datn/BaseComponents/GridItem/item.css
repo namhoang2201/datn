@@ -1,0 +1,32 @@
+/*
+Rate
+*/
+.item-review-rate {
+  display: flex;
+  justify-content: center;
+}
+.static-rate{
+    display: inline-flex;
+    align-items: center;
+    margin-right: 3.25px;
+}
+.static-rate-active{
+
+}
+.item-review-count {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 3.25px;
+  color: #727272;
+  font-family: "Arsenal";
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 12px;
+  text-align: center;
+}
+
+@media (max-width: 1023px) {
+  .item-review-rate svg {
+    width: 75px !important;
+  }
+}
