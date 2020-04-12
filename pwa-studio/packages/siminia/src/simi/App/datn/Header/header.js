@@ -65,9 +65,11 @@ class Header extends React.Component {
         return (
             <div className={`${this.classes['search-icon']} ${this.classes['header-logo']}`} >
                 <Link to='/'>
-                    <img
-                        src={'logo.png'}
-                        alt="siminia-logo" style={!isPhone ? { width: 240, height: 40 } : { width: 180, height: 30 }} />
+                    <div
+                        className={`${this.classes['icon']}`}
+                        style={!isPhone ? { width: 240, height: 40 } : { width: 180, height: 30 }}
+                    > 
+                    </div>
                 </Link>
             </div>
         )

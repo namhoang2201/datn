@@ -18,9 +18,13 @@
     display: block;
     margin: auto;
 }
-.header-logo a img{
+.header-logo a .icon{
     display: block;
     margin: auto;
+    background-image: url('./namlogo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position-x: center;
 }
 .header-logo .siminia-logo {
   cursor: pointer;
@@ -64,7 +68,7 @@
 .header-search-form .search-icon svg{
     fill: #727272 !important;
 }
-.search-icon img {
+.search-icon svg {
   width: 30px;
   height: 30px;
 }
