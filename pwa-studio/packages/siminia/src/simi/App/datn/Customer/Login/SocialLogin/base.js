@@ -13,6 +13,7 @@ if (
     firebaseConfigString = storeConfig.simiStoreConfig.config.social_login_config.firebase_config
 }
 var firebaseConfig = JSON.parse(firebaseConfigString)
+console.log(firebaseConfig)
 const firebaseApp = firebase.initializeApp(firebaseConfig)
 
 export default firebaseApp

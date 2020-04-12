@@ -369,6 +369,7 @@ class Products extends React.Component {
         return (
             <article className="products-gallery-root">
                 <React.Fragment>
+                {props.underHeader}
                     <div className="product-list-container-siminia">
                         {!this.state.isPhone && this.renderLeftNavigation()}
                         {this.state.isPhone && this.renderBottomFilterSort()}

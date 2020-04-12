@@ -6,6 +6,8 @@ import { isRequired } from 'src/util/formValidators';
 import Identify from 'src/simi/Helper/Identify'
 import Checkbox from 'src/simi/BaseComponents/Checkbox';
 import Cookies from 'universal-cookie';
+import firebase, { auth } from 'firebase';
+import firebaseApp from '../SocialLogin/base';
 
 require("./signIn.scss")
 
@@ -23,6 +25,88 @@ class SignIn extends Component {
         onForgotPassword: func.isRequired,
         signIn: func
     };
+
+	authHandler = async (authData) => {
+		var user = authData.user;
+		var providerId = authData.additionalUserInfo.providerId;
+		var profile = authData.additionalUserInfo.profile;
+		var email = profile.email ? profile.email : null;
+		var password = null;
+		var firstname = null;
+		var lastname = null;
+		var telephone = null;
+		var accessToken = authData.credential.accessToken;
+		var accessTokenSecret = authData.credential.secret;
+		var userSocialId = null;
+		if (providerId === 'facebook.com') {
+			userSocialId = profile.id;
+			password = user.uid;
+			firstname = profile.first_name;
+			lastname = profile.last_name;
+			telephone = user.phoneNumber ? user.phoneNumber : '';
+		}
+
+		if (providerId === 'google.com') {
+			if (!email) {
+				email = authData.user.email ? authData.user.email : null;
+			}
+			userSocialId = profile.id;
+			password = user.uid;
+			firstname = profile.given_name;
+			lastname = profile.family_name;
+			telephone = user.phoneNumber ? user.phoneNumber : '';
+		}
+
+		const accountInfo = {
+			uid: user.uid,
+			providerId: providerId,
+			email: email,
+			password: password,
+			firstname: firstname,
+			lastname: lastname,
+			telephone: telephone,
+			accessToken: accessToken,
+			accessTokenSecret: accessTokenSecret,
+			userSocialId: userSocialId
+		};
+
+		if (accountInfo) {
+			Identify.storeDataToStoreage(Identify.LOCAL_STOREAGE, Constants.SIMI_SESS_ID, null);
+			socialLoginApi(this.verifyDone, accountInfo);
+			showFogLoading();
+		}
+	};
+
+	verifyDone = (data) => {
+		hideFogLoading();
+		if (data.errors) {
+			let errorMsg = '';
+			if (data.errors.length) {
+				data.errors.map((error) => {
+					errorMsg += error.message;
+				});
+				showToastMessage(Identify.__(errorMsg));
+			}
+		} else {
+			storage.removeItem('cartId');
+			storage.removeItem('signin_token');
+			if (data.customer_access_token) {
+				Identify.storeDataToStoreage(Identify.LOCAL_STOREAGE, Constants.SIMI_SESS_ID, data.customer_identity);
+				setToken(data.customer_access_token);
+				this.props.simiSignedIn(data.customer_access_token);
+			}
+		}
+	};
+
+
+	authenticate = (provider) => {
+		const authProvider = new firebase.auth[`${provider}AuthProvider`]();
+		firebaseApp.auth().signInWithPopup(authProvider).then(this.authHandler).catch(function(error) {
+			// Handle Errors here.
+			var errorMessage = error.message;
+			showToastMessage(Identify.__(errorMessage))
+		  });;
+	};
 
     componentDidMount() {
         const cookies = new Cookies();
@@ -96,6 +180,29 @@ class SignIn extends Component {
                         >
                             {Identify.__('Sign In').toUpperCase()}
                         </button>
+                    </div>
+                    <div className="signin-divider">
+                        <hr className={`hr left-hr`} />
+                        <div className={`signInWidth`}>
+                            {Identify.__('or sign in with').toUpperCase()}
+                        </div>
+                        <hr className={`hr right-hr`} />
+                    </div>
+                    <div className="social-media">
+                        <span
+                            role="presentation"
+                            className={`social-icon fb`}
+                            onClick={() => this.authenticate('Facebook')}
+                        >
+                            <span className={`icon facebook`} />
+                        </span>
+                        <span
+                            role="presentation"
+                            className={`social-icon gg`}
+                            onClick={() => this.authenticate('Google')}
+                        >
+                            <span className={`icon google`} />
+                        </span>
                     </div>
                 </Form>
             </div>

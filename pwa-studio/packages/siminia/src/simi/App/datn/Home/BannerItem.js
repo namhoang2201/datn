@@ -59,7 +59,7 @@ const BannerItem = props => {
             style={{position: 'relative', maxWidth: w, minHeight: h}} 
             className="banner-item"
         >
-            {renderBannerTitle(item)}
+            {/* {renderBannerTitle(item)} */}
             <img className="img-responsive" width={w} height={h} src={img} alt={item.banner_title}/>
         </div>
     )

@@ -20,4 +20,8 @@
         <observer name="simi_simiconnector_system_rest_modify"
                   instance="Simi\Simiconnector\Observer\SystemRestModify" />
     </event>
+    <event name="simiconnector_get_storeview_info_after">
+        <observer name="simi_simiconnector_get_storeview_info_after"
+                  instance="Simi\Simiconnector\Observer\SimiGetStoreviewInfoAfter" />
+    </event>
 </config>

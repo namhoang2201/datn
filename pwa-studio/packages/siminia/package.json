@@ -41,7 +41,8 @@
   "dependencies": {
     "crypto-js": "^4.0.0",
     "react-responsive-modal": "~4.0.1",
-    "universal-cookie": "^4.0.3"
+    "universal-cookie": "^4.0.3",
+    "firebase": "~7.5.0"
   },
   "devDependencies": {
     "@babel/core": "~7.3.4",

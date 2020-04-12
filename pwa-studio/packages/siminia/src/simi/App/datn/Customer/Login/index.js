@@ -181,11 +181,7 @@ class Login extends Component {
 					data.errors.map((error) => {
 						errorMsg += error.message;
 					});
-					// showToastMessage(Identify.__(errorMsg));
-					$('.error-login').addClass('show')
-					setInterval(function () {
-						$('.error-login').removeClass('show')
-					}, 3000)
+					showToastMessage(Identify.__(errorMsg));
 				}
 			}
 		}

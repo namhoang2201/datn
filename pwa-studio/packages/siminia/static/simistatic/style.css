@@ -12,6 +12,9 @@ body {
 .siminia-main-page {
     min-height: 20vh;
 }
+#data-breadcrumb{
+    margin-top: 25px;
+}
 
 @media (min-width: 1920px) {
     .container {

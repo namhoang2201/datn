@@ -37,7 +37,7 @@ const childCats = props => {
                                     return (
                                         <Link to={location} className="category-top-child-image-ctn" key={index}>
                                             <div className="category-top-child-image" 
-                                                style={{backgroundImage: `url("${'pub' + resourceUrl(child.image, { type: 'image-category' })}")`}}>
+                                                style={child&&child.image&&{backgroundImage: `url("${'pub' + resourceUrl(child.image, { type: 'image-category' })}")`}}>
                                             </div>
                                             <div className="name-title">
                                                 {child.name}
