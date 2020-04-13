@@ -6,6 +6,9 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\AccountManagement;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
+use Hybrid_Auth;
+
+use function PHPSTORM_META\type;
 
 /**
  * Simiconnector Model
@@ -252,6 +255,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
                                         'access_token_url' => 'https://graph.facebook.com/oauth/access_token',
                                     ]
                                 ];
+                                var_dump($config);die();
                                 $adapter = new \Hybridauth\Provider\Facebook($config);
 
                                 $adapter->setAccessToken(['access_token' => $data->accessToken]);
@@ -300,7 +304,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
 
                         // Login by customer object, this function only create new customer session id ( customer_identity)
                         $this->simiObjectManager
-                            ->get('Simi\Simicustomize\Override\Helper\Customer')->loginByCustomer($customer);
+                            ->get('Simi\Simiconnector\Helper\Customer')->loginByCustomer($customer);
                         // Create new customer access token ( customer_access_token )
                         $tokenModel = $this->simiObjectManager->create('\Magento\Integration\Model\Oauth\Token');
                         $tokenModel->createCustomerToken($customer->getId());
@@ -315,6 +319,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
                 throw new \Simi\Simiconnector\Helper\SimiException(__('Invalid login !'), 4);
             }
         } else {
+            echo  'no'; die();
             if (!$data->firstname) {
                 $data->firstname = __('Firstname');
             }

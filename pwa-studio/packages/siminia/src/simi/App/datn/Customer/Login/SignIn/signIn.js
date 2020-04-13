@@ -10,6 +10,8 @@ import firebase, { auth } from 'firebase';
 import firebaseApp from '../SocialLogin/base';
 import { showToastMessage } from 'src/simi/Helper/Message';
 import { socialLogin as socialLoginApi } from 'src/simi/Model/Customer';
+import * as Constants from 'src/simi/Config/Constants';
+import { showFogLoading, hideFogLoading } from 'src/simi/BaseComponents/Loading/GlobalLoading';
 
 require("./signIn.scss")
 
@@ -247,3 +249,8 @@ class SignIn extends Component {
 }
 
 export default SignIn;
+
+async function setToken(token) {
+	// TODO: Get correct token expire time from API
+	return storage.setItem('signin_token', token, 3600);
+}

@@ -63,6 +63,7 @@ class Login extends Component {
 					classes={classes}
 					onForgotPassword={this.setForgotPasswordForm}
 					onSignIn={this.onSignIn.bind(this)}
+					simiSignedIn={this.props.simiSignedIn}
 				/>
 			</div>
 		);
