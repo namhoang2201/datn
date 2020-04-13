@@ -29,3 +29,7 @@ export const logout = (callBack, {}) => {
 export const createPassword = (callBack, passwordInfo) => {
     sendRequest('/rest/V1/simiconnector/customers/createpassword', callBack, 'POST', {}, passwordInfo)
 }
+
+export const socialLogin = (callBack, accountInfo) => {
+    sendRequest('/rest/V1/simiconnector/customers/sociallogin', callBack, 'POST', {}, accountInfo)
+}

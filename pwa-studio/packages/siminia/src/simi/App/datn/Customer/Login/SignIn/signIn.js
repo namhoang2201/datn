@@ -8,6 +8,8 @@ import Checkbox from 'src/simi/BaseComponents/Checkbox';
 import Cookies from 'universal-cookie';
 import firebase, { auth } from 'firebase';
 import firebaseApp from '../SocialLogin/base';
+import { showToastMessage } from 'src/simi/Helper/Message';
+import { socialLogin as socialLoginApi } from 'src/simi/Model/Customer';
 
 require("./signIn.scss")
 
@@ -36,7 +38,6 @@ class SignIn extends Component {
 		var lastname = null;
 		var telephone = null;
 		var accessToken = authData.credential.accessToken;
-		var accessTokenSecret = authData.credential.secret;
 		var userSocialId = null;
 		if (providerId === 'facebook.com') {
 			userSocialId = profile.id;
@@ -66,11 +67,11 @@ class SignIn extends Component {
 			lastname: lastname,
 			telephone: telephone,
 			accessToken: accessToken,
-			accessTokenSecret: accessTokenSecret,
 			userSocialId: userSocialId
 		};
 
 		if (accountInfo) {
+            console.log(accountInfo)
 			Identify.storeDataToStoreage(Identify.LOCAL_STOREAGE, Constants.SIMI_SESS_ID, null);
 			socialLoginApi(this.verifyDone, accountInfo);
 			showFogLoading();
@@ -103,7 +104,8 @@ class SignIn extends Component {
 		const authProvider = new firebase.auth[`${provider}AuthProvider`]();
 		firebaseApp.auth().signInWithPopup(authProvider).then(this.authHandler).catch(function(error) {
 			// Handle Errors here.
-			var errorMessage = error.message;
+            var errorMessage = error.message;
+            console.log(errorMessage)
 			showToastMessage(Identify.__(errorMessage))
 		  });;
 	};
