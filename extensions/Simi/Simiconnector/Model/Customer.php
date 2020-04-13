@@ -221,27 +221,111 @@ class Customer extends \Magento\Framework\Model\AbstractModel
 
     public function socialLogin($data)
     {
-        $data = (object) $data['params'];
-        if (!isset($data->password) || !$this->simiObjectManager
-                ->get('Simi\Simiconnector\Helper\Customer')->validateSimiPass($data->email, $data->password,'social_login')) {
-            throw new \Simi\Simiconnector\Helper\SimiException(__('Password is not Valid'), 4);
-        }
+        $data = (object) $data['contents'];
+
         if (!$data->email) {
-            throw new \Simi\Simiconnector\Helper\SimiException(__('Cannot Get Your Email'), 4);
+            throw new \Simi\Simiconnector\Helper\SimiException(__('Cannot Get Your Email. Please let your application provide an email to login.'), 4);
         }
         $customer = $this->simiObjectManager
-                ->get('Simi\Simiconnector\Helper\Customer')->getCustomerByEmail($data->email);
-        if (!$customer->getId()) {
+            ->get('Simi\Simiconnector\Helper\Customer')->getCustomerByEmail($data->email);
+
+        if ($customer->getId()) {
+            // If exist account with that email, check confirmation
+            if ($customer->getConfirmation()) {
+                throw new \Simi\Simiconnector\Helper\SimiException(__('This account is not confirmed. Verify and try again.'), 4);
+            }
+            //Check authenticate with facebook, google or twitter
+            // Only twitter need accessTokenSecret
+            if (isset($data->providerId) && isset($data->accessToken)) {
+                switch ($data->providerId) {
+                    case "facebook.com":
+                        try {
+                            $fbId = $this->simiObjectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('simiconnector/social_login/facebook_id');
+                            $fbSecret = $this->simiObjectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('simiconnector/social_login/facebook_secret');
+                            if ($fbId && $fbSecret) {
+                                $config = [
+                                    'callback'  => \Hybridauth\HttpClient\Util::getCurrentUrl(),
+                                    'keys' => ['id' => $fbId, 'secret' => $fbSecret],
+                                    'endpoints' => [
+                                        'api_base_url'     => 'https://graph.facebook.com/v2.12/',
+                                        'authorize_url'    => 'https://www.facebook.com/dialog/oauth',
+                                        'access_token_url' => 'https://graph.facebook.com/oauth/access_token',
+                                    ]
+                                ];
+                                $adapter = new \Hybridauth\Provider\Facebook($config);
+
+                                $adapter->setAccessToken(['access_token' => $data->accessToken]);
+
+                                $userProfile = $adapter->getUserProfile();
+
+                                $adapter->disconnect();
+                            } else {
+                                throw new \Simi\Simiconnector\Helper\SimiException(__('Administrator need configure social login !'), 4);
+                            }
+                        } catch (\Exception $e) {
+                            throw new \Simi\Simiconnector\Helper\SimiException(__($e->getMessage()), 4);
+                        }
+                        break;
+                    case "google.com":
+                        try {
+                            $googleId = $this->simiObjectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('simiconnector/social_login/google_id');
+                            $googleSecret = $this->simiObjectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('simiconnector/social_login/google_secret');
+                            if ($googleId && $googleSecret) {
+                                $config = [
+                                    'callback'  => \Hybridauth\HttpClient\Util::getCurrentUrl(),
+                                    'keys' => ['id' => $googleId, 'secret' => $googleSecret]
+                                ];
+
+                                $adapter = new \Hybridauth\Provider\Google($config);
+
+                                $adapter->setAccessToken(['access_token' => $data->accessToken]);
+
+                                $userProfile = $adapter->getUserProfile();
+
+                                $adapter->disconnect();
+                            } else {
+                                throw new \Simi\Simiconnector\Helper\SimiException(__('Administrator need configure social login !'), 4);
+                            }
+                        } catch (\Exception $e) {
+                            throw new \Simi\Simiconnector\Helper\SimiException(__($e->getMessage()), 4);
+                        }
+                        break;
+                }
+
+                // Check if exist response from facebook, google
+                if ($userProfile && $userProfile->identifier) {
+                    // Check if above identifier the same as the identifier returned by pwa studio
+                    if ($userProfile->identifier === $data->userSocialId) {
+                        // If the same -> force login ( need return 2 fields: customer_access_token and customer_identity)
+
+                        // Login by customer object, this function only create new customer session id ( customer_identity)
+                        $this->simiObjectManager
+                            ->get('Simi\Simicustomize\Override\Helper\Customer')->loginByCustomer($customer);
+                        // Create new customer access token ( customer_access_token )
+                        $tokenModel = $this->simiObjectManager->create('\Magento\Integration\Model\Oauth\Token');
+                        $tokenModel->createCustomerToken($customer->getId());
+                    } else {
+                        // Not the same, show error
+                        throw new \Simi\Simiconnector\Helper\SimiException(__('Your account is Invalid !'), 4);
+                    }
+                } else {
+                    throw new \Simi\Simiconnector\Helper\SimiException(__('Your account is not authenticated by ' . $data->providerId . ' !'), 4);
+                }
+            } else {
+                throw new \Simi\Simiconnector\Helper\SimiException(__('Invalid login !'), 4);
+            }
+        } else {
             if (!$data->firstname) {
                 $data->firstname = __('Firstname');
             }
             if (!$data->lastname) {
                 $data->lastname = __('Lastname');
             }
+            // Create new customer account for social network
             $customer = $this->_createCustomer($data);
+            // Notify user to check mailbox and verify new account
+            throw new \Simi\Simiconnector\Helper\SimiException(__('Please check your mailbox to active your account !.'), 4);
         }
-        $this->simiObjectManager->get('Simi\Simiconnector\Helper\Customer')->loginByCustomer($customer);
-        return $customer;
     }
 
     /*

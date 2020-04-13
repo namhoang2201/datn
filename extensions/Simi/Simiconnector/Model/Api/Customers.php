@@ -71,6 +71,8 @@ class Customers extends Apiabstract
                 case 'sociallogin':
                     $this->builderQuery = $this->simiObjectManager->get('Simi\Simiconnector\Model\Customer')
                         ->socialLogin($data);
+                    $this->builderQuery = $this->simiObjectManager
+                        ->get('Magento\Customer\Model\Session')->getCustomer();
                     $this->builderQuery->setData('wishlist_count', $this->getWishlistCount());
                     break;
                 case 'logout':
@@ -112,7 +114,7 @@ class Customers extends Apiabstract
     public function store()
     {
         $data                  = $this->getData();
-        if ($data['resourceid'] !== "createpassword" && $data['resourceid'] !== "logout") {
+        if ($data['resourceid'] !== "createpassword" && $data['resourceid'] !== "logout" && $data['resourceid'] !== "sociallogin") {
             $customer              = $this->simiObjectManager->get('Simi\Simiconnector\Model\Customer')->register($data);
             $this->builderQuery    = $customer;
             $this->RETURN_MESSAGE = __("Thank you for registering with "
