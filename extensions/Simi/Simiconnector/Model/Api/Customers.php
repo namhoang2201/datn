@@ -144,25 +144,57 @@ class Customers extends Apiabstract
     public function getDetail($info)
     {
         $data = $this->getData();
-        $resultArray            = parent::getDetail($info);
-        if ($this->RETURN_MESSAGE)
-            $resultArray['message'] = [$this->RETURN_MESSAGE];
+        if ($data['resourceid'] !== 'sociallogin') {
+            $resultArray            = parent::getDetail($info);
+            if ($this->RETURN_MESSAGE)
+                $resultArray['message'] = [$this->RETURN_MESSAGE];
 
-        if (isset($resultArray['customer']) && isset($resultArray['customer']['email'])) {
-            if ($this->simiObjectManager->get('\Magento\Newsletter\Model\Subscriber') && 
-                $this->simiObjectManager->get('\Magento\Newsletter\Model\Subscriber')
-                ->loadByEmail($resultArray['customer']['email'])->isSubscribed()) {
-                $resultArray['customer']['news_letter'] = '1';
-            } else {
-                $resultArray['customer']['news_letter'] = '0';
+            if (isset($resultArray['customer']) && isset($resultArray['customer']['email'])) {
+                if (
+                    $this->simiObjectManager->get('\Magento\Newsletter\Model\Subscriber') &&
+                    $this->simiObjectManager->get('\Magento\Newsletter\Model\Subscriber')
+                        ->loadByEmail($resultArray['customer']['email'])->isSubscribed()
+                ) {
+                    $resultArray['customer']['news_letter'] = '1';
+                } else {
+                    $resultArray['customer']['news_letter'] = '0';
+                }
+                $hash = $this->simiObjectManager
+                    ->get('Simi\Simiconnector\Helper\Customer')
+                    ->getToken($data);
+                $resultArray['customer']['simi_hash'] = $hash;
             }
-            $hash = $this->simiObjectManager
-                            ->get('Simi\Simiconnector\Helper\Customer')
-                            ->getToken($data);
-            $resultArray['customer']['simi_hash'] = $hash;
-        }
 
-        return $resultArray;
+            return $resultArray;
+        } else {
+            if (isset($info['email'])) {
+                $resultArray            = parent::getDetail($info);
+                if (
+                    $this->simiObjectManager->get('\Magento\Newsletter\Model\Subscriber') &&
+                    $this->simiObjectManager->get('\Magento\Newsletter\Model\Subscriber')
+                        ->loadByEmail($info['email'])->isSubscribed()
+                ) {
+                    $info['news_letter'] = '1';
+                } else {
+                    $info['news_letter'] = '0';
+                }
+                $hash = $this->simiObjectManager
+                    ->get('Simi\Simiconnector\Helper\Customer')
+                    ->getToken($data);
+                $info['simi_hash'] = $hash;
+                // First: get customer access token
+                $customerToken = $this->simiObjectManager->get(\Magento\Integration\Model\Oauth\TokenFactory::class);
+                $customerAccessToken = $customerToken->create()->createCustomerToken($resultArray['customer']['entity_id'])->getToken();
+
+                // Second: get customer_identity
+                $customerIdentity = $this->simiObjectManager->get('Magento\Customer\Model\Session')->getSessionId();
+
+                return ([
+                    'customer_access_token' => $customerAccessToken,
+                    'customer_identity' => $customerIdentity
+                ]);
+            }
+        }
     }
 
     /*

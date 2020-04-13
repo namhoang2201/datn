@@ -12,8 +12,12 @@ import { showToastMessage } from 'src/simi/Helper/Message';
 import { socialLogin as socialLoginApi } from 'src/simi/Model/Customer';
 import * as Constants from 'src/simi/Config/Constants';
 import { showFogLoading, hideFogLoading } from 'src/simi/BaseComponents/Loading/GlobalLoading';
-
+import { Util } from '@magento/peregrine';
 require("./signIn.scss")
+
+const { BrowserPersistence } = Util;
+const storage = new BrowserPersistence();
+const $ = window.$;
 
 class SignIn extends Component {
     state = {

@@ -255,7 +255,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
                                         'access_token_url' => 'https://graph.facebook.com/oauth/access_token',
                                     ]
                                 ];
-                                var_dump($config);die();
                                 $adapter = new \Hybridauth\Provider\Facebook($config);
 
                                 $adapter->setAccessToken(['access_token' => $data->accessToken]);
@@ -319,7 +318,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
                 throw new \Simi\Simiconnector\Helper\SimiException(__('Invalid login !'), 4);
             }
         } else {
-            echo  'no'; die();
             if (!$data->firstname) {
                 $data->firstname = __('Firstname');
             }
