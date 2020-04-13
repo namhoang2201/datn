@@ -131,6 +131,7 @@
 .login-background .select-type .active .icon-email,
 .login-background .select-type .active .title-signin {
   color: #fff !important;
+  margin:auto;
 }
 
 .login-background .select-type .register-type,
@@ -445,6 +446,7 @@
   .login-background .select-type .signin-type .title-signin {
     font-size: 14px;
     line-height: 14px;
+    margin:auto;
   }
   .login-background .active {
     padding: 0 80px;
@@ -593,6 +595,7 @@
     font-size: 14px;
     line-height: 14px;
     height: 14px;
+    margin: auto;
   }
   .login-background .select-type .register-type .title-register,
   .login-background .select-type .signin-type .title-signin {

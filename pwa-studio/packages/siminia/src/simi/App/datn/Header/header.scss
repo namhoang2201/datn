@@ -7,6 +7,21 @@
         margin-right: 35px;
     }
 }
-#cate-tree .menu-icon svg{
-    display: none !important;
+
+#cate-tree {
+    .icon-menu{
+        svg{
+            fill: #000 !important;
+        }
+    }
+    .icon-menu::before{
+        content: unset !important;
+    }
+}
+.sub-cate-root{
+    .cate-icon{
+        svg{
+            fill: #000 !important;
+        }
+    }
 }

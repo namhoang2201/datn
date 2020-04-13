@@ -77,7 +77,6 @@ class SignIn extends Component {
 		};
 
 		if (accountInfo) {
-            console.log(accountInfo)
 			Identify.storeDataToStoreage(Identify.LOCAL_STOREAGE, Constants.SIMI_SESS_ID, null);
 			socialLoginApi(this.verifyDone, accountInfo);
 			showFogLoading();
@@ -111,7 +110,6 @@ class SignIn extends Component {
 		firebaseApp.auth().signInWithPopup(authProvider).then(this.authHandler).catch(function(error) {
 			// Handle Errors here.
             var errorMessage = error.message;
-            console.log(errorMessage)
 			showToastMessage(Identify.__(errorMessage))
 		  });;
 	};
