@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../Backend/etc/menu.xsd">
+    <menu>
+        <add
+                id="Nam_RewardPoint::rewardpoint"
+                title="Nam" module="Nam_RewardPoint"
+                sortOrder="10"
+                dependsOnModule="Nam_RewardPoint"
+                resource="Nam_RewardPoint::general"
+        />
+
+        <!-- rewardpoint setting -->
+        <add
+                id="Nam_RewardPoint::rewardpoint_settings"
+                title="RewardPoint Settings"
+                module="Nam_RewardPoint"
+                sortOrder="99"
+                parent="Nam_RewardPoint::rewardpoint"
+                resource="Nam_RewardPoint::rewardpoint_settings"
+        />
+        <add
+                id="Nam_RewardPoint::settings"
+                title="RewardPoint Settings"
+                module="Nam_RewardPoint"
+                sortOrder="10"
+                parent="Nam_RewardPoint::rewardpoint_settings"
+                resource="Nam_RewardPoint::configuration"
+                action="adminhtml/system_config/edit/section/rewardpoint"
+        />
+        <add
+                id="Nam_RewardPoint::app_transactions"
+                title="Transactions"
+                module="Nam_RewardPoint"
+                sortOrder="40"
+                parent="Nam_RewardPoint::rewardpoint_settings"
+                action="rewardpoint/transactions/"
+                resource="Nam_RewardPoint::manage"
+        />
+    </menu>
+</config>

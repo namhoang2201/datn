@@ -1,0 +1,8 @@
+body .admin__menu .item-rewardpoint > a::before{
+    overflow: hidden;
+    content: '' !important;
+    background-image: url(../images/namicon.gif);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}

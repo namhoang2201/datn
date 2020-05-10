@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="nam" translate="label" sortOrder="10">
+            <label>Nam</label>
+        </tab>
+        <section id="rewardpoint" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>RewardPoint Settings</label>
+            <tab>nam</tab>
+            <resource>Nam_Nam::config_nam</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General Configurations</label>
+                <field id="amount_earn" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Amount money to earn 1 point</label>
+                </field>
+                <field id="amount_spend" translate="label" type="text" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Amount money discount when spend 1 point</label>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
