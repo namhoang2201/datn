@@ -35,8 +35,8 @@
                 module="Nam_RewardPoint"
                 sortOrder="40"
                 parent="Nam_RewardPoint::rewardpoint_settings"
-                action="rewardpoint/transactions/"
                 resource="Nam_RewardPoint::manage"
+                action="rewardpoint/transactions/"
         />
     </menu>
 </config>

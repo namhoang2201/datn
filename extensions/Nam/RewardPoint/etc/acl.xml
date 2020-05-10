@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="Nam_RewardPoint::general" title="Nam" sortOrder="50">
+                    <resource id="Nam_RewardPoint::rewardpoint_settings" title="RewardPoint Settings" sortOrder="99">
+                        <resource id="Nam_RewardPoint::configuration" title="RewardPoint Settings" sortOrder="199"/>
+                        <resource id="Nam_RewardPoint::manage" title="Transactions" sortOrder="199"/>
+                    </resource>
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>
