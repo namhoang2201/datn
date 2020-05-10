@@ -1,0 +1,26 @@
+{
+  "name": "nam/module-rewardpoint",
+  "description": "RewardPoint Graduation Project - Nam Hoang",
+  "license": [
+    "OSL-3.0",
+    "AFL-3.0"
+  ],
+  "authors": [
+    {
+      "name": "Nam Hoang",
+      "email": "hoangnamtb95@gmail.com",
+      "homepage": "https://facebook.com/namhoang2911",
+      "role": "Developer"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {},
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Nam\\RewardPoint\\": ""
+    }
+  }
+}
