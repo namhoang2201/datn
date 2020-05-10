@@ -1,0 +1,129 @@
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">
+                rewardpoint_transactions_listing.rewardpoint_transactions_listing_data_source
+            </item>
+            <item name="deps" xsi:type="string">
+                rewardpoint_transactions_listing.rewardpoint_transactions_listing_data_source
+            </item>
+        </item>
+        <item name="spinner" xsi:type="string">namrewardpoints_transaction_columns</item>
+    </argument>
+    <dataSource name="rewardpoint_transactions_listing_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider</argument>
+            <argument name="name" xsi:type="string">rewardpoint_transactions_listing_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">transaction_id</argument>
+            <argument name="requestFieldName" xsi:type="string">id</argument>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="update_url" xsi:type="url" path="mui/index/render"/>
+                </item>
+            </argument>
+        </argument>
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+            </item>
+        </argument>
+    </dataSource>
+    <columns name="namrewardpoints_transaction_columns">
+        <selectionsColumn name="ids">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
+                    <item name="resizeDefaultWidth" xsi:type="string">55</item>
+                    <item name="indexField" xsi:type="string">transaction_id</item>
+                </item>
+            </argument>
+        </selectionsColumn>
+        <column name="transaction_id">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="sorting" xsi:type="string">asc</item>
+                    <item name="label" xsi:type="string" translate="true">Transaction ID</item>
+                </item>
+            </argument>
+        </column>
+        <column name="np_order_id">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Order ID</item>
+                </item>
+            </argument>
+        </column>
+        <column name="point_before_transaction">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Point Before Transaction</item>
+                </item>
+            </argument>
+        </column>
+        <column name="point_earn">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Point Earn</item>
+                </item>
+            </argument>
+        </column>
+        <column name="point_spend">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Point Spend</item>
+                </item>
+            </argument>
+        </column>
+        <column name="total_before">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Grand Total Before</item>
+                </item>
+            </argument>
+        </column>
+        <column name="discount_amount">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Discount Amount</item>
+                </item>
+            </argument>
+        </column>
+        <column name="total_after_discount">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Final Grand Total</item>
+                </item>
+            </argument>
+        </column>
+        <column name="created_time" class="Magento\Ui\Component\Listing\Columns\Date">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">dateRange</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
+                    <item name="dataType" xsi:type="string">date</item>
+                    <item name="label" xsi:type="string" translate="true">Created On</item>
+                </item>
+            </argument>
+        </column>
+        <actionsColumn name="actions" class="Nam\RewardPoint\Ui\Component\Listing\Column\Transaction\ViewOrder">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
+                    <item name="label" xsi:type="string" translate="true">View Order</item>
+                    <item name="resizeDefaultWidth" xsi:type="string">107</item>
+                    <item name="indexField" xsi:type="string">np_order_id</item>
+                </item>
+                <item name="urlViewOrderDetail" xsi:type="string">sales/order/view</item>
+            </argument>
+        </actionsColumn>
+    </columns>
+</listing>

@@ -1,15 +1,18 @@
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
-        <arguments>
-            <argument name="collections" xsi:type="array">
-                <item name="nam_rewardpoint_transactions_listing_data_source" xsi:type="string">Nam\RewardPoint\Model\ResourceModel\Transactions\Collection</item>
-            </argument>
-        </arguments>
-    </type>
-    <virtualType name="Nam\RewardPoint\Model\ResourceModel\Transactions\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <type name="Nam\RewardPoint\Model\ResourceModel\Transactions\Grid\Collection">
         <arguments>
             <argument name="mainTable" xsi:type="string">namrewardpoint_transaction</argument>
             <argument name="resourceModel" xsi:type="string">Nam\RewardPoint\Model\ResourceModel\Transactions</argument>
         </arguments>
-    </virtualType>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="rewardpoint_transactions_listing_data_source" xsi:type="string">
+                    Nam\RewardPoint\Model\ResourceModel\Transactions\Grid\Collection
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
