@@ -41,7 +41,7 @@ class InstallSchema implements InstallSchemaInterface
                 'np_order_id',
                 Table::TYPE_INTEGER,
                 null,
-                ['unsigned'=>true, 'nullable'=>false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
                 'nam_rewardpoint_order_id reference to sale_order.order_id'
             )
             ->addColumn(
@@ -65,19 +65,19 @@ class InstallSchema implements InstallSchemaInterface
             )->addColumn(
                 'total_before',
                 Table::TYPE_DECIMAL,
-                null,
+                '12,4',
                 ['nullable' => false, 'default' => 0.00],
                 'Grand total before discount'
             )->addColumn(
                 'discount_amount',
                 Table::TYPE_DECIMAL,
-                null,
+                '12,4',
                 ['nullable' => true, 'default' => 0.00],
                 'Discount amount when spent point'
             )->addColumn(
                 'total_after_discount',
                 Table::TYPE_DECIMAL,
-                null,
+                '12,4',
                 ['nullable' => false, 'default' => 0.00],
                 'Final Grand Total'
             )->addColumn(
