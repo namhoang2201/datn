@@ -137,6 +137,17 @@ class InstallSchema implements InstallSchemaInterface
                 'comment' => 'Point amount that customer spent at current order'
             ]
         );
+        $installer->getConnection()->addColumn(
+            $installer->getTable('sales_order'),
+            'namrewardpoints_discount',
+            [
+                'type' => Table::TYPE_DECIMAL,
+                'length' => '12,4',
+                'nullable' => true,
+                'default' => 0.00,
+                'comment' => 'Discount amount when spend point'
+            ]
+        );
 
         /**
          * Add 1 column 'namrewardpoint_discount_amount' to table 'quote'

@@ -1,5 +1,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <!--   create type to show data on grid adnmin transactions -->
     <type name="Nam\RewardPoint\Model\ResourceModel\Transactions\Grid\Collection">
         <arguments>
             <argument name="mainTable" xsi:type="string">namrewardpoint_transaction</argument>
@@ -14,5 +15,10 @@
                 </item>
             </argument>
         </arguments>
+    </type>
+
+    <!-- add data to subtotal, add block to show reward discount on view order detail page   -->
+    <type name="Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid">
+        <plugin name="namrewardpoints_discount_to_subtotal" type="Nam\RewardPoint\Model\Plugin\Quote\RewardpointsToSubtotal"/>
     </type>
 </config>
