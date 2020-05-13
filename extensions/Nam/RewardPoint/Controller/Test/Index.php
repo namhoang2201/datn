@@ -20,6 +20,11 @@ class Index extends \Magento\Framework\App\Action\Action
 
     public function execute()
     {
+        $simiObjectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $balance_point = $simiObjectManager->get('Magento\Customer\Model\Session')->getCustomer()->getRewardPoint();
+        $customerContext = $simiObjectManager->create('Magento\Authorization\Model\UserContextInterface');
+        $customerId = $customerContext->getUserId();
+        echo $customerId;die();
         $transactions = $this->_transactionsFactory->create();
         $collection = $transactions->getCollection();
         foreach($collection as $item){
