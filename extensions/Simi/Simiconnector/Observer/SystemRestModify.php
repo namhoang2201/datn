@@ -11,54 +11,57 @@ class SystemRestModify implements ObserverInterface
 
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $simiObjectManager
-    ) {
+    )
+    {
         $this->simiObjectManager = $simiObjectManager;
     }
 
 
-    public function execute(\Magento\Framework\Event\Observer $observer) {
-       $obj = $observer->getObject();
-       $routeData = $observer->getData('routeData');
-       $requestContent = $observer->getData('requestContent');
-       $request = $observer->getData('request');
-       $contentArray = $obj->getContentArray();
-       if ($routeData && isset($routeData['routePath'])){
-           if (
-               strpos($routeData['routePath'], 'V1/guest-carts/:cartId/payment-methods') !== false ||
-               strpos($routeData['routePath'], 'V1/carts/mine/payment-methods') !== false ||
-               strpos($routeData['routePath'], 'V1/guest-carts/:cartId/shipping-information') !== false ||
-               strpos($routeData['routePath'], 'V1/carts/mine/shipping-information') !== false
-           ) {
-               if ( isset($contentArray['payment_methods']) &&
+    public function execute(\Magento\Framework\Event\Observer $observer)
+    {
+        $obj = $observer->getObject();
+        $routeData = $observer->getData('routeData');
+        $requestContent = $observer->getData('requestContent');
+        $request = $observer->getData('request');
+        $contentArray = $obj->getContentArray();
+        if ($routeData && isset($routeData['routePath'])) {
+            if (
+                strpos($routeData['routePath'], 'V1/guest-carts/:cartId/payment-methods') !== false ||
+                strpos($routeData['routePath'], 'V1/carts/mine/payment-methods') !== false ||
+                strpos($routeData['routePath'], 'V1/guest-carts/:cartId/shipping-information') !== false ||
+                strpos($routeData['routePath'], 'V1/carts/mine/shipping-information') !== false
+            ) {
+                if (isset($contentArray['payment_methods']) &&
                     (strpos($routeData['routePath'], 'V1/guest-carts/:cartId/shipping-information') !== false ||
-                     strpos($routeData['routePath'], 'V1/carts/mine/shipping-information') !== false)){
-                   $this->_addDataToPayment($contentArray['payment_methods'], $routeData);
-               }else{
-                   $this->_addDataToPayment($contentArray, $routeData);
-               }
-               // if (isset($contentArray['totals']['items'])) {
-               //     $totalData = $contentArray['totals'];
-               //     $this->_addDataToQuoteItem($totalData);
-               //     $contentArray['totals'] = $totalData;
-               // }
-           } else if (
-               strpos($routeData['routePath'], 'V1/guest-carts/:cartId') !== false ||
-               strpos($routeData['routePath'], 'V1/carts/mine') !== false
-           ) {
-               $this->_addDataToQuoteItem($contentArray, strpos($routeData['routePath'], 'totals') !== false);
-           } else if (strpos($routeData['routePath'], 'integration/customer/token') !== false) {
-               $this->_addCustomerIdentity($contentArray, $requestContent, $request);
-           }
-       }
-       $obj->setContentArray($contentArray);
+                        strpos($routeData['routePath'], 'V1/carts/mine/shipping-information') !== false)) {
+                    $this->_addDataToPayment($contentArray['payment_methods'], $routeData);
+                } else {
+                    $this->_addDataToPayment($contentArray, $routeData);
+                }
+                // if (isset($contentArray['totals']['items'])) {
+                //     $totalData = $contentArray['totals'];
+                //     $this->_addDataToQuoteItem($totalData);
+                //     $contentArray['totals'] = $totalData;
+                // }
+            } else if (
+                strpos($routeData['routePath'], 'V1/guest-carts/:cartId') !== false ||
+                strpos($routeData['routePath'], 'V1/carts/mine') !== false
+            ) {
+                $this->_addDataToQuoteItem($contentArray, strpos($routeData['routePath'], 'totals') !== false);
+            } else if (strpos($routeData['routePath'], 'integration/customer/token') !== false) {
+                $this->_addCustomerIdentity($contentArray, $requestContent, $request);
+            }
+        }
+        $obj->setContentArray($contentArray);
     }
 
     //modify payment api
-    private function _addDataToPayment(&$contentArray, $routeData = false) {
+    private function _addDataToPayment(&$contentArray, $routeData = false)
+    {
         if (is_array($contentArray) && $routeData && isset($routeData['serviceClass'])) {
             $paymentHelper = $this->simiObjectManager->get('Simi\Simiconnector\Helper\Checkout\Payment');
             foreach ($paymentHelper->getMethods() as $method) {
-                foreach ($contentArray as $index=>$restPayment) {
+                foreach ($contentArray as $index => $restPayment) {
                     if ($method->getCode() == $restPayment['code']) {
                         $restPayment['simi_payment_data'] = $paymentHelper->getDetailsPayment($method);
                     }
@@ -69,7 +72,8 @@ class SystemRestModify implements ObserverInterface
     }
 
     //modify quote item
-    private function _addDataToQuoteItem(&$contentArray, $isTotal = false) {
+    private function _addDataToQuoteItem(&$contentArray, $isTotal = false)
+    {
         if (isset($contentArray['items']) && is_array($contentArray['items'])) {
             $stockRegistry = $this->simiObjectManager->create('Magento\CatalogInventory\Api\StockRegistryInterface');
             $quoteId = null;
@@ -78,24 +82,24 @@ class SystemRestModify implements ObserverInterface
                     ->get('Magento\Quote\Model\Quote\Item')->load($item['item_id']);
                 if ($quoteItem->getId()) {
                     if (!$quoteId)
-                      $quoteId = $quoteItem->getQuoteId();
+                        $quoteId = $quoteItem->getQuoteId();
                     if ($isTotal)
-                      continue;
+                        continue;
                     $product = $this->simiObjectManager
                         ->create('Magento\Catalog\Model\Product')
                         ->load($quoteItem->getData('product_id'));
-                    $item['simi_image']  = $this->simiObjectManager
+                    $item['simi_image'] = $this->simiObjectManager
                         ->create('Simi\Simiconnector\Helper\Products')
                         ->getImageProduct($product);
-                    $item['simi_sku']  = $product->getData('sku');
-                    $item['url_key']  = $product->getData('url_key');
-                    $item['name']  = $product->getName();
+                    $item['simi_sku'] = $product->getData('sku');
+                    $item['url_key'] = $product->getData('url_key');
+                    $item['name'] = $product->getName();
 
                     $parentProducts = $this->simiObjectManager
                         ->create('Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable')
                         ->getParentIdsByChild($product->getId());
                     $imageProductModel = $product;
-                    if($parentProducts && isset($parentProducts[0])){
+                    if ($parentProducts && isset($parentProducts[0])) {
                         $media_gallery = $imageProductModel->getMediaGallery();
                         $parentProductModel = $this->simiObjectManager->create('\Magento\Catalog\Model\Product')->load($parentProducts[0]);
                         if ($media_gallery && isset($media_gallery['images']) && is_array($media_gallery['images']) && !count($media_gallery['images'])) {
@@ -103,7 +107,7 @@ class SystemRestModify implements ObserverInterface
                         }
                         $item['url_key'] = $parentProductModel->getData('url_key');
                     }
-                    $item['image'] =  $this->simiObjectManager
+                    $item['image'] = $this->simiObjectManager
                         ->create('Simi\Simiconnector\Helper\Products')
                         ->getImageProduct($imageProductModel);
                     $stock = $stockRegistry->getStockItemBySku($product->getData('sku'))->getIsInStock();
@@ -112,37 +116,52 @@ class SystemRestModify implements ObserverInterface
                 }
             }
             if ($isTotal && $quoteId) {
-              $contentArray['simi_quote_id'] = $quoteId;
-              try {
-                $quoteModel = $this->simiObjectManager->create('Magento\Quote\Model\Quote')
-                  ->load($quoteId)->collectTotals();
-                if ($quoteMessages = $quoteModel->getMessages()) {
-                  if (count($quoteMessages) > 0) {
-                    $returnedMessages = array();
-                    foreach ($quoteMessages as $quoteMessage) {
-                      $returnedMessages[] = $quoteMessage->getText();
+                $contentArray['simi_quote_id'] = $quoteId;
+
+                // get balance point of current customer show at cart detail
+                $simiObjectManager = \Magento\Framework\App\ObjectManager::getInstance();
+                $balance_point = $simiObjectManager->get('Magento\Customer\Model\Session')->getCustomer()->getRewardPoint();
+                $contentArray['balance_rewardpoint'] = $balance_point;
+                // get point using from quote table to apply to cart
+                $quoteObject = $this->simiObjectManager->create('Magento\Quote\Model\Quote')
+                    ->load($quoteId);
+                $contentArray['np_point_using'] = $quoteObject->getData('np_point_using');
+                //  point_will_earn ->  get from quote
+                $contentArray['np_point_will_earn'] = $quoteObject->getData('np_point_will_earn');
+                // discount_amount -> get from quote
+                $contentArray['np_discount_amount'] = $quoteObject->getData('np_discount_amount');
+
+                try {
+                    $quoteModel = $this->simiObjectManager->create('Magento\Quote\Model\Quote')
+                        ->load($quoteId)->collectTotals();
+                    if ($quoteMessages = $quoteModel->getMessages()) {
+                        if (count($quoteMessages) > 0) {
+                            $returnedMessages = array();
+                            foreach ($quoteMessages as $quoteMessage) {
+                                $returnedMessages[] = $quoteMessage->getText();
+                            }
+                            $contentArray['simi_quote_messages'] = $returnedMessages;
+                        }
                     }
-                    $contentArray['simi_quote_messages'] = $returnedMessages;
-                  }
-                }
-                if ($quoteErrors = $quoteModel->getErrors()) {
-                  if (count($quoteErrors) > 0) {
-                    $returnedErrors = array();
-                    foreach ($quoteErrors as $quoteError) {
-                      $returnedErrors[] = $quoteError->getText();
+                    if ($quoteErrors = $quoteModel->getErrors()) {
+                        if (count($quoteErrors) > 0) {
+                            $returnedErrors = array();
+                            foreach ($quoteErrors as $quoteError) {
+                                $returnedErrors[] = $quoteError->getText();
+                            }
+                            $contentArray['simi_quote_errors'] = $returnedErrors;
+                        }
                     }
-                    $contentArray['simi_quote_errors'] = $returnedErrors;
-                  }
+                } catch (\Exception $e) {
+
                 }
-              }catch (\Exception $e) {
-                
-              }
             }
         }
     }
 
     //add SessionId + simiHash to login api of system rest
-    private function _addCustomerIdentity(&$contentArray, $requestContent, $request) {
+    private function _addCustomerIdentity(&$contentArray, $requestContent, $request)
+    {
         if (is_string($contentArray) && $request->getParam('getSessionId') && $requestContent['username']) {
             $storeManager = $this->simiObjectManager->get('\Magento\Store\Model\StoreManagerInterface');
             $requestCustomer = $this->simiObjectManager->get('Magento\Customer\Model\Customer')
