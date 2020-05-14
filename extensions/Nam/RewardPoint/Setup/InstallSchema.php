@@ -151,21 +151,9 @@ class InstallSchema implements InstallSchemaInterface
 
         /**
          * Add 3 column to table 'quote'
-         * 'namrewardpoint_discount_amount'
          * 'point_using'
          * 'point_will_earn'
          */
-        $installer->getConnection()->addColumn(
-            $installer->getTable('quote'),
-            'np_discount_amount',
-            [
-                'type' => Table::TYPE_DECIMAL,
-                'length' => '12,4',
-                'nullable' => true,
-                'default' => 0.00,
-                'comment' => 'Save discount amount from calculating point customer use from pwa studio then save to quote table'
-            ]
-        );
         $installer->getConnection()->addColumn(
             $installer->getTable('quote'),
             'np_point_using',
@@ -173,7 +161,7 @@ class InstallSchema implements InstallSchemaInterface
                 'type' => Table::TYPE_INTEGER,
                 'nullable' => true,
                 'default' => 0,
-                'comment' => 'Point amount that customer are applying but not place order yet.'
+                'comment' => 'Point amount that customer are spending before place order.'
             ]
         );
         $installer->getConnection()->addColumn(

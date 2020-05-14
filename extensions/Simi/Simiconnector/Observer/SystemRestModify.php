@@ -128,8 +128,6 @@ class SystemRestModify implements ObserverInterface
                 $contentArray['np_point_using'] = $quoteObject->getData('np_point_using');
                 //  point_will_earn ->  get from quote
                 $contentArray['np_point_will_earn'] = $quoteObject->getData('np_point_will_earn');
-                // discount_amount -> get from quote
-                $contentArray['np_discount_amount'] = $quoteObject->getData('np_discount_amount');
 
                 try {
                     $quoteModel = $this->simiObjectManager->create('Magento\Quote\Model\Quote')
