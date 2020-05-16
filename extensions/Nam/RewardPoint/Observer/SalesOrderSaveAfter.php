@@ -51,22 +51,23 @@ class SalesOrderSaveAfter implements ObserverInterface
         }
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $transactionModel = $objectManager->create('\Nam\RewardPoint\Model\Transactions');
-        $customerModel = $objectManager->get('\Magento\Customer\Model\Session')->getCustomer();
-//        $quoteModel = $objectManager->get('\Magento\Checkout\Model\Session')->getQuote();
-        $quoteModel = $objectManager->get('Magento\Checkout\Model\Cart')->getQuote();
+        $customerModel = $this->_customer->load($order->getCustomerId());
+        $quoteModel = $objectManager->get('\Magento\Quote\Model\Quote')->load($order->getQuoteId());
 
         // get amount discount by 1 point
         $discount_by_1_point = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')
             ->getValue('rewardpoint/general/amount_spend');
         // calculate base_discount
         $baseDiscount = $quoteModel->getNpPointUsing() * floatval($discount_by_1_point);
+        $pointEarn = $quoteModel->getNpPointWillEarn();
+        $pointUse = $quoteModel->getNpPointUsing();
 
         // 1. Create transactions
         $transactionModel->setData([
             'np_order_id' => $order->getData('entity_id'),
             'point_before_transaction' => $customerModel->getRewardPoint(),
-            'point_earn' => $quoteModel->getNpPointWillEarn(),
-            'point_spend' => $quoteModel->getNpPointUsing(),
+            'point_earn' => $pointEarn,
+            'point_spend' => $pointUse,
             'total_before' => $quoteModel->getGrandTotal() - $baseDiscount,
             'discount_amount' => $baseDiscount,
             'total_after_discount' => $quoteModel->getGrandTotal(),
@@ -87,6 +88,12 @@ class SalesOrderSaveAfter implements ObserverInterface
         $quoteModel->setNpPointWillEarn(0);
         $quoteModel->setNpPointUsing(0);
         $quoteModel->save();
+
+        // 4. Update order
+        $order->setPointEarn($pointEarn);
+        $order->setPointSpend($pointUse);
+        $order->setNamrewardpointsDiscount($baseDiscount);
+        $order->save();
 
         return $this;
     }
