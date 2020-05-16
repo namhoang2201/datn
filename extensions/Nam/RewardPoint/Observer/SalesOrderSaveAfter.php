@@ -52,7 +52,8 @@ class SalesOrderSaveAfter implements ObserverInterface
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $transactionModel = $objectManager->create('\Nam\RewardPoint\Model\Transactions');
         $customerModel = $objectManager->get('\Magento\Customer\Model\Session')->getCustomer();
-        $quoteModel = $objectManager->get('\Magento\Checkout\Model\Session')->getQuote();
+//        $quoteModel = $objectManager->get('\Magento\Checkout\Model\Session')->getQuote();
+        $quoteModel = $objectManager->get('Magento\Checkout\Model\Cart')->getQuote();
 
         // get amount discount by 1 point
         $discount_by_1_point = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')

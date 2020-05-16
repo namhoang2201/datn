@@ -60,6 +60,10 @@ class Quoteitems extends Apiabstract
             $this->RETURN_MESSAGE = $this->simiObjectManager
                     ->get('Simi\Simiconnector\Helper\Coupon')->setCoupon($parameters['coupon_code']);
         }
+        if (isset($parameters['spend_point'])) {
+            $this->RETURN_MESSAGE = $this->simiObjectManager
+                    ->get('Nam\RewardPoint\Helper\RewardPoint')->spendPoint($parameters['spend_point']);
+        }
         $this->_updateItems($parameters);
         return $this->index();
     }
