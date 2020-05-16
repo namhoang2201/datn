@@ -5,4 +5,7 @@
         <observer name="Nam_RewardPoint_Model_Server_Initialize"
                   instance="Nam\RewardPoint\Observer\SimiconnectorModelServerInitialize"/>
     </event>
+    <event name="sales_order_save_after">
+        <observer name="namrewardpoints_sales_order_save_after" instance="Nam\RewardPoint\Observer\SalesOrderSaveAfter" />
+    </event>
 </config>
