@@ -1,48 +1,31 @@
-import React, { useCallback, useState } from 'react';
-import { Form } from 'informed';
-import { array, object } from 'prop-types';
+import React from 'react';
 
-import PaymentsFormItems from '../components/paymentsFormItems';
+import PaymentsFormItems from './paymentsFormItems';
 
 require('./PaymentsForm.scss')
-/**
- * A wrapper around the payment form. This component's purpose is to maintain
- * the submission state as well as prepare/set initial values.
- */
+
 const PaymentsForm = props => {
-    const { initialValues } = props;
+    const { submitPaymentMethod, paymentMethods, paymentCode, paymentData } = props;
 
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
-    const handleSubmit = useCallback(() => {
-        setIsSubmitting(true);
-    }, [setIsSubmitting]);
-
-    const formChildrenProps = {
-        ...props,
-        isSubmitting,
-        setIsSubmitting
-    };
-
-
-    return (
-        <Form
-            className='root'
-            initialValues={initialValues}
-            onSubmit={handleSubmit}
-        >
-            <PaymentsFormItems {...formChildrenProps} />
-        </Form>
-    );
-};
-
-PaymentsForm.propTypes = {
-    initialValues: object,
-    paymentMethods: array
-};
-
-PaymentsForm.defaultProps = {
-    initialValues: {}
+    return React.useMemo(() => {
+        if (!submitPaymentMethod || !paymentMethods || !paymentMethods.length)
+            return ''
+        return (
+            <div className='paymentform-root' >
+                <PaymentsFormItems
+                    submit={submitPaymentMethod}
+                    {...{
+                        paymentMethods,
+                        paymentCode,
+                        paymentData
+                    }} />
+            </div>
+        )
+    }, [
+        paymentMethods,
+        paymentCode,
+        submitPaymentMethod,
+        paymentData])
 };
 
 export default PaymentsForm;

@@ -7,7 +7,7 @@ const Home = (props) => {
 }
 
 const Checkout = (props) => {
-    return <LazyComponent component={() => import(/* webpackChunkName: "Checkout"*/'src/simi/App/core/Checkout')} {...props}/>
+    return <LazyComponent component={() => import(/* webpackChunkName: "Checkout"*/'src/simi/App/datn/Checkout')} {...props}/>
 }
 
 const PaypalExpress = (props) => {

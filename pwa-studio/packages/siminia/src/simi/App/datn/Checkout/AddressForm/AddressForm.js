@@ -2,19 +2,19 @@ import React, { useCallback, useMemo } from 'react';
 import { array, bool, func, object, shape, string } from 'prop-types';
 
 import isObjectEmpty from 'src/util/isObjectEmpty';
-import FormFields from '../components/formFields';
+import FormFields from './formFields';
 import Identify from 'src/simi/Helper/Identify';
 import { smoothScrollToView } from 'src/simi/Helper/Behavior';
 
-require('./AddressForm.scss')
-
 const fields = [
+    'id',
     'city',
     'email',
     'firstname',
     'lastname',
     'postcode',
     'region_code',
+    'region',
     'street',
     'telephone',
     'company',
@@ -41,13 +41,13 @@ const defaultConfigFields = [
 ];
 
 const defaultConfigValues = {
-    'company_show' : 'req',
-    'street_show' : 'req',
+    'company_show': 'req',
+    'street_show': 'req',
     'country_id_show': 'req',
     'region_id_show': 'req',
     'city_show': 'req',
-    'zipcode_show': 'opt',
-    'telephone_show': 'opt',
+    'zipcode_show': 'req',
+    'telephone_show': 'req',
     'fax_show': '',
     'prefix_show': '',
     'suffix_show': '',
@@ -73,7 +73,7 @@ const AddressForm = props => {
         user
     } = props;
 
-    const formId = props.id?props.id:Identify.randomString()
+    const formId = props.id ? props.id : Identify.randomString()
     const validationMessage = isAddressInvalid ? invalidAddressMessage : null;
 
     let initialFormValues = initialValues;
@@ -100,19 +100,19 @@ const AddressForm = props => {
     const simiGetStoreConfig = Identify.getStoreConfig();
     const simiStoreViewCustomer = simiGetStoreConfig.simiStoreConfig.config.customer;
 
-    let configFields = defaultConfigValues;
-    if (simiStoreViewCustomer && simiStoreViewCustomer.hasOwnProperty('address_fields_config')) {
-        const { address_fields_config } = simiStoreViewCustomer;
-        configFields = useMemo(
-            () =>
-                defaultConfigFields.reduce((acc, key) => {
+    const configFields = useMemo(
+        () => {
+            if (simiStoreViewCustomer && simiStoreViewCustomer.hasOwnProperty('address_fields_config')) {
+                const { address_fields_config } = simiStoreViewCustomer;
+                return defaultConfigFields.reduce((acc, key) => {
                     acc[key] = address_fields_config[key];
                     return acc;
-                }, {}),
-            [address_fields_config]
-        )
-    }
-
+                }, {})
+            }
+            return defaultConfigValues
+        },
+        [simiStoreViewCustomer]
+    )
     const values = useMemo(
         () =>
             fields.reduce((acc, key) => {
@@ -129,7 +129,7 @@ const AddressForm = props => {
 
     let initialCountry;
     let selectableCountries;
-    const callGetCountries = { value: '', label: Identify.__('Please choose') }
+    //const callGetCountries = { value: '', label: Identify.__('Please choose') }
 
     if (countries && countries.length) {
         selectableCountries = countries.map(
@@ -138,12 +138,12 @@ const AddressForm = props => {
                 value: id
             })
         );
-        initialCountry = values.country_id || '' //countries[0].id;
+        initialCountry = values.country_id ? values.country_id : (countries[0].id ? countries[0].id : '')
     } else {
         selectableCountries = [];
         initialCountry = '';
     }
-    selectableCountries.unshift(callGetCountries);
+    //selectableCountries.unshift(callGetCountries);
 
     const handleSubmitBillingSameFollowShipping = useCallback(
         () => {
@@ -174,12 +174,16 @@ const AddressForm = props => {
                 if (name) {
                     if (name === 'street[0]') {
                         submitValues.street = [value]
-                    } else if (name === 'street[1]') { 
+                    } else if (name === 'street[1]') {
                         submitValues.street.push(value)
-                    } else if (name === 'emailaddress') { 
+                    } else if (name === 'emailaddress') {
                         submitValues['email'] = value
-                    } else if (name === 'save_in_address_book') { 
+                    } else if (name === 'save_in_address_book') {
                         submitValues[name] = (inputField.is(":checked")) ? 1 : 0
+                    } else if (name === 'region_code') {
+                        //region will be filled form async action
+                        submitValues['region'] = ''
+                        submitValues[name] = value
                     } else {
                         submitValues[name] = value
                     }
@@ -191,16 +195,16 @@ const AddressForm = props => {
         if (submitValues.hasOwnProperty('addresses_same')) delete submitValues.addresses_same
         if (submitValues.hasOwnProperty('selected_address_field')) delete submitValues.selected_address_field
         if (submitValues.hasOwnProperty('password')) delete submitValues.password
-        
+
         if (parseInt(submitValues.save_in_address_book) && !submitValues.id) {
             submitValues.save_in_address_book = 1;
         } else {
             submitValues.save_in_address_book = 0;
         }
-        
+
         if (!submitValues.email && user && user.currentUser && user.currentUser.email)
             submitValues.email = user.currentUser.email;
-
+            
         submit(JSON.parse(JSON.stringify(submitValues)));
         if (!billingForm && !billingAddressSaved) {
             handleSubmitBillingSameFollowShipping();
@@ -222,15 +226,14 @@ const AddressForm = props => {
         handleFormReset,
         formId
     };
-
+    
     return (
-        <form 
+        <form
             id={formId}
             onSubmit={handleSubmit}
-            className='root'
             style={{ display: 'inline-block', width: '100%' }}
         >
-            <FormFields {...formChildrenProps}/>
+            <FormFields {...formChildrenProps} initialValues={values} />
         </form>
     );
 };

@@ -1,15 +1,45 @@
-.textBlock {
-    margin: 1.5rem 0 1.5rem;
-    line-height: 1.875rem;
-    font-size: 0.875rem;
-}
-.orderId {
-    color: #22a1a8;
-    text-decoration: underline;
-}
+.thankyou-ctn {
+    text-align: center;
+    color: #000;
+    padding-bottom: 350px;
+    .header {
+        font-size: 24px;
+        font-weight: 600;
+        margin-top: 130px;
+        margin-bottom: 15px;
+        text-align: center;
+        text-transform: uppercase;
+        line-height: 33px;
+    }
+    .order-id {
+        font-size: 16px;
+        line-height: 24px;
+        font-weight: 400;
+    }
+    .order-message {
+        font-size: 16px;
+        line-height: 24px;
+        margin-bottom: 36px;
+        font-weight: 400;
+    }
+    .thankyou-action {
+        color: white;
+        background-color: #000;
+        padding: 13px 49px;
+        height: 48px;
+        display: inline-block;
+        max-width: 262px;
+        text-transform: uppercase;
+        &.view-details {
+            margin-inline-end: 26px;
+        }
+    }
 
-.header {
-    font-size: 1.25rem;
-    font-weight: 300;
-    line-height: 1.25rem;
+    @media(max-width: 1023px) {
+        .thankyou-action {
+            width: 100%;
+            margin-top: 10px;
+            max-width: unset;
+        }
+    }
 }

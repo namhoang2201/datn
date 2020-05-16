@@ -16,11 +16,9 @@ import { Util } from '@magento/peregrine';
 
 import dropIn from 'braintree-web-drop-in';
 
-require('./braintreeDropin.scss')
 
 const { BrowserPersistence } = Util;
 const storage = new BrowserPersistence();
-const authorization = process.env.BRAINTREE_TOKEN;
 const CONTAINER_ID = 'braintree-dropin-container';
 
 
@@ -33,7 +31,7 @@ const CONTAINER_ID = 'braintree-dropin-container';
  */
 
 const BraintreeDropin = props => {
-    const { onError, onSuccess, shouldRequestPaymentNonce } = props;
+    const { onError, onSuccess, shouldRequestPaymentNonce, authorization } = props;
     const [isError, setIsError] = useState(false);
     const [dropinInstance, setDropinInstance] = useState();
 
@@ -121,7 +119,7 @@ const BraintreeDropin = props => {
 
     if (isError) {
         return (
-            <span className='error'>
+            <span className="braintree-error">
                 There was an error loading payment options. Please try again
                 later.
             </span>

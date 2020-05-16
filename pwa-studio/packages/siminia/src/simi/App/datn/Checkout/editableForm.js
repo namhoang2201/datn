@@ -1,15 +1,10 @@
 import React, { useCallback, Fragment } from 'react';
-import { array, bool, func, object, oneOf, shape, string } from 'prop-types';
+import { bool, func, object, oneOf, string } from 'prop-types';
 
 import AddressForm from './AddressForm/AddressForm';
-import PaymentsForm from './PaymentsForm/PaymentsForm';
-import ShippingForm from './ShippingForm/ShippingForm';
 import AddressItem from 'src/simi/BaseComponents/Address';
 import isObjectEmpty from 'src/util/isObjectEmpty';
-import Identify from 'src/simi/Helper/Identify';
 import {getAllowedCountries} from 'src/simi/Helper/Countries'
-
-require('./editableForm.scss')
 
 /**
  * The EditableForm component renders the actual edit forms for the sections
@@ -19,27 +14,17 @@ require('./editableForm.scss')
 const EditableForm = props => {
     const {
         editing,
-        editOrder,
         submitShippingAddress,
-        submitShippingMethod,
         submitting,
         isAddressInvalid,
         invalidAddressMessage,
-        paymentMethods,
         submitBillingAddress,
-        submitPaymentMethod,
         user,
         simiSignedIn,
-        paymentCode,
         toggleMessages,
-        cartCurrencyCode,
-        cart,
         is_virtual,
     } = props;
     const countries = getAllowedCountries()
-    const handleCancel = useCallback(() => {
-        editOrder(null);
-    }, [editOrder]);
 
     const handleSubmitAddressForm = useCallback(
         formValues => {
@@ -50,24 +35,6 @@ const EditableForm = props => {
         [submitShippingAddress]
     );
 
-    /* const handleSubmitPaymentsForm = useCallback(
-        formValues => {
-            submitPaymentMethodAndBillingAddress({
-                formValues
-            });
-        },
-        [submitPaymentMethodAndBillingAddress]
-    ); */
-
-    const handleSubmitShippingForm = useCallback(
-        formValues => {
-            submitShippingMethod({
-                formValues
-            });
-        },
-        [submitShippingMethod]
-    );
-
     const handleSubmitBillingForm = useCallback(
         formValues => {
             submitBillingAddress(formValues);
@@ -75,15 +42,8 @@ const EditableForm = props => {
         [submitBillingAddress]
     );
 
-    const handleSubmitPaymentsForm = useCallback(
-        formValues => {
-            submitPaymentMethod(formValues);
-        },
-        [submitPaymentMethod]
-    );
-
     switch (editing) {
-        case 'address': {
+        case 'shippingAddress': {
             const {billingAddress} = props;
             let { shippingAddress } = props;
             if (!shippingAddress) {
@@ -94,7 +54,6 @@ const EditableForm = props => {
                 <Fragment>
                     <AddressForm
                         id="shippingAddressForm"
-                        cancel={handleCancel}
                         countries={countries}
                         isAddressInvalid={isAddressInvalid}
                         invalidAddressMessage={invalidAddressMessage}
@@ -123,7 +82,6 @@ const EditableForm = props => {
                 <Fragment>
                     <AddressForm
                         id="billingAddressForm"
-                        cancel={handleCancel}
                         countries={countries}
                         isAddressInvalid={isAddressInvalid}
                         invalidAddressMessage={invalidAddressMessage}
@@ -132,49 +90,13 @@ const EditableForm = props => {
                         submitting={submitting}
                         billingForm={true}
                         user={user}
+                        simiSignedIn={simiSignedIn}
                         is_virtual={is_virtual}
                     />
                     {billingAddress && !isObjectEmpty(billingAddress) && !billingAddress.hasOwnProperty('sameAsShippingAddress') ?
                         <AddressItem data={billingAddress} /> : null}
                 </Fragment>
 
-            );
-        }
-
-        case 'paymentMethod': {
-            let { paymentData } = props;
-            if (!paymentData) {
-                paymentData = undefined;
-            }
-
-            return (
-                <PaymentsForm
-                    cancel={handleCancel}
-                    countries={countries}
-                    initialValues={paymentData}
-                    paymentCode={paymentCode}
-                    submit={handleSubmitPaymentsForm}
-                    submitting={submitting}
-                    paymentMethods={paymentMethods}
-                    cart={cart}
-                    cartCurrencyCode={cartCurrencyCode}
-                    key={Identify.randomString()}
-                />
-            );
-        }
-
-        case 'shippingMethod': {
-            const { availableShippingMethods, shippingMethod } = props;
-
-            return (
-                <ShippingForm
-                    availableShippingMethods={availableShippingMethods}
-                    cancel={handleCancel}
-                    shippingMethod={shippingMethod}
-                    submit={handleSubmitShippingForm}
-                    submitting={submitting}
-                    key={Identify.randomString()}
-                />
             );
         }
 
@@ -185,19 +107,13 @@ const EditableForm = props => {
 };
 
 EditableForm.propTypes = {
-    availableShippingMethods: array,
-    editing: oneOf(['address', 'billingAddress', 'paymentMethod', 'shippingMethod']),
-    editOrder: func.isRequired,
+    editing: oneOf(['shippingAddress', 'billingAddress']),
     shippingAddress: object,
-    shippingMethod: string,
     submitShippingAddress: func.isRequired,
-    submitShippingMethod: func.isRequired,
     submitBillingAddress: func.isRequired,
-    submitPaymentMethod: func.isRequired,
     submitting: bool,
     isAddressInvalid: bool,
     invalidAddressMessage: string,
-    paymentMethods: array,
     user: object
 };
 

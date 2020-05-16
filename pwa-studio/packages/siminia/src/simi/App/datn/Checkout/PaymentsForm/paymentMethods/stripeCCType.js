@@ -3,13 +3,17 @@ import React, { useState, useRef } from 'react';
 import Identify from 'src/simi/Helper/Identify';
 import CardHelper from 'src/simi/Helper/Card';
 import Button from 'src/components/Button';
-
-require('./ccType.scss')
+import { connect } from 'src/drivers';
+import { showFogLoading, hideFogLoading } from 'src/simi/BaseComponents/Loading/GlobalLoading';
 
 const $ = window.$;
 
-const ccType = (props) => {
-    const { onSuccess, cartCurrencyCode, cart, payment_method, paymentContent } = props;
+const stripeCCType = props => {
+    const { onSuccess, cart, payment_method, paymentContent, paymentData } = props;
+    if (!paymentData || (!paymentData.three_d_client_secret && !paymentData.cc_token))
+        $('.go-place_order').addClass('payment-not-ready')
+    else
+        $('.go-place_order').removeClass('payment-not-ready')
 
     const numberRef = useRef();
     const monthRef = useRef();
@@ -18,18 +22,14 @@ const ccType = (props) => {
 
     const [errorMsg, setErrorMsg] = useState('');
     const [hasError, setHasError] = useState('');
-    const secKey = paymentContent && paymentContent.public_key ? paymentContent.public_key : "";
-    const test_3d_secure = paymentContent && paymentContent.hasOwnProperty('verify_3dsecure') ? parseInt(paymentContent.verify_3dsecure, 10) : 0;
+    if (!cart || !cart.totals) {
+        return ''
+    }
+    const baseCurrencyCode = cart.totals.base_currency_code
+    const baseGrandTotal = cart.totals.base_grand_total
+    const pubKey = paymentContent && paymentContent.stripe_public_key ? paymentContent.stripe_public_key : "";
+    const test_3d_secure = paymentContent && paymentContent.hasOwnProperty('stripe_3d_secure') ? paymentContent.stripe_3d_secure : false;
     const initialValues = Identify.getDataFromStoreage(Identify.SESSION_STOREAGE, 'cc_card_data') ? Identify.getDataFromStoreage(Identify.SESSION_STOREAGE, 'cc_card_data') : '';
-
-    const cartGrandTotals = () => {
-        return cart && cart.totals && cart.totals.grand_total;
-    }
-
-    const getBaseUrl = () => {
-        const storeConfig = Identify.getStoreConfig();
-        return storeConfig && storeConfig.storeConfig && storeConfig.storeConfig.base_url
-    }
 
     const onCCNUmberInput = e => {
         $(e.currentTarget).val(formatCC(e.currentTarget.value));
@@ -41,21 +41,6 @@ const ccType = (props) => {
 
         let pattern = /\d{4,16}/g;
         let cardType = 'OT';
-        /* if (cardByNUmber !== null) {
-            pattern = cardByNUmber.cardFormatPattern;
-            cardType = cardByNUmber.type;
-            // auto pick Card Type By Number
-            let paymentMethod = this.props.payment_item.payment_method;
-            $('#' + paymentMethod).find('li.cc-item').each(function () {
-                $(this).find('.check').hide();
-                $(this).find('.uncheck').show();
-            });
-            let currentTarget = $('#' + cardByNUmber.type);
-            currentTarget.find('.check').show();
-            currentTarget.find('.uncheck').hide();
-            currentTarget.parents('.lists-cc').find('input[name="cc_type"]').val(cardType);
-            $('#cc_cid').attr('maxlength', cardByNUmber.cvcLength[0]).attr('placeholder', "*".repeat(cardByNUmber.cvcLength[0]));
-        } */
         let regex = new RegExp(pattern, 'gi');
         let matches = v.match(regex);
         let match = (matches && matches[0]) ? matches[0] : '';
@@ -74,20 +59,21 @@ const ccType = (props) => {
 
     const responseToken = (card) => {
         const url = "https://api.stripe.com/v1/tokens";
-
+        showFogLoading()
         $.ajax({
             url: url, // Url to which the request is send
             headers: {
-                Authorization: `Bearer ${secKey}`,
+                Authorization: `Bearer ${pubKey}`,
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
             type: "POST",
             data: { card },
             success: function (data) {
+                hideFogLoading();
                 processData(data);
-
             },
             error: function (xhr, status, error) {
+                hideFogLoading()
                 const respondText = JSON.parse(xhr.responseText);
                 if (respondText.error.message) {
                     setErrorMsg(respondText.error.message);
@@ -103,22 +89,24 @@ const ccType = (props) => {
         const url = "https://api.stripe.com/v1/sources";
         const payload = {
             'type': 'card',
-            'currency': cartCurrencyCode,
+            'currency': baseCurrencyCode,
             card
         }
-
+        showFogLoading()
         $.ajax({
             url: url, // Url to which the request is send
             headers: {
-                Authorization: `Bearer ${secKey}`,
+                Authorization: `Bearer ${pubKey}`,
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
             type: "POST",
             data: payload,
             success: function (data) {
+                hideFogLoading();
                 confirm3DSecure(data);
             },
             error: function (xhr, status, error) {
+                hideFogLoading();
                 const respondText = JSON.parse(xhr.responseText);
                 if (respondText.error.message) {
                     setErrorMsg(respondText.error.message);
@@ -133,20 +121,20 @@ const ccType = (props) => {
     const confirm3DSecure = (source_response) => {
         const url = "https://api.stripe.com/v1/sources";
         const { id } = source_response;
-        const amount = parseFloat(cartGrandTotals(), 2) * 100;
-        const return_url = getBaseUrl(); //window.location.origin.indexOf('localhost') > -1 ? "https://simicart-siminia-hsmrn.local.pwadev:8495/" : getBaseUrl();
+        const amount = parseInt(parseFloat(baseGrandTotal, 2) * 100, 10);
+        const return_url = window.location.origin
         const payload = {
             type: 'three_d_secure',
             'three_d_secure[card]': id,
-            'redirect[return_url]': return_url + 'checkout.html?confirmed_3d_secure=stripe',
-            key: secKey,
-            currency: cartCurrencyCode,
+            'redirect[return_url]': return_url + '/checkout.html?confirmed_3d_secure=stripe',
+            key: pubKey,
+            currency: baseCurrencyCode,
             amount
         };
         $.ajax({
             url, // Url to which the request is send
             headers: {
-                Authorization: `Bearer ${secKey}`,
+                Authorization: `Bearer ${pubKey}`,
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
             type: "POST",
@@ -213,7 +201,7 @@ const ccType = (props) => {
     const processData = (data) => {
         const { card } = data;
 
-        const paymentData = {
+        const newPaymentData = {
             cc_cid: "",
             cc_exp_month: card.exp_month,
             cc_exp_year: card.exp_year,
@@ -225,12 +213,12 @@ const ccType = (props) => {
             cc_token: data.id,
             cc_type: card.brand,
         };
-        onSuccess(paymentData);
+        onSuccess(newPaymentData);
     }
 
     const secureData = (response) => {
         const { three_d_secure, redirect } = response;
-        const paymentData = {
+        const newPaymentData = {
             cc_cid: "",
             cc_exp_month: three_d_secure.exp_month,
             cc_exp_year: three_d_secure.exp_year,
@@ -245,14 +233,14 @@ const ccType = (props) => {
 
         const dataSave = {
             code: payment_method,
-            data: paymentData
+            data: newPaymentData
         }
         Identify.storeDataToStoreage(Identify.SESSION_STOREAGE, 'cc_3DSecure_stripe', dataSave);
         window.location.replace(redirect.url);
     }
 
     return (
-        <div className="container-cc_form">
+        <div className="container-cc_form cc-stripe-form">
             <div className={`cc-field form-group ${hasError === 'number' ? 'has-error' : ''}`}>
                 <label htmlFor="cc_number">
                     {Identify.__('Credit Card Number')}
@@ -283,7 +271,7 @@ const ccType = (props) => {
             </div>
             {errorMsg && <div className="cc-msg-error">{errorMsg}</div>}
             <Button
-                className='submitCC'
+                className='submitCCStripe'
                 style={{ marginTop: 10, marginBottom: 20 }}
                 type="button"
                 onClick={() => submitCC()}
@@ -292,4 +280,12 @@ const ccType = (props) => {
     );
 }
 
-export default ccType;
+
+
+const mapStateToProps = ({ cart }) => {
+    return {
+        cart
+    }
+}
+
+export default connect(mapStateToProps)(stripeCCType);
