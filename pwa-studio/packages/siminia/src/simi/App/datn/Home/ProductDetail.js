@@ -3,7 +3,7 @@ import Identify from "src/simi/Helper/Identify";
 import { simiUseQuery } from 'src/simi/Network/Query' 
 import getCategory from 'src/simi/queries/catalog/getCategory.graphql'
 import Loading from "src/simi/BaseComponents/Loading";
-import { GridItem } from "src/simi/BaseComponents/GridItem";
+import { GridItem } from "src/simi/App/datn/BaseComponents/GridItem";
 import {applySimiProductListItemExtraField} from 'src/simi/Helper/Product'
 
 const ProductItem = props => {

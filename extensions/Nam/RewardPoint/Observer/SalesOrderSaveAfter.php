@@ -50,7 +50,7 @@ class SalesOrderSaveAfter implements ObserverInterface
             return $this;
         }
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $transactionModel = $objectManager->create('\Nam\RewardPoint\Model\Transactions');
+        $transactionModel = $objectManager->create('Nam\RewardPoint\Model\Transactions');
         $customerModel = $this->_customer->load($order->getCustomerId());
         $quoteModel = $objectManager->get('Magento\Quote\Model\Quote')->load($order->getQuoteId());
 
