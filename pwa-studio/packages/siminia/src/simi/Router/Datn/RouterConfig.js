@@ -15,7 +15,7 @@ const PaypalExpress = (props) => {
 }
 
 const Thankyou = (props) => {
-    return <LazyComponent component={() => import(/* webpackChunkName: "Thankyou"*/'src/simi/App/core/Checkout/Thankyou')} {...props}/>
+    return <LazyComponent component={() => import(/* webpackChunkName: "Thankyou"*/'src/simi/App/datn/Checkout/Thankyou')} {...props}/>
 }
 
 const Login = (props) => {

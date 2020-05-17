@@ -227,7 +227,6 @@ class Cart extends Component {
             pointSpend,
             pointEarn
         }
-        console.log(cart)
         return <div className={`nam-reward-point`}><RewardPoint {...childCPProps} /></div>
     }
 

@@ -8,6 +8,7 @@ import classify from "src/classify";
 import { toggleMessages } from 'src/simi/Redux/actions/simiactions';
 import { connect } from 'src/drivers';
 import { compose } from 'redux';
+import Loading from 'src/simi/BaseComponents/Loading'
 
 const OrderList = props => {
     const { showForDashboard, data } = props
@@ -85,9 +86,7 @@ const OrderList = props => {
         <div className='customer-recent-orders'>
             {!data || !data.hasOwnProperty('customerOrders') || data.customerOrders.items.length === 0
                 ? (
-                    <div className="text-center">
-                        {Identify.__("You have no items in your order")}
-                    </div>
+                    <Loading />
                 ) : (
                     <PaginationTable
                         renderItem={renderOrderItem}

@@ -213,6 +213,24 @@ const Detail = (props) => {
                                             )}
                                     </td>
                                 </tr>
+                                {data.namrewardpoints_discount&&<tr className="special-row" data-title="NamRP Discount: ">
+                                    <td colSpan="5">
+                                        {Identify.__('NamRP Discount: ')}
+                                        {getFormatPrice(data.namrewardpoints_discount)}
+                                    </td>
+                                </tr>}
+                                {data.point_earn&&<tr className="special-row" data-title="Point Earned: ">
+                                    <td colSpan="5">
+                                        {Identify.__('Point Earned: ')}
+                                        {data.point_earn}
+                                    </td>
+                                </tr>}
+                                {data.point_spend&&<tr className="special-row" data-title="Point Spent: ">
+                                    <td colSpan="5">
+                                        {Identify.__('Point Spent: ')}
+                                        {data.point_spend}
+                                    </td>
+                                </tr>}
                                 <tr className="special-row grand-total">
                                     <td className="super-special" colSpan="5">
                                         {Identify.__('Grand Total: ')}
@@ -261,7 +279,7 @@ const Detail = (props) => {
     return (
         <div className="dashboard-acc-order-detail">
             <div className="order-detail-page-title">
-                {Identify.__("Order ") + "#" + data.entity_id}
+                {Identify.__("Order ") + "#" + data.increment_id}
             </div>
             <div className="order-date">
                 {!isPhone && getDateFormat(data.created_at)}
