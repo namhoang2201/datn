@@ -82,9 +82,9 @@ class NamSalesOrderSaveAfter implements ObserverInterface
                 'point_before_transaction' => intval($customerModel->getData('reward_point')),
                 'point_earn' => $pointEarn,
                 'point_spend' => $pointUse,
-                'total_before' => $quoteModel->getShippingAddress()->getGrandTotal(),
+                'total_before' => $quoteModel->getShippingAddress()->getGrandTotal() + $baseDiscount,
                 'discount_amount' => $baseDiscount,
-                'total_after_discount' => $quoteModel->getShippingAddress()->getGrandTotal() - $baseDiscount,
+                'total_after_discount' => $quoteModel->getShippingAddress()->getGrandTotal(),
                 'created_time' => date('Y-m-d H:i:s')
             ]);
             $transactionModel->save();

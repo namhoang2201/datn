@@ -126,7 +126,15 @@ class NamSystemRestModify implements ObserverInterface
                 $quoteObject = $this->simiObjectManager->get('Magento\Quote\Model\Quote')
                     ->load($quoteId);
                 $contentArray['np_point_using'] = intval($quoteObject->getData('np_point_using'));
-                $contentArray['np_point_will_earn'] = intval($quoteObject->getData('np_point_will_earn'));
+                // calculate point will earn but not save to quote
+                $grandTotal = $quoteObject->getShippingAddress()->getGrandTotal();
+                $amount_earn_1_point = $this->simiObjectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')
+                    ->getValue('rewardpoint/general/amount_earn');
+                $numberPointWillEarn = 0;
+                if($amount_earn_1_point > 0){
+                    $numberPointWillEarn = floor($grandTotal / $amount_earn_1_point);
+                }
+                $contentArray['np_point_will_earn'] = $numberPointWillEarn;
 
                 try {
                     $quoteModel = $this->simiObjectManager->create('Magento\Quote\Model\Quote')
