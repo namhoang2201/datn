@@ -4,7 +4,7 @@ namespace Nam\RewardPoint\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
-class SalesOrderSaveAfter implements ObserverInterface
+class NamSalesOrderSaveAfter implements ObserverInterface
 {
 
     /**
@@ -22,7 +22,7 @@ class SalesOrderSaveAfter implements ObserverInterface
     protected $_request;
 
     /**
-     * SalesOrderSaveAfter constructor.
+     * NamSalesOrderSaveAfter constructor.
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Customer\Model\Customer $customer
      */
@@ -50,7 +50,6 @@ class SalesOrderSaveAfter implements ObserverInterface
             return $this;
         }
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $transactionModel = $objectManager->create('Nam\RewardPoint\Model\Transactions');
         $customerModel = $this->_customer->load($order->getCustomerId());
         $quoteModel = $objectManager->get('Magento\Quote\Model\Quote')->load($order->getQuoteId());
 
@@ -63,6 +62,7 @@ class SalesOrderSaveAfter implements ObserverInterface
         $pointUse = intval($quoteModel->getNpPointUsing());
 
         // 1. Create transactions
+        $transactionModel = $objectManager->create('Nam\RewardPoint\Model\Transactions');
         $transactionModel->setData([
             'np_order_id' => $order->getData('entity_id'),
             'point_before_transaction' => intval($customerModel->getRewardPoint()),
