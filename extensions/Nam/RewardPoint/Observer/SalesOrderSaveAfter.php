@@ -52,20 +52,20 @@ class SalesOrderSaveAfter implements ObserverInterface
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $transactionModel = $objectManager->create('\Nam\RewardPoint\Model\Transactions');
         $customerModel = $this->_customer->load($order->getCustomerId());
-        $quoteModel = $objectManager->get('\Magento\Quote\Model\Quote')->load($order->getQuoteId());
+        $quoteModel = $objectManager->get('Magento\Quote\Model\Quote')->load($order->getQuoteId());
 
         // get amount discount by 1 point
         $discount_by_1_point = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')
             ->getValue('rewardpoint/general/amount_spend');
         // calculate base_discount
-        $baseDiscount = $quoteModel->getNpPointUsing() * floatval($discount_by_1_point);
-        $pointEarn = $quoteModel->getNpPointWillEarn();
-        $pointUse = $quoteModel->getNpPointUsing();
+        $baseDiscount = intval($quoteModel->getNpPointUsing()) * floatval($discount_by_1_point);
+        $pointEarn = intval($quoteModel->getNpPointWillEarn());
+        $pointUse = intval($quoteModel->getNpPointUsing());
 
         // 1. Create transactions
         $transactionModel->setData([
             'np_order_id' => $order->getData('entity_id'),
-            'point_before_transaction' => $customerModel->getRewardPoint(),
+            'point_before_transaction' => intval($customerModel->getRewardPoint()),
             'point_earn' => $pointEarn,
             'point_spend' => $pointUse,
             'total_before' => $quoteModel->getGrandTotal() - $baseDiscount,
@@ -76,7 +76,7 @@ class SalesOrderSaveAfter implements ObserverInterface
         $transactionModel->save();
 
         // 2. Update point for customer
-        $newBalancePoint = $customerModel->getRewardPoint() + $quoteModel->getNpPointWillEarn() - $quoteModel->getNpPointUsing();
+        $newBalancePoint = intval($customerModel->getRewardPoint()) + $pointEarn - $pointUse;
         if ($newBalancePoint < 0) {
             $customerModel->setRewardPoint(0);
         } else {

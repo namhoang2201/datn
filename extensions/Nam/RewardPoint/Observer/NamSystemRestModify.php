@@ -121,11 +121,11 @@ class NamSystemRestModify implements ObserverInterface
                 // get balance point of current customer show at cart detail
                 $simiObjectManager = \Magento\Framework\App\ObjectManager::getInstance();
                 $balance_point = $simiObjectManager->get('Magento\Customer\Model\Session')->getCustomer()->getRewardPoint();
-                $contentArray['balance_rewardpoint'] = $balance_point;
+                $contentArray['balance_rewardpoint'] = intval($balance_point);
                 // get point using from quote table to apply to cart
-                $quoteObject = $this->simiObjectManager->create('Magento\Quote\Model\Quote')
+                $quoteObject = $this->simiObjectManager->get('Magento\Quote\Model\Quote')
                     ->load($quoteId);
-                $contentArray['np_point_using'] = $quoteObject->getData('np_point_using');
+                $contentArray['np_point_using'] = intval($quoteObject->getData('np_point_using'));
                 // calculate point_will_earn ->  save to quote
                 $grandTotal = $quoteObject->getGrandTotal();
                 $amount_earn_1_point = $simiObjectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')
