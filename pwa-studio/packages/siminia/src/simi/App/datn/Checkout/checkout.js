@@ -13,6 +13,7 @@ import { smoothScrollToView } from 'src/simi/Helper/Behavior';
 import Coupon from 'src/simi/BaseComponents/Coupon';
 import ShippingForm from './ShippingForm';
 import PaymentsForm from './PaymentsForm/PaymentsForm';
+import RewardPoint from './../RewardPoint'
 
 const $ = window.$
 
@@ -206,10 +207,26 @@ class Checkout extends Component {
             cpValue = cart.totals.coupon_code;
         }
 
+        let balancePoint = 0
+        let pointSpend = 0
+        let pointEarn = 0
+        if(cart && cart.totals && cart.totals.balance_rewardpoint){
+            balancePoint = cart.totals.balance_rewardpoint
+        }
+        if(cart && cart.totals && cart.totals.np_point_using){
+            pointSpend = cart.totals.np_point_using
+        }
+        if(cart && cart.totals && cart.totals.np_point_will_earn){
+            pointEarn = cart.totals.np_point_will_earn
+        }
+
         const childCPProps = {
             value: cpValue,
             toggleMessages,
-            getCartDetails
+            getCartDetails,
+            balancePoint,
+            pointSpend,
+            pointEarn
         }
 
         if (checkout.step && checkout.step === 'receipt' && checkout.order_entity_id) {
@@ -268,6 +285,13 @@ class Checkout extends Component {
                         expanded={false}
                         headerStyle={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
                     />
+                    {/* <Panel title={<div className='checkout-section-title'>{Identify.__('Nam Reward Point Discount')}</div>}
+                        className='checkout-panel checkout-panel-rewardpoint'
+                        renderContent={<RewardPoint {...childCPProps} />}
+                        isToggle={true}
+                        expanded={false}
+                        headerStyle={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+                    /> */}
 
                 </div>
                 <div className='checkout-col-3'>

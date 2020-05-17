@@ -28,3 +28,9 @@ export const updateCoupon = (callBack, params) => {
     getParams = getParams ? {quote_id: getParams} : {};
     sendRequest('/rest/V1/simiconnector/quoteitems', callBack, 'PUT', getParams, params)
 }
+
+export const spendPoint = (callBack, params) => {
+    let getParams = storage.getItem('cartId');
+    getParams = getParams ? {quote_id: getParams} : {};
+    sendRequest('/rest/V1/simiconnector/quoteitems', callBack, 'PUT', getParams, params)
+}

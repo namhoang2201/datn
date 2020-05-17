@@ -21,6 +21,7 @@ import {showFogLoading, hideFogLoading} from 'src/simi/BaseComponents/Loading/Gl
 import { toggleMessages } from 'src/simi/Redux/actions/simiactions';
 import {removeItemFromCart} from 'src/simi/Model/Cart'
 import Coupon from 'src/simi/BaseComponents/Coupon'
+import RewardPoint from './../RewardPoint'
 require('./cart.scss')
 
 
@@ -204,8 +205,34 @@ class Cart extends Component {
         return <div className={`cart-coupon-form`}><Coupon {...childCPProps} /></div>
     }
 
+    get namRewardPoint () {
+        const { cart, toggleMessages, getCartDetails } = this.props;
+        let balancePoint = 0
+        let pointSpend = 0
+        let pointEarn = 0
+        if(cart && cart.totals && cart.totals.balance_rewardpoint){
+            balancePoint = cart.totals.balance_rewardpoint
+        }
+        if(cart && cart.totals && cart.totals.np_point_using){
+            pointSpend = cart.totals.np_point_using
+        }
+        if(cart && cart.totals && cart.totals.np_point_will_earn){
+            pointEarn = cart.totals.np_point_will_earn
+        }
+        const childCPProps = {
+            cart,
+            toggleMessages,
+            getCartDetails,
+            balancePoint,
+            pointSpend,
+            pointEarn
+        }
+        console.log(cart)
+        return <div className={`nam-reward-point`}><RewardPoint {...childCPProps} /></div>
+    }
+
     get cartInner() {
-        const { productList, props, total, checkoutButton, couponView } = this;
+        const { productList, props, total, checkoutButton, couponView, namRewardPoint } = this;
         const { cart: { isLoading }, isCartEmpty,cart } = props;
 
         if (isCartEmpty || !cart.details || !parseInt(cart.details.items_count)) {
@@ -246,6 +273,7 @@ class Cart extends Component {
                 </div>
                 <div className={`body ${Identify.isRtl() ? 'body-cart-rtl' : ''}`}>{productList}</div>
                 {couponView}
+                {this.props.isSignedIn&&namRewardPoint}
                 {total}
                 {checkoutButton}
             </Fragment>

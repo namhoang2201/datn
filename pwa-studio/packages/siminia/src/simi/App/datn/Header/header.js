@@ -3,6 +3,7 @@ import Identify from "src/simi/Helper/Identify";
 import WishList from 'src/simi/BaseComponents/Icon/WishList'
 import MenuIcon from 'src/simi/BaseComponents/Icon/Menu'
 import ToastMessage from 'src/simi/BaseComponents/Message/ToastMessage'
+import ToastSuccess from 'src/simi/BaseComponents/Message/ToastSuccess';
 import TopMessage from 'src/simi/BaseComponents/Message/TopMessage'
 import NavTrigger from './Component/navTrigger'
 import CartTrigger from './cartTrigger'
@@ -141,6 +142,7 @@ class Header extends React.Component {
                 <div id="id-message">
                     <TopMessage />
                     <ToastMessage />
+                    <ToastSuccess />
                 </div>
             </div>
 
@@ -166,6 +168,7 @@ class Header extends React.Component {
                 <div id="id-message">
                     <TopMessage />
                     <ToastMessage />
+                    <ToastSuccess />
                 </div>
             </React.Fragment>
         )

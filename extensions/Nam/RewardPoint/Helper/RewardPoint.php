@@ -17,14 +17,54 @@ class RewardPoint extends \Simi\Simiconnector\Helper\Data
     public function spendPoint($spendPoint)
     {
         $this->_getCart()->getQuote()->getShippingAddress()->setCollectShippingRates(true);
-        $this->_getCart()->getQuote()->collectTotals()->save();
-        $balance_point = $this->simiObjectManager->get('Magento\Customer\Model\Session')->getCustomer()->getRewardPoint();
-        $grandTotal              = $this->_getCart()->getQuote()->getShippingAddress()->getGrandTotal();
-        echo $grandTotal; die();
-        if($spendPoint > $balance_point){
-            $message = 'You can not spend a numbers of points greater than your balance points !';
-        }
 
+        $balance_point = $this->simiObjectManager->get('Magento\Customer\Model\Session')->getCustomer()->getRewardPoint();
+        $grandTotal = $this->_getCart()->getQuote()->getShippingAddress()->getGrandTotal();
+        // calculate amount discount
+        $amount_discount_by_1_point = $this->simiObjectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')
+            ->getValue('rewardpoint/general/amount_spend');
+        $maxDiscount = floatval($amount_discount_by_1_point) * $spendPoint;
+        $quote = $this->_getCart()->getQuote();
+        $useAllPoint = false;
+        if ($maxDiscount <= $grandTotal) {
+            // case: use all point
+            $quote->setNpPointUsing($spendPoint);
+            $useAllPoint = true;
+            $quote->save();
+        } else {
+            // case: use a mount point < blance point
+            // find max_point < spendPoint and max_point * amount_discount_by_1_point > grandTotal
+            $max_point = 0;
+            for ($i = 0; $i < $spendPoint; $i++) {
+                if (floatval($amount_discount_by_1_point) * $i > $grandTotal) {
+                    $max_point = $i;
+                    break;
+                }
+            }
+            if ($max_point > 0) {
+                $quote->setNpPointUsing($max_point);
+                $quote->save();
+            }
+        }
+        $this->_getCart()->getQuote()->collectTotals()->save();
+
+        $newestQuote = $this->_getCart()->getQuote();
+        $newestGrandTotal = $newestQuote->getShippingAddress()->getGrandTotal();
+        // calculate point_will_earn ->  save to quote
+        $amount_earn_1_point = $this->simiObjectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')
+            ->getValue('rewardpoint/general/amount_earn');
+        $numberPointWillEarn = 0;
+        if($amount_earn_1_point > 0){
+            $numberPointWillEarn = floor($newestGrandTotal / $amount_earn_1_point);
+        }
+        $newestQuote->setNpPointWillEarn($numberPointWillEarn);
+        $newestQuote->save();
+        if($useAllPoint){
+            // all point <=> su dung het so point ma customer apply (khong co nghia la su dung het balance point )
+            $message = 'You spend '.$spendPoint.' point(s) successfully !';
+        }else{
+            $message = 'You spend '.$max_point.' point(s) successfully !';
+        }
         return $message;
     }
 }
