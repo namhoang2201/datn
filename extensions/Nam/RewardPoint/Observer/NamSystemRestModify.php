@@ -126,7 +126,6 @@ class NamSystemRestModify implements ObserverInterface
                 $quoteObject = $this->simiObjectManager->get('Magento\Quote\Model\Quote')
                     ->load($quoteId);
                 $contentArray['np_point_using'] = intval($quoteObject->getData('np_point_using'));
-                // get point will earn
                 $contentArray['np_point_will_earn'] = intval($quoteObject->getData('np_point_will_earn'));
 
                 try {

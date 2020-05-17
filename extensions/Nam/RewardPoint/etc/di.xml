@@ -16,9 +16,4 @@
             </argument>
         </arguments>
     </type>
-
-    <!-- add data to subtotal, add block to show reward discount on view order detail page   -->
-    <type name="Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid">
-        <plugin name="namrewardpoints_discount_to_subtotal" type="Nam\RewardPoint\Model\Plugin\Quote\RewardpointsToSubtotal"/>
-    </type>
 </config>
