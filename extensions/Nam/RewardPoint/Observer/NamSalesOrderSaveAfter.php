@@ -78,7 +78,8 @@ class NamSalesOrderSaveAfter implements ObserverInterface
             $transactionModel = $objectManager->create('Nam\RewardPoint\Model\Transactions');
             $transactionModel->setData([
                 'np_order_id' => $order->getData('entity_id'),
-                'point_before_transaction' => intval($customerModel->getCustomAttribute('reward_point')),
+                'np_increment_id' => $order->getData('increment_id'),
+                'point_before_transaction' => intval($customerModel->getData('reward_point')),
                 'point_earn' => $pointEarn,
                 'point_spend' => $pointUse,
                 'total_before' => $quoteModel->getGrandTotal() - $baseDiscount,
@@ -89,11 +90,11 @@ class NamSalesOrderSaveAfter implements ObserverInterface
             $transactionModel->save();
 
             // 2. Update point for customer
-            $newBalancePoint = intval($customerModel->getCustomAttribute('reward_point')) + $pointEarn - $pointUse;
+            $newBalancePoint = intval($customerModel->getData('reward_point')) + $pointEarn - $pointUse;
             if ($newBalancePoint < 0) {
                 $newBalancePoint = 0;
             }
-            $customerModel->setCustomAttribute('reward_point',$newBalancePoint);
+            $customerModel->setData('reward_point',$newBalancePoint);
             $customerModel->save();
             // 3. Update point at quote table (np_point_using, np_point_will_earn )
             $quoteModel->setNpPointWillEarn(0);

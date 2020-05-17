@@ -43,6 +43,12 @@ class InstallSchema implements InstallSchemaInterface
                 null,
                 ['unsigned' => true, 'nullable' => false, 'default' => '0'],
                 'nam_rewardpoint_order_id reference to sale_order.order_id'
+            )->addColumn(
+                'np_increment_id',
+                Table::TYPE_TEXT,
+                null,
+                ['nullable' => true],
+                'nam_rewardpoint_increment_id reference to sale_order.increment_id'
             )
             ->addColumn(
                 'point_before_transaction',
