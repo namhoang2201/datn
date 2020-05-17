@@ -58,7 +58,6 @@ class Cart extends Component {
             showFogLoading()
             return false
         }
-        console.log(nextProps)
         hideFogLoading()
         return true
     }
@@ -136,9 +135,11 @@ class Cart extends Component {
     get totalsSummary() {
         const { cart } = this.props;
         const { cartCurrencyCode } = this;
+        const {details} = cart
+        const isGuest = details && details.hasOwnProperty('customer_is_guest') && details.customer_is_guest;
         if (!cart.totals)
             return
-        return (<Total data={cart.totals} currencyCode={cartCurrencyCode} />)
+        return (<Total data={cart.totals} currencyCode={cartCurrencyCode} isSignedIn={!isGuest}/>)
     }
 
 
@@ -160,7 +161,7 @@ class Cart extends Component {
                     id="go-checkout"
                     style={{backgroundColor: configColor.button_background, color: configColor.button_text_color}}
                     className="go-checkout"
-                    onClick={() => this.handleGoCheckout()} text={Identify.__('Pay Securely')}/>
+                    onClick={() => this.handleGoCheckout()} text={Identify.__('Go to checkout')}/>
             </div>
         )
     }

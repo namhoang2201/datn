@@ -12,7 +12,7 @@ const OrderSummary = (props) => {
 
     const { cart, cartCurrencyCode, panelClassName, btnPlaceOrder } = props;
     const { details } = cart;
-
+    const isGuest = details && details.hasOwnProperty('customer_is_guest') && details.customer_is_guest;
     const totalLabel = details && details.hasOwnProperty('items_count') && details.items_count + Identify.__(' items in cart');
 
     const orderItem = useMemo(() => details && details.items && <OrderItems items={details.items} cartCurrencyCode={cartCurrencyCode} />, [details.items]);
@@ -24,7 +24,7 @@ const OrderSummary = (props) => {
     }
 
     const totalsSummary = (
-        <Total data={cart.totals} currencyCode={cartCurrencyCode} />
+        <Total data={cart.totals} currencyCode={cartCurrencyCode} isSignedIn={!isGuest}/>
     )
 
     const summaryItem = (

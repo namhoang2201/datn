@@ -6,6 +6,10 @@ use Magento\Framework\Event\ObserverInterface;
 
 class NamSalesOrderSaveAfter implements ObserverInterface
 {
+    /**
+     * @var \Magento\Framework\Registry
+     */
+    protected $_registry;
 
     /**
      * Store manager
@@ -25,14 +29,17 @@ class NamSalesOrderSaveAfter implements ObserverInterface
      * NamSalesOrderSaveAfter constructor.
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Customer\Model\Customer $customer
+     * @param \Magento\Framework\Registry $registry
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
-        \Magento\Customer\Model\Customer $customer
+        \Magento\Customer\Model\Customer $customer,
+        \Magento\Framework\Registry $registry
     )
     {
         $this->_request = $request;
         $this->_customer = $customer;
+        $this->_registry = $registry;
     }
 
     /**
@@ -41,17 +48,22 @@ class NamSalesOrderSaveAfter implements ObserverInterface
      * Update point at quote table
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @throws \Exception
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-
+        // variable to check if already placed order
+        $placed_order = $this->_registry->registry('nam_rewardpoint_place_order');
         $order = $observer['order'];
         if ($order->getCustomerIsGuest() || !$order->getCustomerId()) {
             return $this;
         }
-        if($order->getQuoteId()){
+
+        // only run 1 time, check if already placed order
+        if ($order->getQuoteId() && $placed_order !== '1') {
             $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-            $customerModel = $this->_customer->load($order->getCustomerId());
+//            $customerModel = $this->_customer->load($order->getCustomerId());
+            $customerModel = $objectManager->get('Magento\Customer\Model\Customer')->load($order->getCustomerId());
             $quoteModel = $objectManager->get('Magento\Quote\Model\Quote')->load($order->getQuoteId());
 
             // get amount discount by 1 point
@@ -66,7 +78,7 @@ class NamSalesOrderSaveAfter implements ObserverInterface
             $transactionModel = $objectManager->create('Nam\RewardPoint\Model\Transactions');
             $transactionModel->setData([
                 'np_order_id' => $order->getData('entity_id'),
-                'point_before_transaction' => intval($customerModel->getRewardPoint()),
+                'point_before_transaction' => intval($customerModel->getCustomAttribute('reward_point')),
                 'point_earn' => $pointEarn,
                 'point_spend' => $pointUse,
                 'total_before' => $quoteModel->getGrandTotal() - $baseDiscount,
@@ -77,20 +89,21 @@ class NamSalesOrderSaveAfter implements ObserverInterface
             $transactionModel->save();
 
             // 2. Update point for customer
-            $newBalancePoint = intval($customerModel->getRewardPoint()) + $pointEarn - $pointUse;
+            $newBalancePoint = intval($customerModel->getCustomAttribute('reward_point')) + $pointEarn - $pointUse;
             if ($newBalancePoint < 0) {
-                $customerModel->setRewardPoint(0);
-            } else {
-                $customerModel->setRewardPoint($newBalancePoint);
+                $newBalancePoint = 0;
             }
+            $customerModel->setCustomAttribute('reward_point',$newBalancePoint);
             $customerModel->save();
-
             // 3. Update point at quote table (np_point_using, np_point_will_earn )
             $quoteModel->setNpPointWillEarn(0);
             $quoteModel->setNpPointUsing(0);
             $quoteModel->save();
 
-            // 4. Update order
+            // 4. Change status registry
+            $this->_registry->register('nam_rewardpoint_place_order', '1');
+
+            // 5. Update order
             $order->setPointEarn($pointEarn);
             $order->setPointSpend($pointUse);
             $order->setNamrewardpointsDiscount($baseDiscount);

@@ -250,7 +250,7 @@ class Griditem extends React.Component {
                             </span>
                         </div>
                     </div>}
-                <div className="quickViewAction action">
+                {/* <div className="quickViewAction action">
                     <div className="quick-view sub-action">
                         <span
                             role="presentation"
@@ -259,7 +259,7 @@ class Griditem extends React.Component {
                         >
                         </span>
                     </div>
-                </div>
+                </div> */}
                 {!this.state.isPhone &&
                     <div className="compareAction action">
                         <div className="compare sub-action">
@@ -304,8 +304,8 @@ class Griditem extends React.Component {
                 }}
                 onMouseOver={(e) => this.showUserAction(id)}
                 onFocus={(e) => this.showUserAction(id)}
-                onMouseOut={(e) => this.hideUserAction(id)}
-                onBlur={(e) => this.hideUserAction(id)}
+                // onMouseOut={(e) => this.hideUserAction(id)}
+                // onBlur={(e) => this.hideUserAction(id)}
             >
                 <div
                     style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '100%' }}>

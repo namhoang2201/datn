@@ -101,20 +101,6 @@ class InstallSchema implements InstallSchemaInterface
         $installer->getConnection()->createTable($table);
 
         /**
-         * Add 1 column 'reward_point' to table  'customer_entity'
-         */
-        $installer->getConnection()->addColumn(
-            $installer->getTable('customer_entity'),
-            'reward_point',
-            [
-                'type' => Table::TYPE_INTEGER,
-                'nullable' => true,
-                'default' => 0,
-                'comment' => 'Current balance point of customer'
-            ]
-        );
-
-        /**
          * Add 2 column 'earn_point', 'point_spend' to table  'sales_order'
          */
         $installer->getConnection()->addColumn(

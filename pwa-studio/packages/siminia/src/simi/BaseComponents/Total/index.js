@@ -5,7 +5,9 @@ import PropTypes from 'prop-types'
 import {configColor} from 'src/simi/Config'
 
 const Total = props => {
-    const { currencyCode, data } = props
+    const { currencyCode, data, isSignedIn } = props
+    console.log(data)
+    console.log(isSignedIn)
     if (!data.total_segments)
         return ''
     const total_segments = data.total_segments
