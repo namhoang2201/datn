@@ -29,12 +29,10 @@ class LeftMenuContent extends React.Component {
         this.parent = this.props.parent;
         this.state = ({
             product_id: null,
-            resultScan: null
+            resultScan: null,
+            open: false
         })
     }
-    state = {
-        open: false
-    };
 
     onOpenModal = () => {
         if (
