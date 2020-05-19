@@ -25,6 +25,7 @@ import LinkedProduct from './LinkedProduct';
 import Tabs from "src/simi/App/datn/BaseComponents/Tabs";
 import { getProductDetail } from 'src/simi/Model/Product';
 import CompareProduct from 'src/simi/App/datn/BaseComponents/CompareProducts';
+import { showToastSuccess } from 'src/simi/Helper/MessageSuccess';
 
 const ConfigurableOptions = React.lazy(() => import('./Options/ConfigurableOptions'));
 const CustomOptions = React.lazy(() => import('./Options/CustomOptions'));
@@ -157,11 +158,7 @@ class ProductFullDetail extends Component {
         if (data.errors) {
             this.showError(data)
         } else {
-            this.props.toggleMessages([{
-                type: 'success',
-                message: Identify.__('Product was added to your wishlist'),
-                auto_dismiss: true
-            }])
+            showToastSuccess('Product was added to your wishlist')
         }
     }
 
