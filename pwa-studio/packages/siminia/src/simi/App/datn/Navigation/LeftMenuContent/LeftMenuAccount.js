@@ -2,6 +2,7 @@ import React from 'react'
 import Identify from 'src/simi/Helper/Identify';
 import MenuItem from './MenuItem';
 import ListItemNested from "src/simi/BaseComponents/MuiListItem/Nested";
+import { smoothScrollToView } from 'src/simi/Helper/Behavior';
 
 const listAccountMenu = [
     {
@@ -17,6 +18,13 @@ const listAccountMenu = [
         page: 'my-order',
         enable: true,
         sort_order: 20
+    },
+    {
+        title: Identify.__('RewardPoint Transactions'),
+        url: '/transaction.html',
+        page: 'transaction',
+        enable: true,
+        sort_order: 25
     },
     {
         title: Identify.__('Account Information'),
@@ -60,6 +68,9 @@ class LeftMenuAccount extends React.Component {
         super(props)
     }
 
+    scrollTop = () => {
+        smoothScrollToView($('#root'));
+    }
 
     listPages = pages => {
         let result = null;
@@ -84,6 +95,7 @@ class LeftMenuAccount extends React.Component {
 
     openLocation = (location) => {
         this.props.handleMenuItem(location);
+        this.scrollTop()
     }
 
     renderItem(listAccountMenu) {

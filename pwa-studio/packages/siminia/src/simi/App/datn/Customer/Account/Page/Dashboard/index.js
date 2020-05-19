@@ -11,7 +11,7 @@ import TitleHelper from 'src/simi/Helper/TitleHelper';
 
 const Dashboard = props => {
     const { isPhone, customer } = props;
-    const { data } = simiUseQuery(getCustomerInfoQuery);
+    const { data } = simiUseQuery(getCustomerInfoQuery, {fetchPolicy: 'no-cache'});
 
     const renderDefaultAddress = (item, default_billing, default_shipping) => {
         const defaultBilling = item.find(value => {

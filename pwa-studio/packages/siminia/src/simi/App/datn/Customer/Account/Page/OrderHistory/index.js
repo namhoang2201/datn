@@ -7,7 +7,7 @@ import TitleHelper from 'src/simi/Helper/TitleHelper';
 
 const MyOrder = props => {
     const {customer} = props
-    const { data } = simiUseQuery(getCustomerInfoQuery, {});
+    const { data } = simiUseQuery(getCustomerInfoQuery, {fetchPolicy: 'no-cache'});
     return (
         <div className='account-my-orders-history'>
             {TitleHelper.renderMetaHeader({

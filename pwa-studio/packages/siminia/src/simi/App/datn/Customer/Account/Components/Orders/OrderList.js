@@ -84,7 +84,7 @@ const OrderList = props => {
     }
     return (
         <div className='customer-recent-orders'>
-            {!data || !data.hasOwnProperty('customerOrders') || data.customerOrders.items.length === 0
+            {!data || !data.hasOwnProperty('customerOrders')
                 ? (
                     <Loading />
                 ) : (

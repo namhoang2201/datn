@@ -248,7 +248,7 @@ const ProfileForm = props => {
                         required={true}
                         onChange={handleOnChange}
                     />
-                    <RadioCheckbox key={Identify.randomString(2)} className="first" defaultChecked={changeForm === 'email' ? true : false} title={Identify.__("Change email")} id='checkbox-change-email' onClick={() => handleChangeForm(changeForm === 'email' ? false : 'email')} />
+                    {/* <RadioCheckbox key={Identify.randomString(2)} className="first" defaultChecked={changeForm === 'email' ? true : false} title={Identify.__("Change email")} id='checkbox-change-email' onClick={() => handleChangeForm(changeForm === 'email' ? false : 'email')} /> */}
                     <RadioCheckbox key={Identify.randomString(2)} defaultChecked={changeForm === 'password' ? true : false} title={Identify.__("Change password")} id='checkbox-change-password' onClick={() => handleChangeForm(changeForm === 'password' ? false : 'password')} />
                 </div>
                 <div className='alternative__edit-column'>

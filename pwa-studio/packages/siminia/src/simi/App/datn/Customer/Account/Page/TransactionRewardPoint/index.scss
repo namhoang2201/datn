@@ -1,0 +1,33 @@
+.transaction {
+  font-family: arsenal;
+  .balance-point {
+    margin: 0 0 20px 0;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    line-height: 18px;
+    .point {
+      font-size: 20px;
+      margin-left: 20px;
+      color: white;
+      font-weight: bold;
+      background-color: black;
+      border-radius: 100%;
+      padding: 5px;
+    }
+  }
+  .table-siminia > thead > tr > th,
+  .table-siminia > tbody > tr > td {
+    padding: 14.5px 5px;
+    text-align: center;
+  }
+}
+@media (max-width: 767px) {
+  .table-siminia > tbody > tr > td {
+    padding-right: 15px !important;
+    text-align: right !important;
+  }
+  .table-siminia > tbody > tr > td::before {
+    left: 15px;
+  }
+}

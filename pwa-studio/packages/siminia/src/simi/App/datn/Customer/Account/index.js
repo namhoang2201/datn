@@ -15,6 +15,8 @@ import NewAddressBook from './Page/AddressBook/NewAddress';
 import Profile from './Page/Profile';
 import MyOrder from './Page/OrderHistory';
 import OrderDetail from './Page/OrderDetail';
+import Transaction from './Page/TransactionRewardPoint'
+import { smoothScrollToView } from 'src/simi/Helper/Behavior';
 
 class CustomerLayout extends React.Component {
 
@@ -40,6 +42,10 @@ class CustomerLayout extends React.Component {
         }
     }
 
+    scrollTop = () => {
+        smoothScrollToView($('#root'));
+    }
+
     getMenuConfig = () => {
         const menuConfig = [
             {
@@ -55,6 +61,13 @@ class CustomerLayout extends React.Component {
                 page: 'my-order',
                 enable: true,
                 sort_order: 20
+            },
+            {
+                title: Identify.__('Point Transactions'),
+                url: '/transaction.html',
+                page: 'transaction',
+                enable: true,
+                sort_order: 25
             },
             {
                 title: Identify.__('Account Information'),
@@ -101,6 +114,7 @@ class CustomerLayout extends React.Component {
     }
 
     handleLink = (link) => {
+        this.scrollTop()
         this.props.history.push(link)
     }
 
@@ -175,6 +189,9 @@ class CustomerLayout extends React.Component {
                 break;
             case 'my-order':
                 content = <MyOrder customer={data} isPhone={this.state.isPhone} history={this.props.history} />
+                break;
+            case 'transaction':
+                content = <Transaction customer={data} isPhone={this.state.isPhone} history={this.props.history} />
                 break;
             case 'newsletter':
                 content = <Newsletter />

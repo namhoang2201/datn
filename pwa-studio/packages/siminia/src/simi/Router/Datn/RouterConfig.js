@@ -124,6 +124,10 @@ const router = {
         path : '/profile.html',
         render : location => <Account {...location} page={`edit`} />
     },
+    transaction : {
+        path : '/transaction.html',
+        render : location => <Account {...location} page={`transaction`} />
+    },
     wishlist : {
         path: '/wishlist.html',
         render : (location) => <Account {...location} page={`wishlist`}/>

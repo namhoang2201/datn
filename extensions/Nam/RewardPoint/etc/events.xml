@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
-    <event name="simi_simiconnector_model_server_initialize">
-        <observer name="Nam_RewardPoint_Model_Server_Initialize"
-                  instance="Nam\RewardPoint\Observer\SimiconnectorModelServerInitialize"/>
-    </event>
+<!--    <event name="simi_simiconnector_model_server_initialize">-->
+<!--        <observer name="Nam_RewardPoint_Simiconnector_Model_Server_Initialize"-->
+<!--                  instance="Nam\RewardPoint\Observer\SimiconnectorModelServerInitialize"/>-->
+<!--    </event>-->
     <event name="simiconnector_system_rest_modify">
         <observer name="nam_rewardpoint_system_rest_modify"
                   instance="Nam\RewardPoint\Observer\NamSystemRestModify" />

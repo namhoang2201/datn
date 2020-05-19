@@ -63,9 +63,9 @@
     font-family: "Arsenal";
     font-size: 18px;
     line-height: 18px;
-    font-weight: 500;
     margin-bottom: 16px;
     color: #000000;
+    font-weight: bold;
     .view-all {
         font-size: 12px;
         line-height: 15px;
@@ -131,7 +131,6 @@
         margin: 27px 0 16px;
         padding: 11px 18px;
         min-width: 180px;
-        float: right;
         background-color: #000000;
         color: #fff;
         font-size: 14px;
@@ -1122,11 +1121,22 @@
     }
 }
 
-@media (min-width: 1024px) and (max-width: 1919px) {
+@media (min-width: 1920px) {
+    .product-grid .siminia-product-list-item {
+        padding: 0;
+        margin-left: 75px;
+        width: 240px;
+    }
+
     .product-grid .no-product {
-        margin-left: 22px;
+        margin-left: 40px;
+    }
+
+    .product-grid .siminia-product-list-item.first {
+        margin-left: 40px;
     }
 }
+
 .product-grid .siminia-product-list-item {
     display: inline-block;
     padding: 0;
@@ -1135,6 +1145,14 @@
     vertical-align: top;
     width: 48%;
 }
+
+@media (min-width: 1440px) {
+    .dashboard-menu{
+        min-width: 278px !important;
+        width: 278px;
+    }
+}
+
 
 @media (min-width: 1024px) {
     .dashboard-menu{
@@ -1149,26 +1167,9 @@
         padding-left: 22px;
     }
 }
-@media (min-width: 1440px) {
-    .dashboard-menu{
-        min-width: 278px;
-        width: 278px;
-    }
-}
-
-@media (min-width: 1920px) {
-    .product-grid .siminia-product-list-item {
-        padding: 0;
-        margin-left: 75px;
-        width: 240px;
-    }
-
+@media (min-width: 1024px) and (max-width: 1919px) {
     .product-grid .no-product {
-        margin-left: 40px;
-    }
-
-    .product-grid .siminia-product-list-item.first {
-        margin-left: 40px;
+        margin-left: 22px;
     }
 }
 

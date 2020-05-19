@@ -30,6 +30,7 @@ class AppRouter extends Abstract{
                 <Route exact {...router.new_address_book}/>
                 <Route exact {...router.oder_history}/>
                 <Route exact {...router.order_history_detail}/>
+                <Route exact {...router.transaction}/>
                 <Route exact {...router.newsletter}/>
                 <Route exact {...router.profile}/>
                 <Route exact {...router.wishlist}/>
