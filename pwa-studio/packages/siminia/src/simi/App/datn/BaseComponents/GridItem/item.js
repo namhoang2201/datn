@@ -26,6 +26,7 @@ import { smoothScrollToView } from 'src/simi/Helper/Behavior';
 import defaultClasses from './item.css'
 import { mergeClasses } from 'src/classify'
 import { toggleMessages } from 'src/simi/Redux/actions/simiactions';
+import { showToastSuccess } from 'src/simi/Helper/MessageSuccess';
 
 const $ = window.$;
 require('./item.scss')
@@ -84,7 +85,7 @@ class Griditem extends React.Component {
             showToastMessage(message ? message : Identify.__('Problem occurred.'))
         } else {
             if (data.message)
-                showToastMessage(data.message)
+            showToastSuccess(data.message)
             this.props.getCartDetails()
             const item = prepareProduct(this.props.item)
             analyticAddCartGTM(item.name, item.id, item.price)

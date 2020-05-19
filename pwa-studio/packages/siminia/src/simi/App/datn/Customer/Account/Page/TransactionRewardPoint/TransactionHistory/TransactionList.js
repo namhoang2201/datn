@@ -90,7 +90,7 @@ const TransactionList = props => {
             return b.id - a.id
         })
     }
-    console.log(data)
+    
     return (
         <div className='customer-recent-orders'>
             {!data || !data.hasOwnProperty('transactions')
