@@ -10,13 +10,24 @@ import { withRouter } from 'react-router-dom';
 import { compose } from 'redux';
 import Modal from 'react-responsive-modal';
 import { showToastMessage } from 'src/simi/Helper/Message';
+import { showToastSuccess } from 'src/simi/Helper/MessageSuccess';
 import ScanGo from './ScanGo';
+import { showFogLoading, hideFogLoading } from 'src/simi/BaseComponents/Loading/GlobalLoading';
+import { getProductDetail } from 'src/simi/Model/Product';
+import { addToCart as simiAddToCart } from 'src/simi/Model/Cart';
+import { productUrlSuffix } from 'src/simi/Helper/Url';
+import { smoothScrollToView } from 'src/simi/Helper/Behavior';
+import {
+    updateItemInCart
+} from 'src/actions/cart';
+import { toggleMessages } from 'src/simi/Redux/actions/simiactions';
 
 class LeftMenuContent extends React.Component {
 
     constructor(props) {
         super(props);
         this.parent = this.props.parent;
+        this.state = ({ product_id: null })
     }
     state = {
         open: false
@@ -124,18 +135,64 @@ class LeftMenuContent extends React.Component {
 
     scanSuccess = data => {
         if (data) {
-            console.log(data)
-            if (data.includes('http://') || data.includes('https://')) {
-                window.location.href = data
-            } else {
-                showToastMessage('Your QR code content is: ' + data)
-            }
             this.onCloseModal()
+            showFogLoading()
+            // data is product_id
+            this.setState({ product_id: data })
+            getProductDetail(this.getDataCallback, data)
         }
     }
     scanFail = err => {
         console.log(err)
         this.onCloseModal()
+    }
+
+    getDataCallback = (data) => {
+        hideFogLoading()
+        console.log(data)
+        if (data && data.product && data.product.entity_id
+            && data.product.entity_id === this.state.product_id) {
+            // add product to cart
+            if (data.product.is_salable === 1) {
+                // add product to cart
+                if (data.product.type_id === "simple") {
+                    showFogLoading()
+                    const params = { product: String(data.product.entity_id), qty: '1' }
+                    simiAddToCart(this.addToCartCallBack, params)
+                } else {
+                    // go to product detail page if product not simple
+                    const product_url = `/${data.product.url_key}${productUrlSuffix()}`
+                    smoothScrollToView($('#root'));
+                    this.props.history.push(product_url)
+                }
+            } else {
+                showToastMessage('Your product is out of stock !')
+            }
+        } else {
+            showToastMessage('Cannot find any product with your QrCode !')
+        }
+    }
+
+    addToCartCallBack = (data) => {
+        hideFogLoading()
+        if (data.errors) {
+            this.showError(data)
+        } else {
+            this.showSuccess(data)
+            this.props.updateItemInCart()
+        }
+    }
+
+    showSuccess(data) {
+        if (data.message) {
+            showToastSuccess(data.message[0])
+        }
+    }
+
+    showError(data) {
+        if (data.errors.length) {
+            showToastMessage('Problem occurs !')
+        }
     }
 
     render() {
@@ -166,7 +223,9 @@ class LeftMenuContent extends React.Component {
 
 const mapDispatchToProps = dispatch => ({
     openNav: () => dispatch(toggleDrawer('nav')),
-    hideNav: () => dispatch(closeDrawer('nav'))
+    hideNav: () => dispatch(closeDrawer('nav')),
+    toggleMessages: () => dispatch(toggleMessages()),
+    updateItemInCart: () => dispatch(updateItemInCart())
 });
 
 const mapStateToProps = ({ user }) => {
