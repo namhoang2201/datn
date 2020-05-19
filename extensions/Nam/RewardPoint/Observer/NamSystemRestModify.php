@@ -134,6 +134,8 @@ class NamSystemRestModify implements ObserverInterface
                 if($amount_earn_1_point > 0){
                     $numberPointWillEarn = floor($grandTotal / $amount_earn_1_point);
                 }
+                $quoteObject->setNpPointWillEarn($numberPointWillEarn);
+                $quoteObject->save();
                 $contentArray['np_point_will_earn'] = $numberPointWillEarn;
 
                 try {
