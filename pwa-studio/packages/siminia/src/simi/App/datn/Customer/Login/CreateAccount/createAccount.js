@@ -1,24 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { shape, string } from 'prop-types';
 import { Form } from 'informed';
-
-import Field from 'src/components/Field';
-import TextInput from 'src/components/TextInput';
+import TextInputCustom from '../TextInputCustom'
 import { validators } from './validators';
-import classes from './createAccount.css';
 import Identify from 'src/simi/Helper/Identify'
-import TitleHelper from 'src/simi/Helper/TitleHelper'
 import { createAccount } from 'src/simi/Model/Customer'
 import { showToastMessage } from 'src/simi/Helper/Message';
 import { showFogLoading, hideFogLoading } from 'src/simi/BaseComponents/Loading/GlobalLoading';
 import { smoothScrollToView } from 'src/simi/Helper/Behavior';
 import { toggleMessages } from 'src/simi/Redux/actions/simiactions';
 import { connect } from 'src/drivers';
+require('./createAccount.scss')
 
 const $ = window.$;
 
 const CreateAccount = props => {
-    const { history, createAccountError } = props;
+    const { history, createAccountError, classes } = props;
     const errorMessage = createAccountError && (Object.keys(createAccountError).length !== 0) ? Identify.__('An error occurred. Please try again.') : null
     var registeringEmail = null
     var registeringPassword = null
@@ -74,15 +71,15 @@ const CreateAccount = props => {
         <React.Fragment>
             <Form
                 id="form-create-account"
-                className={`create-acc-form ${classes.root} ${Identify.isRtl() ? classes['rtl-rootForm'] : null}`}
+                className={`create-acc-form ${classes} ${Identify.isRtl() ? classes['rtl-rootForm'] : null}`}
                 initialValues={initialValues}
                 onSubmit={handleSubmit}
             >
-                <div className={classes.lead1}>
+                <div className="lead1">
                     {Identify.__('Personal Information')}
                 </div>
-                <Field required={true}>
-                    <TextInput
+                <div className="firstname">
+                    <TextInputCustom
                         classes={classes}
                         field="customer.firstname"
                         autoComplete="given-name"
@@ -90,9 +87,9 @@ const CreateAccount = props => {
                         validateOnBlur
                         placeholder={Identify.__('First Name')}
                     />
-                </Field>
-                <Field required={true}>
-                    <TextInput
+                </div>
+                <div className="lastname">
+                    <TextInputCustom
                         classes={classes}
                         field="customer.lastname"
                         autoComplete="family-name"
@@ -100,12 +97,12 @@ const CreateAccount = props => {
                         validateOnBlur
                         placeholder={Identify.__('Last Name')}
                     />
-                </Field>
-                <div className={classes.lead2}>
+                </div>
+                <div className="lead2">
                     {Identify.__('Sign-in Information')}
                 </div>
-                <Field required={true}>
-                    <TextInput
+                <div className="email">
+                    <TextInputCustom
                         classes={classes}
                         field="customer.email"
                         autoComplete="email"
@@ -113,9 +110,9 @@ const CreateAccount = props => {
                         validateOnBlur
                         placeholder={Identify.__('Email')}
                     />
-                </Field>
-                <Field >
-                    <TextInput
+                </div>
+                <div className="password">
+                    <TextInputCustom
                         classes={classes}
                         field="password"
                         type="password"
@@ -124,20 +121,21 @@ const CreateAccount = props => {
                         validateOnBlur
                         placeholder={Identify.__('Password')}
                     />
-                </Field>
-                <Field >
-                    <TextInput
+                </div>
+                <div className="confirm" >
+                    <TextInputCustom
+                        classes={classes}
                         field="confirm"
                         type="password"
                         validate={validators.get('confirm')}
                         validateOnBlur
                         placeholder={Identify.__('Confirm Password')}
                     />
-                </Field>
-                <div className={classes.error}>{errorMessage}</div>
-                <div className={classes.actions}>
+                </div>
+                <div className="error">{errorMessage}</div>
+                <div className="action">
                     <button
-                        priority="high" className={classes.submitButton} type="submit"
+                        priority="high" className="submitbtn" type="submit"
                     >
                         {Identify.__('Register')}
                     </button>

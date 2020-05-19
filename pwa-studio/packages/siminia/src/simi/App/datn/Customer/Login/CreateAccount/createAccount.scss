@@ -1,0 +1,159 @@
+#form-create-account {
+  justify-items: stretch;
+  padding: 46px 98px;
+  padding-top: 30px;
+  padding-bottom: 8px;
+  .lead1 {
+    color: #000;
+    font-family: "Roboto";
+    font-size: 16px;
+    line-height: 22px;
+    text-align: left;
+    text-transform: capitalize;
+    margin-bottom: 15px;
+    font-weight: 500;
+  }
+  span[class*="fieldIcons-root"] {
+    display: block;
+    height: auto;
+  }
+  input {
+    min-height: 48px;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    background-color: #f2f2f2;
+    min-width: 572px;
+    width: 100%;
+    border: unset;
+    font-family: "Roboto";
+    font-size: 14px;
+    line-height: 19px;
+    color: #000;
+    margin-bottom: 20px;
+  }
+  input::placeholder {
+    color: #727272;
+    font-family: "Roboto";
+    font-size: 14px;
+    line-height: 19px;
+    font-weight: 300;
+  }
+  p {
+    padding: unset;
+    margin: unset;
+    margin-top: -14px;
+    margin-bottom: 20px;
+    display: block;
+    color: #b91c1c;
+    font-family: "Roboto";
+    font-size: 12px;
+    line-height: 15px;
+    text-align: justify;
+    font-weight: 300;
+  }
+  .firstname {
+  }
+  .lastname {
+  }
+  .lead2 {
+    margin-top: 10px;
+    color: #000;
+    font-family: "Roboto";
+    font-size: 16px;
+    line-height: 22px;
+    text-align: left;
+    font-weight: 500;
+    margin-bottom: 15px;
+  }
+  .email {
+  }
+  .password {
+  }
+  .password {
+  }
+  .confirm {
+  }
+  .error {
+  }
+  .action {
+    margin-top: 20px;
+    button {
+      font-size: 16px;
+      font-weight: 500 !important;
+      white-space: nowrap;
+      text-align: center;
+      padding-top: 13px !important;
+      cursor: pointer;
+      border: 0;
+      width: 100%;
+      min-width: 200px;
+      padding-bottom: 13px !important;
+      line-height: 22px !important;
+      text-transform: uppercase;
+      background-color: #101820;
+      color: #fff;
+      font-family: "Roboto";
+      letter-spacing: 1px;
+    }
+  }
+}
+.rtl-root{
+  .create-acc-form{
+    .lead1, .lead2{
+      text-align: right !important;
+    }
+  }
+}
+
+@media (max-width: 834px) {
+  #form-create-account {
+    padding: 40px 80px !important;
+  }
+  #form-create-account input {
+    min-width: unset !important;
+  }
+}
+
+@media (max-width: 736px) {
+  #form-create-account {
+    padding: 40px 60px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  #form-create-account {
+    padding: 40px 40px !important;
+  }
+}
+
+@media (max-width: 500px) {
+  #form-create-account {
+    padding: 10px 10px !important;
+  }
+  .lead1,
+  .lead2 {
+    font-size: 15px !important;
+  }
+}
+
+@media (max-width: 425px) {
+  #form-create-account {
+    padding: 0px !important;
+    padding-top: 10px !important;
+  }
+}
+
+@media (max-width: 375px) {
+  #form-create-account input {
+    min-height: 40px;
+    font-size: 14px;
+    line-height: 14px;
+    height: 14px;
+  }
+  #form-create-account input::placeholder {
+    min-height: 40px;
+    font-size: 14px;
+    line-height: 14px;
+    height: 14px;
+  }
+}
