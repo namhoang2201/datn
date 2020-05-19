@@ -20,7 +20,8 @@ const initialState = {
     step: 'cart',
     submitting: false,
     isAddressIncorrect: false,
-    incorrectAddressMessage: ''
+    incorrectAddressMessage: '',
+    order_entity_id: null,
 };
 
 const reducerMap = {
@@ -76,6 +77,7 @@ const reducerMap = {
     [actions.shippingAddress.submit]: state => {
         return {
             ...state,
+            order_entity_id: null,
             submitting: true
         };
     },
@@ -107,6 +109,7 @@ const reducerMap = {
     [actions.paymentMethod.submit]: state => {
         return {
             ...state,
+            order_entity_id: null,
             submitting: true
         };
     },
@@ -129,6 +132,7 @@ const reducerMap = {
     [actions.shippingMethod.submit]: state => {
         return {
             ...state,
+            order_entity_id: null,
             submitting: true
         };
     },
@@ -153,15 +157,17 @@ const reducerMap = {
     [actions.order.submit]: state => {
         return {
             ...state,
+            order_entity_id: null,
             submitting: true
         };
     },
-    [actions.order.accept]: state => {
+    [actions.order.accept]: (state, { payload }) => {
         return {
             ...state,
             editing: null,
             step: 'receipt',
-            submitting: false
+            submitting: false,
+            order_entity_id: payload
         };
     },
     [actions.order.reject]: state => {
