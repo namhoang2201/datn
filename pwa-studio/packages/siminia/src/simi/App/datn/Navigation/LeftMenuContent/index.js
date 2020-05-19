@@ -27,7 +27,10 @@ class LeftMenuContent extends React.Component {
     constructor(props) {
         super(props);
         this.parent = this.props.parent;
-        this.state = ({ product_id: null })
+        this.state = ({
+            product_id: null,
+            resultScan: null
+        })
     }
     state = {
         open: false
@@ -138,7 +141,10 @@ class LeftMenuContent extends React.Component {
             this.onCloseModal()
             showFogLoading()
             // data is product_id
-            this.setState({ product_id: data })
+            this.setState({
+                product_id: data,
+                resultScan: data
+            })
             getProductDetail(this.getDataCallback, data)
         }
     }
@@ -149,7 +155,6 @@ class LeftMenuContent extends React.Component {
 
     getDataCallback = (data) => {
         hideFogLoading()
-        console.log(data)
         if (data && data.product && data.product.entity_id
             && data.product.entity_id === this.state.product_id) {
             // add product to cart
@@ -169,7 +174,7 @@ class LeftMenuContent extends React.Component {
                 showToastMessage('Your product is out of stock !')
             }
         } else {
-            showToastMessage('Cannot find any product with your QrCode !')
+            showToastMessage('Cannot find any product with your QrCode: ' + this.state.resultScan)
         }
     }
 
