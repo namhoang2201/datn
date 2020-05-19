@@ -44,8 +44,16 @@ class Orders extends Apiabstract
             if ($data['resourceid'] == 'onepage') {
                 return;
             } else {
-                $this->builderQuery = $this->simiObjectManager->create('Magento\Sales\Model\Order')
+                if (isset($data['params']['by_entity_id'])) {
+                    $this->builderQuery = $this->simiObjectManager->create('Magento\Sales\Model\Order')
+                        ->load($data['resourceid']);
+                }
+                try {
+                    $this->builderQuery = $this->simiObjectManager->create('Magento\Sales\Model\Order')
                         ->loadByIncrementId($data['resourceid']);
+                } catch (\Exception $e) {
+
+                }
                 if (!$this->builderQuery->getId()) {
                     $this->builderQuery = $this->simiObjectManager->create('Magento\Sales\Model\Order')
                             ->load($data['resourceid']);

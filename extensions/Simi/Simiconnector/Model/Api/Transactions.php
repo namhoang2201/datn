@@ -31,7 +31,7 @@ class Transactions extends \Simi\Simiconnector\Model\Api\Apiabstract
     public function index()
     {
         $result = parent::index();
-        
+
         // return blance point customer in api result
         $simiObjectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $balance_point = $simiObjectManager->get('Magento\Customer\Model\Session')->getCustomer()->getData('reward_point');
