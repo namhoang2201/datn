@@ -18,7 +18,7 @@ const Description = props => {
                 <QRCode
                     className="qrcode-product"
                     id='qrcode'
-                    value={product.id}
+                    value={product.id+''}
                     size={290}
                     level={'H'}
                     includeMargin={true}
