@@ -222,13 +222,13 @@ const Detail = (props) => {
                                 {data.point_earn&&<tr className="special-row" data-title="Point Earned: ">
                                     <td colSpan="5">
                                         {Identify.__('Point Earned: ')}
-                                        {data.point_earn}
+                                        +{data.point_earn}
                                     </td>
                                 </tr>}
                                 {data.point_spend&&<tr className="special-row" data-title="Point Spent: ">
                                     <td colSpan="5">
                                         {Identify.__('Point Spent: ')}
-                                        {data.point_spend}
+                                        -{data.point_spend}
                                     </td>
                                 </tr>}
                                 <tr className="special-row grand-total">

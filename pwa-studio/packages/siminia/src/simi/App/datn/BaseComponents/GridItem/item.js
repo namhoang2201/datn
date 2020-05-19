@@ -305,8 +305,8 @@ class Griditem extends React.Component {
                 }}
                 onMouseOver={(e) => this.showUserAction(id)}
                 onFocus={(e) => this.showUserAction(id)}
-                // onMouseOut={(e) => this.hideUserAction(id)}
-                // onBlur={(e) => this.hideUserAction(id)}
+                onMouseOut={(e) => this.hideUserAction(id)}
+                onBlur={(e) => this.hideUserAction(id)}
             >
                 <div
                     style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '100%' }}>

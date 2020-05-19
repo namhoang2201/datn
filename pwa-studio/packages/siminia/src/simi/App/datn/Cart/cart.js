@@ -22,6 +22,7 @@ import { toggleMessages } from 'src/simi/Redux/actions/simiactions';
 import {removeItemFromCart} from 'src/simi/Model/Cart'
 import Coupon from 'src/simi/BaseComponents/Coupon'
 import RewardPoint from './../RewardPoint'
+import { smoothScrollToView } from 'src/simi/Helper/Behavior';
 require('./cart.scss')
 
 
@@ -180,6 +181,7 @@ class Cart extends Component {
     }
 
     handleGoCheckout() {
+        smoothScrollToView($("#root"));
         this.props.history.push('/checkout.html')
     }
 

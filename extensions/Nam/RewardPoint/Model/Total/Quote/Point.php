@@ -70,7 +70,7 @@ class Point extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         return [
             'code' => $this->getCode(),
             'title' => $this->getLabel(),
-            'value' => $baseDiscount
+            'value' => -$baseDiscount
         ];
 
    }

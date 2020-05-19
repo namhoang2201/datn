@@ -7,11 +7,13 @@ import { getCartDetails, clearCartId } from 'src/actions/cart';
 import { connect } from 'src/drivers';
 import { resetCheckout } from 'src/actions/checkout';
 import { Colorbtn } from '../../../../BaseComponents/Button';
+import { smoothScrollToView } from 'src/simi/Helper/Behavior';
 
 require('./thankyou.scss')
 
 const Thankyou = props => {
     hideFogLoading()
+    smoothScrollToView($("#root"));
     const { history, isSignedIn, resetCheckout, getCartDetails } = props;
     if (resetCheckout) {
         clearCartId()
@@ -36,6 +38,7 @@ const Thankyou = props => {
             }
         }
         history.push(orderLocate);
+        smoothScrollToView($("#root"));
     }
 
     if (!orderIncrementId && orderEntityId && isSignedIn) {
@@ -65,7 +68,11 @@ const Thankyou = props => {
                             className="thankyou-action view-details" />
                     }
                     <Colorbtn
-                        onClick={() => history.push('/')}
+                        onClick={() => {
+                            history.push('/')
+                            smoothScrollToView($("#root"));
+                        }
+                        }
                         text={"Continue Shopping"}
                         className="thankyou-action" />
                 </div>

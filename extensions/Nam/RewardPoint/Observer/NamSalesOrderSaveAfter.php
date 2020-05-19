@@ -79,6 +79,7 @@ class NamSalesOrderSaveAfter implements ObserverInterface
             $transactionModel->setData([
                 'np_order_id' => $order->getData('entity_id'),
                 'np_increment_id' => $order->getData('increment_id'),
+                'email' => $order->getData('customer_email'),
                 'point_before_transaction' => intval($customerModel->getData('reward_point')),
                 'point_earn' => $pointEarn,
                 'point_spend' => $pointUse,

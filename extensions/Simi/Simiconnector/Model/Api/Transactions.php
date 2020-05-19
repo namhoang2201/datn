@@ -19,8 +19,13 @@ class Transactions extends \Simi\Simiconnector\Model\Api\Apiabstract
     public function getCollection()
     {
         $data = $this->getData();
+        $parameters = $data['params'];
+        $email = null;
+        if(isset($parameters['email'])){
+            $email = $parameters['email'];
+        }
         $transactionsCollection = $this->simiObjectManager
-            ->get('Nam\RewardPoint\Model\Transactions')->getCollection();
+            ->get('Nam\RewardPoint\Model\Transactions')->getCollection()->addFieldToFilter('email', $email);
 
         $transactionsCollection->setOrder('created_time', 'DESC')->load();
 

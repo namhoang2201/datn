@@ -13,7 +13,8 @@ class Transaction extends React.Component {
     }
 
     componentDidMount() {
-        getTransactions(this.processData, {})
+        const customerEmail = this.props.customer.email
+        getTransactions(this.processData, {email: customerEmail})
     }
 
     processData = (data) => {
@@ -21,7 +22,7 @@ class Transaction extends React.Component {
     }
 
     render() {
-        
+        console.log(this.props)
         return (
             <div className='account-my-orders-history'>
                 {TitleHelper.renderMetaHeader({

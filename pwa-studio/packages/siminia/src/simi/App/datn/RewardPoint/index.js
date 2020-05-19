@@ -52,7 +52,7 @@ class RewardPoint extends React.Component {
                         You will earn:
                     </div>
                     <div className="value plus">
-                        {this.props.pointEarn} {this.props.pointEarn < 2 ? 'Point' : 'Points'}
+                        + {this.props.pointEarn} {this.props.pointEarn < 2 ? 'Point' : 'Points'}
                     </div>
                 </div>
                 <div className="wrap-special">
@@ -68,7 +68,7 @@ class RewardPoint extends React.Component {
                             You are spending:
                     </div>
                         <div className="value device">
-                            {this.state.point_spend} {this.state.point_spend < 2 ? 'Point' : 'Points'}
+                            - {this.state.point_spend} {this.state.point_spend < 2 ? 'Point' : 'Points'}
                         </div>
                     </div>
                     <Whitebtn id="submit-point" className='submit-point' onClick={() => this.spendPoint()} text={Identify.__('Spend point')} />

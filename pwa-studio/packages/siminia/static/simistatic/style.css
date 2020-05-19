@@ -89,7 +89,7 @@ div#app-loading {
 #toast-message-content {
   border-radius: 25px;
   color: #fff;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: bold;
   max-width: 400px;
   -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
@@ -114,7 +114,7 @@ div#app-loading {
 #toast-success-content {
   color: #fff;
   font-family: Nunito;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: bold;
   line-height: 19px;
   max-width: 400px;

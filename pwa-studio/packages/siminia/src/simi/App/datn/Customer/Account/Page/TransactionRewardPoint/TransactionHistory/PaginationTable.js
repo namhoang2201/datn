@@ -141,7 +141,7 @@ class PaginationTable extends Pagination {
             )
         }
         return <div className="text-center">
-            {Identify.__("You have no items in your order")}
+            {Identify.__("You have no transactions yet !")}
         </div>
     }
 

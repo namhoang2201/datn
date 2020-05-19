@@ -58,10 +58,10 @@ const TransactionList = props => {
                     {Identify.__(item.point_before_transaction)}
                 </td>
                 <td data-title={Identify.__("Point earned")}>
-                    {Identify.__(item.point_earn)}
+                    + {Identify.__(item.point_earn)}
                 </td>
                 <td data-title={Identify.__("Point spent")}>
-                    {Identify.__(item.point_spend)}
+                    - {Identify.__(item.point_spend)}
                 </td>
                 <td data-title={Identify.__("Grand total before")}>
                     {Identify.__(formatPrice(item.total_before))}
