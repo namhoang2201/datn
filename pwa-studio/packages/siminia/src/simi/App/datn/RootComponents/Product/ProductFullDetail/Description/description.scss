@@ -1,4 +1,13 @@
-.description-title {
+.description {
+  .description-title {
     font-size: 20px;
     margin-bottom: 20px;
+  }
+  .qr {
+    margin: 10px 0;
+    display: flex;
+    justify-content: center;
+    .qrcode-product {
+    }
+  }
 }
