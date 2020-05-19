@@ -1,7 +1,6 @@
-@import "../fonts/MaterialDesignIconicFont.css";
-@import "../fonts/Arsenal.css";
-@import "../fonts/Linearicons.css";
-@import "../fonts/SimpleLineIcons.css";
+@import './fonts/Linearicons.css';
+@import './fonts/MaterialDesignIconicFont.css';
+@import './fonts/Arsenal.css';
 #root.rtl-root {
   direction: rtl;
 }

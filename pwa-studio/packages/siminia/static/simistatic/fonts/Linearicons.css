@@ -1,10 +1,15 @@
 @font-face {
 	font-family: 'Linearicons';
-	src: url('./Linearicons//Linearicons.ttf') format('truetype');
+	src: url('/static/simistatic/fonts/Linearicons.ttf') format('truetype');
 	font-weight: normal;
 	font-style: normal;
 }
-
+@font-face {
+	font-family: 'Simple Linearicons';
+	src: url('/static/simistatic/fonts/Simple-Line-Icons.woff2') format('woff2');
+	font-weight: 400;
+	font-style: normal;
+}
 [class^="icon-"], [class*=" icon-"] {
 	font-family: 'Linearicons', 'Simple Linearicons';
 	speak: none;
