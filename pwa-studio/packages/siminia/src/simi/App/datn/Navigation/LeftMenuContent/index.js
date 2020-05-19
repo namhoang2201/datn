@@ -84,6 +84,12 @@ class LeftMenuContent extends React.Component {
         return (
             <React.Fragment>
                 <div className="left-cats-menu">
+                    <div className="scan-go">
+                        <button className="item" onClick={() => this.onOpenModal()}>
+                            <i className="icon-frame-expand"></i>
+                            <span>Scan Now</span>
+                        </button>
+                    </div>
                     <CateTree classes={{
                         'menu-content': 'menu-content',
                         'icon-menu': 'icon-menu',
@@ -114,12 +120,6 @@ class LeftMenuContent extends React.Component {
                         </div>
                     </div>
                 }
-                <div className="scan-go">
-                    <button className="item" onClick={() => this.onOpenModal()}>
-                        <i className="icon-frame-expand"></i>
-                        <span>Scan Now</span>
-                    </button>
-                </div>
                 <div className="left-contact-us">
                     {Identify.__('Contact us 24/7: +84965351741')}
                 </div>
