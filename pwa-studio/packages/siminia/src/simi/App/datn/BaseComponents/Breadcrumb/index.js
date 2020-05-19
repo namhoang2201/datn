@@ -1,7 +1,7 @@
-import React from 'react'
-import ReactDom from 'react-dom'
-import PropTypes from 'prop-types'
-import { withRouter, Link } from 'react-router-dom';
+import React from './node_modules/react'
+import ReactDom from './node_modules/react-dom'
+import PropTypes from './node_modules/prop-types'
+import { withRouter, Link } from './node_modules/react-router-dom';
 
 class BreadCrumb extends React.Component {
     renderBreadcrumb = data => {
