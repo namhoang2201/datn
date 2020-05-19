@@ -7,7 +7,7 @@
   "background_color": "#fff",
   "description": "Shop the look",
   "icons": [{
-    "src": "/icons/logo512.png",
+    "src": "/static/icons/logo512.png",
     "sizes": "512x512",
     "type": "image/png"
   }

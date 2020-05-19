@@ -158,7 +158,7 @@
 .login-background .select-type .register-type .icon-phone {
   display: inline-block;
   color: #101820;
-  font-family: Linearicons;
+  font-family: 'linearicons';
   font-size: 18px;
   line-height: 18px;
   text-align: center;
@@ -183,7 +183,7 @@
 .login-background .select-type .signin-type .icon-email {
   display: inline-block;
   color: #101820;
-  font-family: Linearicons;
+  font-family: 'linearicons';
   font-size: 18px;
   line-height: 18px;
   text-align: center;
