@@ -109,8 +109,10 @@ class PaginationTable extends Pagination {
                 }}
             >
                 <div className="total-items">
-                    {totalItem} {Identify.__('items ')}
                     {pagesSelection}
+                    <div className="total">
+                        {totalItem} {totalItem > 1 ? 'items' : 'item'}
+                    </div>
                 </div>
             </div>
         )

@@ -21,13 +21,30 @@
     padding: 14.5px 5px;
     text-align: center;
   }
+  .config-page {
+    display: block !important;
+    .total-items {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
 }
 @media (max-width: 767px) {
-  .table-siminia > tbody > tr > td {
-    padding-right: 15px !important;
-    text-align: right !important;
-  }
-  .table-siminia > tbody > tr > td::before {
-    left: 15px;
+  .transaction {
+    .table-siminia > tbody > tr > td {
+      padding-right: 15px !important;
+      text-align: right !important;
+    }
+    .table-siminia > tbody > tr > td::before {
+      left: 15px;
+    }
+    .config-page {
+      .total-items {
+        .total {
+          margin-top: 24px;
+        }
+      }
+    }
   }
 }
