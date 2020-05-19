@@ -100,7 +100,7 @@ class LeftMenuContent extends React.Component {
                         'cate-icon': 'cate-icon',
                         'cate-root': 'cate-root',
                     }}
-                        handleMenuItem={this.handleMenuItem.bind(this)} hideHeader={false} />
+                        handleMenuItem={this.handleMenuItem.bind(this)} hideHeader={true} />
                 </div>
                 {isSignedIn
                     ?
