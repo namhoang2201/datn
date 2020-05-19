@@ -185,6 +185,7 @@ class LeftMenuContent extends React.Component {
         } else {
             this.showSuccess(data)
             this.props.updateItemInCart()
+            smoothScrollToView($('#root'));
         }
     }
 
