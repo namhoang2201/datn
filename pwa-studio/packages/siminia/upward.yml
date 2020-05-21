@@ -42,7 +42,7 @@ siminiaResponse:
           pattern: '^/img/resize/(\d+)'
           use: imageOpt
         - matches: fileExtension
-          pattern: '(js|json|png|svg|ico|css|txt)'
+          pattern: '(js|json|png|svg|ico|css|txt|ttf|woff2|otf|gif)'
           use: siminiaStatic
         #param contain simiforceproxy would use proxy directly to magento site
         - matches: request.url.search
@@ -173,7 +173,7 @@ siminiaStaticIncludes:
         resolver: inline
         inline: './static'
 
-# The imageOpt object returns an HTTP redirect response (301) to Fastly, an 
+# The imageOpt object returns an HTTP redirect response (301) to Fastly, an
 # image optimization service.
 #
 # This is mainly used in production mode when the PWA does NOT have a
