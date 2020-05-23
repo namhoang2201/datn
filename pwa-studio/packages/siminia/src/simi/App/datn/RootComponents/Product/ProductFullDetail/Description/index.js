@@ -7,7 +7,6 @@ require('./description.scss')
 
 const Description = props => {
     const { product } = props
-    console.log(product)
     return (
         <React.Fragment>
             <h2 className="description-title">

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import TextBox from 'src/simi/BaseComponents/TextBox';
 import Identify from 'src/simi/Helper/Identify';
-import Checkbox from 'src/simi/BaseComponents/Checkbox';
 import { Colorbtn } from 'src/simi/BaseComponents/Button';
 import { editCustomer } from 'src/simi/Model/Customer';
 import { showFogLoading, hideFogLoading } from 'src/simi/BaseComponents/Loading/GlobalLoading';
 import RadioCheckbox from 'src/simi/App/datn/BaseComponents/RadioCheckbox';
+import { smoothScrollToView } from 'src/simi/Helper/Behavior';
 const $ = window.$;
 
 const ProfileForm = props => {
@@ -121,6 +121,7 @@ const ProfileForm = props => {
     };
 
     const processData = (data) => {
+        smoothScrollToView($("#root"));
         if (data.hasOwnProperty('errors') && data.errors) {
             const messages = data.errors.map(value => {
                 return { type: 'error', message: value.message, auto_dismiss: true }

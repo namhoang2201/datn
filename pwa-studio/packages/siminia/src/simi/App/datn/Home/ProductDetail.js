@@ -11,11 +11,10 @@ const ProductItem = props => {
     const { dataProduct, history} = props;
     const {data} = simiUseQuery(getCategory, {variables: {
         id: Number(dataProduct.category_id),
-        pageSize: Number(8),
+        pageSize: Number(6),
         currentPage: Number(1),
         stringId: String(dataProduct.category_id)
     }});
-    console.log(data)
     const handleAction = (location) => {
         history.push(location);
     }
@@ -70,7 +69,7 @@ const ProductItem = props => {
                     {/* {renderProductGrid(productItem.items)} */}
                     <Gallery
                         data={data.products.items}
-                        pageSize={9}
+                        pageSize={6}
                         history={history}
                         location={props.location}
                     />

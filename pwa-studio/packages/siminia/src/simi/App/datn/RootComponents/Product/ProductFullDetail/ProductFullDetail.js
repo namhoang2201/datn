@@ -215,6 +215,7 @@ class ProductFullDetail extends Component {
     }
 
     showError(data) {
+        smoothScrollToView($("#root"));
         if (data.errors.length) {
             const errors = data.errors.map(error => {
                 return {

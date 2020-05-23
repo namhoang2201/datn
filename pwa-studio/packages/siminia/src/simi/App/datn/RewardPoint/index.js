@@ -56,13 +56,6 @@ class RewardPoint extends React.Component {
                     </div>
                 </div>
                 <div className="wrap-special">
-                    <div className="area-apply-point">
-                        <InputRange
-                            maxValue={this.props.balancePoint}
-                            minValue={0}
-                            value={this.state.point_spend}
-                            onChange={point_spend => this.setState({ point_spend })} />
-                    </div>
                     <div className="wrap">
                         <div className="title">
                             You are spending:
@@ -70,6 +63,13 @@ class RewardPoint extends React.Component {
                         <div className="value device">
                             - {this.state.point_spend} {this.state.point_spend < 2 ? 'Point' : 'Points'}
                         </div>
+                    </div>
+                    <div className="area-apply-point">
+                        <InputRange
+                            maxValue={this.props.balancePoint}
+                            minValue={0}
+                            value={this.state.point_spend}
+                            onChange={point_spend => this.setState({ point_spend })} />
                     </div>
                     <Whitebtn id="submit-point" className='submit-point' onClick={() => this.spendPoint()} text={Identify.__('Spend point')} />
                 </div>

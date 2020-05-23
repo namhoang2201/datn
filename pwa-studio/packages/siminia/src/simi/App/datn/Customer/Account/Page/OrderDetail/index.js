@@ -116,6 +116,7 @@ const Detail = (props) => {
     }
 
     const renderItem = items => {
+        console.log(data.total)
         let html = null;
         const totalPrice = data.total;
 
@@ -213,19 +214,37 @@ const Detail = (props) => {
                                             )}
                                     </td>
                                 </tr>
-                                {data.namrewardpoints_discount&&<tr className="special-row" data-title="NamRP Discount: ">
+                                {(totalPrice.shipping_hand_excl_tax > 0 || totalPrice.shipping_hand_excl_tax > 0) && <tr className="special-row" data-title="Shipping fee: ">
+                                    <td colSpan="5">
+                                        {Identify.__('Shipping fee: ')}
+                                        {totalPrice.shipping_hand_incl_tax
+                                            ? getFormatPrice(
+                                                totalPrice.shipping_hand_incl_tax, data.order_currency_code
+                                            )
+                                            : getFormatPrice(
+                                                totalPrice.shipping_hand_excl_tax, data.order_currency_code
+                                            )}
+                                    </td>
+                                </tr>}
+                                {totalPrice.discount > 0 && <tr className="special-row" data-title="Discount: ">
+                                    <td colSpan="5">
+                                        {Identify.__('Discount: ')}
+                                        {getFormatPrice(data.discount)}
+                                    </td>
+                                </tr>}
+                                {data.namrewardpoints_discount && <tr className="special-row" data-title="NamRP Discount: ">
                                     <td colSpan="5">
                                         {Identify.__('NamRP Discount: ')}
                                         {getFormatPrice(data.namrewardpoints_discount)}
                                     </td>
                                 </tr>}
-                                {data.point_earn&&<tr className="special-row" data-title="Point Earned: ">
+                                {data.point_earn && <tr className="special-row" data-title="Point Earned: ">
                                     <td colSpan="5">
                                         {Identify.__('Point Earned: ')}
                                         +{data.point_earn}
                                     </td>
                                 </tr>}
-                                {data.point_spend&&<tr className="special-row" data-title="Point Spent: ">
+                                {data.point_spend && <tr className="special-row" data-title="Point Spent: ">
                                     <td colSpan="5">
                                         {Identify.__('Point Spent: ')}
                                         -{data.point_spend}
