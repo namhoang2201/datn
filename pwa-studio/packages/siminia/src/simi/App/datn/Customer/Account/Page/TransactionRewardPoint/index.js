@@ -3,6 +3,8 @@ import TransactionHistory from './TransactionHistory/TransactionList';
 import Identify from "src/simi/Helper/Identify";
 import TitleHelper from 'src/simi/Helper/TitleHelper';
 import { getTransactions } from 'src/simi/Model/TransactionPoint'
+import { compose } from 'redux';
+import { connect } from 'src/drivers';
 require('./index.scss')
 
 class Transaction extends React.Component {
@@ -13,7 +15,7 @@ class Transaction extends React.Component {
     }
 
     componentDidMount() {
-        const customerEmail = this.props.customer.email
+        const customerEmail = this.props.email
         getTransactions(this.processData, {email: customerEmail})
     }
 
@@ -22,7 +24,6 @@ class Transaction extends React.Component {
     }
 
     render() {
-        console.log(this.props)
         return (
             <div className='account-my-orders-history'>
                 {TitleHelper.renderMetaHeader({
@@ -42,4 +43,20 @@ class Transaction extends React.Component {
     }
 }
 
-export default Transaction;
+const mapStateToProps = ({ user }) => {
+    const { currentUser, isSignedIn } = user
+    const { firstname, lastname, email, addresses } = currentUser;
+    return {
+        firstname,
+        lastname,
+        email,
+        isSignedIn,
+        addresses
+    };
+}
+
+export default compose(
+    connect(
+        mapStateToProps
+    )
+)(Transaction);
