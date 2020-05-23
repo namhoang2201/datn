@@ -85,7 +85,8 @@ class Griditem extends React.Component {
             showToastMessage(message ? message : Identify.__('Problem occurred.'))
         } else {
             if (data.message)
-            showToastSuccess(data.message)
+                showToastSuccess(data.message)
+            smoothScrollToView($("#root"));
             this.props.getCartDetails()
             const item = prepareProduct(this.props.item)
             analyticAddCartGTM(item.name, item.id, item.price)
@@ -212,6 +213,19 @@ class Griditem extends React.Component {
 
     }
 
+    renderActionCartMobile = (item) => {
+        const { addToCart } = this
+        return (
+            item && item.simiExtraField && item.simiExtraField.attribute_values && parseInt(item.simiExtraField.attribute_values.is_salable) === 1 &&
+            <div className="cartActionMobile"
+                role="presentation"
+                onClick={addToCart}
+            >
+                <span className="add-to-cart-btn icon-bag2"></span>
+            </div>
+        )
+    }
+
     renderWishlistAction = (item) => {
         if (this.props.wlitems && this.props.wlitems.length) {
             for (let i = 0; i < this.props.wlitems.length; i++) {
@@ -315,8 +329,9 @@ class Griditem extends React.Component {
                     </Link>
                 </div>
                 {this.renderDiscountPercentAndOutOfStock(item)}
+                {this.state.isPhone && this.renderActionCartMobile(item)}
                 {this.renderWishlistAction(item)}
-                {this.renderUserAction(item)}
+                {!this.state.isPhone && this.renderUserAction(item)}
             </div>
         )
 

@@ -58,6 +58,7 @@ class LeftMenuContent extends React.Component {
     handleLink = (link) => {
         this.getBrowserHistory().push(link);
         this.handleCloseMenu()
+        smoothScrollToView($('#root'));
     }
 
     handleMenuItem = (item) => {
@@ -82,6 +83,17 @@ class LeftMenuContent extends React.Component {
         return (
             <React.Fragment>
                 <div className="left-cats-menu">
+                    {isSignedIn ? <div className="scan-go">
+                        <button className="item" onClick={() => this.onOpenModal()}>
+                            <span></span>
+                            <span className="username">{this.props.currentUser ? this.props.currentUser.firstname + ' ' + this.props.currentUser.lastname : ''}</span>
+                        </button>
+                    </div> : null}
+                    {isSignedIn
+                        ?
+                        <LeftMenuAccount currentUser={this.props.currentUser} handleMenuItem={this.handleMenuItem.bind(this)} />
+                        : null
+                    }
                     <div className="scan-go">
                         <button className="item" onClick={() => this.onOpenModal()}>
                             <i className="icon-frame-expand"></i>
@@ -100,13 +112,8 @@ class LeftMenuContent extends React.Component {
                         'cate-icon': 'cate-icon',
                         'cate-root': 'cate-root',
                     }}
-                        handleMenuItem={this.handleMenuItem.bind(this)} hideHeader={true} />
+                        handleMenuItem={this.handleMenuItem.bind(this)} hideHeader={false} />
                 </div>
-                {isSignedIn
-                    ?
-                    <LeftMenuAccount handleMenuItem={this.handleMenuItem.bind(this)} />
-                    : null
-                }
                 {
                     merchantConfigs &&
                     <div className="left-store-switch">
@@ -118,9 +125,9 @@ class LeftMenuContent extends React.Component {
                         </div>
                     </div>
                 }
-                <div className="left-contact-us">
+                {/* <div className="left-contact-us">
                     {Identify.__('Contact us 24/7: +84965351741')}
-                </div>
+                </div> */}
 
 
                 <div className="left-bottom-menu">

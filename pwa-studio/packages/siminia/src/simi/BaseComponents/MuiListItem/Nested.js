@@ -7,7 +7,7 @@ import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Identify from 'src/simi/Helper/Identify';
-import {configColor} from "src/simi/Config";
+import { configColor } from "src/simi/Config";
 
 class NestedListItem extends React.Component {
     state = { open: false };
@@ -16,30 +16,30 @@ class NestedListItem extends React.Component {
         this.setState(state => ({ open: !state.open }));
     };
 
-    shouldComponentUpdate(nextProps,nextState){
+    shouldComponentUpdate(nextProps, nextState) {
         return nextState.open !== this.state.open
     }
 
     render() {
-        const className = this.props.className?this.props.className:'';
-        const primaryText = Identify.isRtl()?
-            <div style={{textAlign: 'right'}}>{this.props.primarytext}</div>:
+        const className = this.props.className ? this.props.className : '';
+        const primaryText = Identify.isRtl() ?
+            <div style={{ textAlign: 'right' }}>{this.props.primarytext}</div> :
             this.props.primarytext
-        
+
         return (
             <div>
                 <ListItem
                     {...this.props}
-                          button
-                          className={className}
-                          onClick={this.handleClick}
+                    button
+                    className={className}
+                    onClick={this.handleClick}
                 >
                     {this.props.listItemIcon}
                     <ListItemText primary={primaryText}
-                                  primaryTypographyProps={{
-                                      style:{color:this.props.color ? this.props.color:configColor.menu_text_color}
-                                  }}/>
-                    {this.state.open ? <ExpandLess /> : <ExpandMore />}
+                        primaryTypographyProps={{
+                            style: { color: this.props.color ? this.props.color : configColor.menu_text_color }
+                        }} />
+                    {!this.props.myaccount ? <>{this.state.open ? <ExpandLess /> : <ExpandMore />}</> : <>{this.state.open ? <ExpandLess /> : <i className="icon-user useraccount"></i>}</>}
                 </ListItem>
                 <Collapse in={this.state.open} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
@@ -52,8 +52,8 @@ class NestedListItem extends React.Component {
 }
 
 NestedListItem.propTypes = {
-    primarytext: PropTypes.oneOfType([PropTypes.string,PropTypes.object]).isRequired,
-    children: PropTypes.oneOfType([PropTypes.array,PropTypes.object]).isRequired,
+    primarytext: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
+    children: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
     className: PropTypes.string,
     listItemIcon: PropTypes.object
 };

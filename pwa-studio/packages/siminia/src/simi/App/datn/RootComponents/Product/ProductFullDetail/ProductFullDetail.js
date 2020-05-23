@@ -35,6 +35,8 @@ const DownloadableOptions = React.lazy(() => import('./Options/DownloadableOptio
 
 require('./productFullDetail.scss');
 
+const $ = window.$
+
 class ProductFullDetail extends Component {
     state = {
         optionCodes: new Map(),
@@ -227,6 +229,7 @@ class ProductFullDetail extends Component {
 
     showSuccess(data) {
         if (data.message) {
+            smoothScrollToView($("#root"));
             this.props.toggleMessages([{
                 type: 'success',
                 message: Array.isArray(data.message) ? data.message[0] : data.message,

@@ -13,6 +13,7 @@ import { socialLogin as socialLoginApi } from 'src/simi/Model/Customer';
 import * as Constants from 'src/simi/Config/Constants';
 import { showFogLoading, hideFogLoading } from 'src/simi/BaseComponents/Loading/GlobalLoading';
 import { Util } from '@magento/peregrine';
+import { smoothScrollToView } from 'src/simi/Helper/Behavior';
 require("./signIn.scss")
 
 const { BrowserPersistence } = Util;
@@ -216,6 +217,7 @@ class SignIn extends Component {
     }
 
     handleForgotPassword = () => {
+        smoothScrollToView($("#id-message"));
         this.props.onForgotPassword();
     };
 

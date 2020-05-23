@@ -61,6 +61,7 @@ class Cart extends Component {
             return false
         }
         hideFogLoading()
+        smoothScrollToView($("#root"));
         return true
     }
 

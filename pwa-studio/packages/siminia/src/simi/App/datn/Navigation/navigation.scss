@@ -48,7 +48,7 @@ $colorSubTitle : #000;
         }
     }
     .left-cats-menu {
-        margin-top: 54px;
+        margin-top: 50px;
         padding: 0 19px 0 33px;
         .cate-root {
             > div > .menu-content {
@@ -108,18 +108,30 @@ $colorSubTitle : #000;
         font-size: 12px;
         font-weight: 300;
         .MuiListItem-root {
-            padding: 13px 19px 15px 33px;
+            padding: 4px 0px 4px 0px;
+            direction: rtl;
+            text-align: right;
+            font-family: Muli !important;
             .left-menu-account-title {
+                // font-family: Muli !important;
+                color: #000 !important;
                 font-size: 12px;
-                font-weight: 300;
+                font-weight: 500;
             }
             svg {
                 width: 25px;
                 height: 25px;
             }
+            .useraccount{
+                font-weight: bold;
+                font-size: 18px;
+                width: 18px;
+                height: 18px;
+                color: #000 !important;
+            }
         }
         .list-account-menu-item {
-            padding: 13px 19px 15px 44px;
+            padding: 13px 19px 15px 30px;
         }
     }
     .left-store-switch {
@@ -173,6 +185,11 @@ $colorSubTitle : #000;
                 font-size: 12px;
                 font-weight: 500;
                 text-transform: uppercase;
+            }
+            span.username{
+                font-family: cursive;
+                color: teal !important;
+                font-weight: bold;
             }
         }
     }

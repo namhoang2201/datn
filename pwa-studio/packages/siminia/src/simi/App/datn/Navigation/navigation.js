@@ -6,7 +6,7 @@ import LeftMenuContent from './LeftMenuContent'
 require('./navigation.scss')
 
 const Navigation = props => {
-    const {isSignedIn, currentUser, getUserDetails, cartId} = props
+    const { isSignedIn, currentUser, getUserDetails, cartId } = props
     const storeConfig = Identify.getStoreConfig()
     if (storeConfig && storeConfig.simiStoreConfig) {
         if (isSignedIn && (!currentUser || !currentUser.email))
@@ -17,9 +17,9 @@ const Navigation = props => {
             else
                 props.getCartDetails() //get cart if empty and logged int
         }
-    } else 
+    } else
         return ''
-    
+
     const {
         drawer,
     } = props;
@@ -28,7 +28,8 @@ const Navigation = props => {
 
     return (
         <aside id="left-menu" className={className}>
-            <LeftMenuContent 
+            <LeftMenuContent
+                currentUser={currentUser}
                 parent={this}
                 isSignedIn={props.isSignedIn}
             />
