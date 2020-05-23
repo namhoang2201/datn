@@ -11,7 +11,7 @@ const Banner = props => {
     const bannerCount = data.length;
 
     const slideSettings = {
-        autoPlay: true,
+        autoPlay: false,
         showArrows: false,
         showThumbs: false,
         showIndicators: (bannerCount && bannerCount !== 1) || isPhone ? false : true,

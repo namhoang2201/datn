@@ -90,6 +90,8 @@
     line-height: 45px;
     margin-top: 40px;
     font-weight: bold;
+    text-align: center;
+    font-family: arsenal;
 }
 .cta-row {
     display: flex;
@@ -152,13 +154,21 @@
 }
 .banner-title {
     position: absolute;
-    top: 133px;
-    left: 120px;
+    top: 0;
+    left: 42px;
     color: #fff;
     z-index: 20;
     text-align: left;
-    max-width: 433px;
-
+    width: 90%;
+    height: 100%;
+    background-color: transparent;
+    opacity: 0;
+    .banner-item{
+        opacity: 0;
+    }
+    .banner-action{
+        opacity: 0;
+    }
 }
 .banner-title .title {
     font-size: 50px;
@@ -189,13 +199,21 @@
 }
 
 .banner-homepage img{
-    min-height: 490px !important;
+    min-height: 490px;
     object-fit: cover;
 }
 
 .productlist-content .product-horizotal {
     margin-top: 40px;
     margin-bottom: 40px;
+}
+
+.product-horizotal .siminia-product-grid-item .siminia-product-des {
+    margin: 0px auto 0 auto;
+    padding-bottom: 10px;
+}
+.siminia-product-grid-item .siminia-product-des .product-des-info{
+    margin: auto;
 }
 
 /* rtl */
@@ -234,6 +252,10 @@
         width: 100%;
         padding: 0 40px;
         max-width: unset;
+    }
+    .banner-title {
+        left: 0;
+        width: 95%;
     }
 }
 
@@ -276,16 +298,26 @@
     .cta-item .cta-action {
         margin-bottom: 24px;
     }
-    .banner-title {
-        top : 100px;
-    }
     .banner-title .title {
         font-size: 36px;
     }
 }
 @media (max-width: 1024px) {
-    .banner-title  {
-        top : 50px;
+    .banner-homepage{
+        .slider-wrapper{
+            height: unset !important;
+            ul{
+                height: unset !important;
+                li{
+                    .banner-item{
+                        img{
+                            min-height: unset !important;
+                            object-fit: scale-down;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -310,21 +342,9 @@
     .harlow-homepage .container {
         padding: 0;
     }
-    .banner-homepage .carousel-slider{
-        height: 380px;
-    }
-    /* .banner-homepage .carousel-slider .iron-image-container {
-        min-height: 380px !important;
-    } */
-    .banner-homepage img{
-        min-height: 380px !important;
-        object-fit: cover;
-    }
+
     .banner-title {
-        top: unset;
-        bottom: 16px;
-        left: 24px;
-        max-width: 270px;
+
     }
     .banner-title .title {
         font-size: 28px;
@@ -368,9 +388,9 @@
         height: 40px !important;
     }
     .default-productlist-title {
-        font-size: 28px;
-        line-height: 36px;
-        padding-left: 24px;
+        font-size: 24px;
+        line-height: 20px;
+        text-align: center;
     }
     .cta-row {
         flex-wrap: wrap;

@@ -3,6 +3,7 @@ import Identify from "src/simi/Helper/Identify";
 import { simiUseQuery } from 'src/simi/Network/Query' 
 import getCategory from 'src/simi/queries/catalog/getCategory.graphql'
 import Loading from "src/simi/BaseComponents/Loading";
+import Gallery from 'src/simi/App/datn/BaseComponents/Products/Gallery';
 import { GridItem } from "src/simi/App/datn/BaseComponents/GridItem";
 import {applySimiProductListItemExtraField} from 'src/simi/Helper/Product'
 
@@ -14,7 +15,7 @@ const ProductItem = props => {
         currentPage: Number(1),
         stringId: String(dataProduct.category_id)
     }});
-
+    console.log(data)
     const handleAction = (location) => {
         history.push(location);
     }
@@ -61,11 +62,18 @@ const ProductItem = props => {
     }
 
     if(data.simiproducts.hasOwnProperty('items') && data.simiproducts.total_count > 0) {
-        const productItem = applySimiProductListItemExtraField(data.simiproducts);
+        data.products = applySimiProductListItemExtraField(data.simiproducts)
+        // const productItem = applySimiProductListItemExtraField(data.simiproducts);
         return (
             <div className="product-list">
                 <div className="product-horizotal">
-                    {renderProductGrid(productItem.items)}
+                    {/* {renderProductGrid(productItem.items)} */}
+                    <Gallery
+                        data={data.products.items}
+                        pageSize={9}
+                        history={history}
+                        location={props.location}
+                    />
                 </div>
             </div>
         )
