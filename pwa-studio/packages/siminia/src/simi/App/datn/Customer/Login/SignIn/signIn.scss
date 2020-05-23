@@ -230,11 +230,13 @@
           height: 24px;
           width: 24px;
           color: #101820;
-          font-family: 'Simple Linearicons';
-          font-size: 25px;
-          line-height: 24px;
+          font-family: Material-Design-Iconic-Font;
+          font-size: 30px;
+          line-height: 25px;
           text-align: center;
-          padding: 12px;
+          padding: 13px;
+          padding-left: 18px;
+          padding-top: 14px;
         }
         .icon.google {
           display: inline-block;
@@ -249,7 +251,7 @@
           padding: 15px;
         }
         .facebook::before {
-          content: "\e00b";
+          content: "\f343";
         }
         .google::before {
           content: "\f34e";

@@ -308,7 +308,7 @@ const Footer = (props) => {
 					</div>
 				</div>
 				{/* <Copyright isPhone={isPhone} classes={classes} /> */}
-				<div className={`mobile-social`}>
+				{/* <div className={`mobile-social`}>
 					{!isPhone ? (<></>) : (
 						<div className={`footer-mobile-social`}>
 							<a href={"https://facebook.com"} target="__blank">
@@ -322,7 +322,7 @@ const Footer = (props) => {
 							</a>
 						</div>
 					)}
-				</div>
+				</div> */}
 			</div>
 		</React.Fragment>
 	);
