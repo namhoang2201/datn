@@ -154,7 +154,7 @@ const NewReview = props => {
         return <Modal id="review-require-login-popup">
             <div className="ck-popup-main">
                 <div className="confirm-ck-col">
-                    <div className="confirm-ck-title">{Identify.__("Please sign in to SimiCart")}</div>
+                    <div className="confirm-ck-title">{Identify.__("Please sign in my shop")}</div>
                     <div className="confirm-ck-desc">{Identify.__("Lorem Ipsum is simply dummy text of the printing and typesetting industry.")}</div>
                     <form className="form-ck-popup-signin" onSubmit={handleSignIn}>
                         <div className="form-control-pl">
