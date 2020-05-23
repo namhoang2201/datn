@@ -84,7 +84,7 @@ class LeftMenuContent extends React.Component {
             <React.Fragment>
                 <div className="left-cats-menu">
                     {isSignedIn ? <div className="scan-go">
-                        <button className="item" onClick={() => this.onOpenModal()}>
+                        <button className="item">
                             <span></span>
                             <span className="username">{this.props.currentUser ? this.props.currentUser.firstname + ' ' + this.props.currentUser.lastname : ''}</span>
                         </button>
