@@ -171,6 +171,7 @@ class LeftMenuContent extends React.Component {
                     simiAddToCart(this.addToCartCallBack, params)
                 } else {
                     // go to product detail page if product not simple
+                    showToastMessage('You need choose options before add product to cart !')
                     const product_url = `/${data.product.url_key}${productUrlSuffix()}`
                     smoothScrollToView($('#root'));
                     this.props.history.push(product_url)
