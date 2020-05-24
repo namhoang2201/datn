@@ -19,24 +19,24 @@ class RewardPoint extends \Simi\Simiconnector\Helper\Data
         $this->_getCart()->getQuote()->getShippingAddress()->setCollectShippingRates(true);
 
         $balance_point = $this->simiObjectManager->get('Magento\Customer\Model\Session')->getCustomer()->getRewardPoint();
-        $grandTotal = $this->_getCart()->getQuote()->getShippingAddress()->getGrandTotal();
+        $subTotal = $this->_getCart()->getQuote()->getShippingAddress()->getSubtotal();
         // calculate amount discount
         $amount_discount_by_1_point = $this->simiObjectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')
             ->getValue('rewardpoint/general/amount_spend');
         $maxDiscount = floatval($amount_discount_by_1_point) * $spendPoint;
         $quote = $this->_getCart()->getQuote();
         $useAllPoint = false;
-        if ($maxDiscount <= $grandTotal) {
+        if ($maxDiscount <= $subTotal) {
             // case: use all point
             $quote->setNpPointUsing($spendPoint);
             $useAllPoint = true;
             $quote->save();
         } else {
             // case: use a mount point < blance point
-            // find max_point < spendPoint and max_point * amount_discount_by_1_point > grandTotal
+            // find max_point < spendPoint and max_point * amount_discount_by_1_point > subTotal
             $max_point = 0;
             for ($i = 0; $i < $spendPoint; $i++) {
-                if (floatval($amount_discount_by_1_point) * $i > $grandTotal) {
+                if (floatval($amount_discount_by_1_point) * $i >= $subTotal) {
                     $max_point = $i;
                     break;
                 }

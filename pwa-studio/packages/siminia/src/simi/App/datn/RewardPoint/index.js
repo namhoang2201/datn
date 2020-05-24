@@ -12,6 +12,7 @@ class RewardPoint extends React.Component {
     constructor(props) {
         super(props)
         this.state = { point_spend: props.pointSpend };
+        this.firstGrandTotal = this.props.cart.totals.grand_total;
     }
 
     spendPoint = () => {
@@ -37,7 +38,17 @@ class RewardPoint extends React.Component {
     }
 
     render() {
-        // console.log(this.props)
+        let maxPoint = 0;
+        if (this.props.balancePoint * this.props.discount_by_1_point <= this.props.cart.totals.subtotal) {
+            maxPoint = this.props.balancePoint;
+        } else {
+            for (let i = 0; i < this.props.balancePoint; i++) {
+                if (i * this.props.discount_by_1_point >= this.props.cart.totals.subtotal) {
+                    maxPoint = i;
+                    break;
+                }
+            }
+        }
         return (
             <div className="nam-rewardpoint">
                 <div className="wrap">
@@ -75,7 +86,7 @@ class RewardPoint extends React.Component {
                     </div>
                     <div className="area-apply-point">
                         <InputRange
-                            maxValue={this.props.balancePoint}
+                            maxValue={maxPoint}
                             minValue={0}
                             value={this.state.point_spend}
                             onChange={point_spend => this.setState({ point_spend })} />

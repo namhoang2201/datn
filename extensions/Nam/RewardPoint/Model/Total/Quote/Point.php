@@ -45,7 +45,11 @@ class Point extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         $discount = $this->_priceCurrency->convert($baseDiscount);
         $total->addTotalAmount('nam_rewardpoint_discount', -$discount);
         $total->addBaseTotalAmount('nam_rewardpoint_discount', -$baseDiscount);
-        $total->setBaseGrandTotal($total->getBaseGrandTotal() - $baseDiscount);
+        if($total->getBaseGrandTotal() - $baseDiscount <= 0){
+            $total->setBaseGrandTotal(0);
+        }else{
+            $total->setBaseGrandTotal($total->getBaseGrandTotal() - $baseDiscount);
+        }
         $quote->setCustomDiscount(-$discount);
         return $this;
     }
