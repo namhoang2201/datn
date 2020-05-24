@@ -5,6 +5,8 @@ namespace Simi\Simiconnector\Model\Api;
 class Transactions extends \Simi\Simiconnector\Model\Api\Apiabstract
 {
 
+    public $DEFAULT_ORDER = 'transaction_id';
+
     public function setBuilderQuery()
     {
         $data = $this->getData();
