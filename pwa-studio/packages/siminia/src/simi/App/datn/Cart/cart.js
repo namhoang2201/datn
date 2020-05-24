@@ -212,6 +212,7 @@ class Cart extends Component {
         let balancePoint = 0
         let pointSpend = 0
         let pointEarn = 0
+        let discount_by_1_point = 0
         if(cart && cart.totals && cart.totals.balance_rewardpoint){
             balancePoint = cart.totals.balance_rewardpoint
         }
@@ -221,13 +222,17 @@ class Cart extends Component {
         if(cart && cart.totals && cart.totals.np_point_will_earn){
             pointEarn = cart.totals.np_point_will_earn
         }
+        if(cart && cart.totals && cart.totals.discount_by_1_point){
+            discount_by_1_point = cart.totals.discount_by_1_point
+        }
         const childCPProps = {
             cart,
             toggleMessages,
             getCartDetails,
             balancePoint,
             pointSpend,
-            pointEarn
+            pointEarn,
+            discount_by_1_point
         }
         return <div className={`nam-reward-point`}><RewardPoint {...childCPProps} /></div>
     }

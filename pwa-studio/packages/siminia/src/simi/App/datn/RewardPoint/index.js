@@ -5,6 +5,7 @@ import Identify from 'src/simi/Helper/Identify';
 import { spendPoint } from 'src/simi/Model/Cart';
 import { showFogLoading, hideFogLoading } from 'src/simi/BaseComponents/Loading/GlobalLoading';
 import { showToastSuccess } from 'src/simi/Helper/MessageSuccess';
+import { formatPrice } from 'src/simi/Helper/Pricing';
 require('./index.scss')
 
 class RewardPoint extends React.Component {
@@ -53,6 +54,14 @@ class RewardPoint extends React.Component {
                     </div>
                     <div className="value plus">
                         + {this.props.pointEarn} {this.props.pointEarn < 2 ? 'Point' : 'Points'}
+                    </div>
+                </div>
+                <div className="wrap">
+                    <div className="title">
+                        RewardPoint will discount:
+                    </div>
+                    <div className="value device">
+                        - {formatPrice(parseFloat(this.props.discount_by_1_point*this.state.point_spend).toFixed(2))}
                     </div>
                 </div>
                 <div className="wrap-special">
