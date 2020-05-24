@@ -56,14 +56,6 @@ class RewardPoint extends React.Component {
                         + {this.props.pointEarn} {this.props.pointEarn < 2 ? 'Point' : 'Points'}
                     </div>
                 </div>
-                <div className="wrap">
-                    <div className="title">
-                        RewardPoint will discount:
-                    </div>
-                    <div className="value device">
-                        - {formatPrice(parseFloat(this.props.discount_by_1_point*this.state.point_spend).toFixed(2))}
-                    </div>
-                </div>
                 <div className="wrap-special">
                     <div className="wrap">
                         <div className="title">
@@ -71,6 +63,14 @@ class RewardPoint extends React.Component {
                     </div>
                         <div className="value device">
                             - {this.state.point_spend} {this.state.point_spend < 2 ? 'Point' : 'Points'}
+                        </div>
+                    </div>
+                    <div className="wrap">
+                        <div className="title">
+                            RewardPoint will discount:
+                    </div>
+                        <div className="value device">
+                            - {formatPrice(parseFloat((this.props.discount_by_1_point * this.state.point_spend).toFixed(2)))}
                         </div>
                     </div>
                     <div className="area-apply-point">
