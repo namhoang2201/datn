@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Identify from 'src/simi/Helper/Identify'
-import { formatPrice } from 'src/simi/Helper/Pricing';
 import PaginationTable from './PaginationTable';
 import { Link } from 'react-router-dom';
 import defaultClasses from './style.scss'
@@ -49,28 +48,28 @@ const TransactionList = props => {
         return (
             <tr key={index}>
                 <td data-title={Identify.__("Transaction ID")}>
-                    {Identify.__(item.transaction_id)}
+                    {item.transaction_id}
                 </td>
                 <td data-title={Identify.__("Increment ID")}>
-                    {Identify.__(item.np_increment_id)}
+                    {item.np_increment_id}
                 </td>
                 <td data-title={Identify.__("Point before transaction")}>
-                    {Identify.__(item.point_before_transaction)}
+                    {item.point_before_transaction}
                 </td>
                 <td data-title={Identify.__("Point earned")}>
-                    + {Identify.__(item.point_earn)}
+                    + {item.point_earn}
                 </td>
                 <td data-title={Identify.__("Point spent")}>
-                    - {Identify.__(item.point_spend)}
+                    - {item.point_spend}
                 </td>
                 <td data-title={Identify.__("Grand total before")}>
-                    {Identify.__(formatPrice(item.total_before))}
+                    {item.total_before}
                 </td>
                 <td data-title={Identify.__("Discount amount")}>
-                    {Identify.__(formatPrice(item.discount_amount))}
+                    {item.discount_amount}
                 </td>
                 <td data-title={Identify.__("Final grand total")}>
-                    {Identify.__(formatPrice(item.total_after_discount))}
+                    {item.total_after_discount}
                 </td>
                 <td
                     data-title={Identify.__("Created on")}
