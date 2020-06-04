@@ -311,11 +311,16 @@ export const submitShippingMethod = payload =>
             };
         }
 
-        let shipping_addressModify = shipping_address;
+        const shipping_addressModify = shipping_address;
         if (shipping_address.region_code && !shipping_address.region) {
             shipping_addressModify['region'] = shipping_address.region_code;
             delete shipping_addressModify.region_code;
         }
+        if (shipping_addressModify.hasOwnProperty('id'))
+            delete shipping_addressModify['id']
+        const billing_addressModify = billing_address;
+        if (billing_addressModify.hasOwnProperty('id'))
+            delete billing_addressModify['id']
 
         try{
             // POST to shipping-information to submit the shipping address and shipping method.
