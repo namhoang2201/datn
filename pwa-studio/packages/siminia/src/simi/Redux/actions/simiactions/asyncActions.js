@@ -97,6 +97,10 @@ export const submitShippingAddress = payload =>
             delete address.region_code;
         }
 
+        if (address && address.region && !address.region_code) {
+            address['region_code'] = address.region;
+        }
+
         const response = await request(endpoint, {
             method: 'POST',
             body: JSON.stringify({address})
