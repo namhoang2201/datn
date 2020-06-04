@@ -97,12 +97,13 @@ export const submitShippingAddress = payload =>
             delete address.region_code;
         }
 
-        if (address && address.region && !address.region_code) {
-            address['region_code'] = address.region;
-        }
-
-        if (address && address.hasOwnProperty('id') && !address.id) {
-            delete address.id;
+        if (user.isSignedIn) {
+            if (address && address.region && !address.region_code) {
+                        address['region_code'] = address.region;
+            }
+            if (address && address.hasOwnProperty('id') && !address.id) {
+                    delete address.id;
+            }
         }
 
         const response = await request(endpoint, {
@@ -142,6 +143,14 @@ export const getShippingMethods = () => {
                     s_address['region'] = checkout.shippingAddress.region_code;
                     delete s_address.region_code;
                 }
+                if (user.isSignedIn) {
+                   if (checkout.shippingAddress.region && !checkout.shippingAddress.region_code) {
+                       s_address['region_code'] = checkout.shippingAddress.region;
+                   }
+                   if (checkout.shippingAddress.hasOwnProperty('id') && !checkout.shippingAddress.id) {
+                       delete checkout.shippingAddress.id;
+                   }
+               }
             }
 
             const response = await request(endpoint, {
@@ -388,6 +397,8 @@ export const submitOrder = () =>
             billing_address['region'] = billing_address.region_code;
             delete billing_address.region_code;
         }
+        if (billing_address['id'])
+          delete billing_address['id']
 
         try {
 
