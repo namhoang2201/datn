@@ -101,6 +101,10 @@ export const submitShippingAddress = payload =>
             address['region_code'] = address.region;
         }
 
+        if (address && address.hasOwnProperty('id') && !address.id) {
+            delete address.id;
+        }
+
         const response = await request(endpoint, {
             method: 'POST',
             body: JSON.stringify({address})
