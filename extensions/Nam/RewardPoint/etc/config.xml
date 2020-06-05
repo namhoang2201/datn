@@ -9,6 +9,7 @@
     <default>
         <rewardpoint>
             <general>
+                <enable_rewardpoint>0</enable_rewardpoint>
                 <amount_earn>0.00</amount_earn>
                 <amount_spend>0.00</amount_spend>
             </general>

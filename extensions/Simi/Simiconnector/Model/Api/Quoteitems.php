@@ -60,7 +60,8 @@ class Quoteitems extends Apiabstract
             $this->RETURN_MESSAGE = $this->simiObjectManager
                     ->get('Simi\Simiconnector\Helper\Coupon')->setCoupon($parameters['coupon_code']);
         }
-        if (isset($parameters['spend_point'])) {
+        $enableNamRewardPoint = $this->simiObjectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('rewardpoint/general/enable_rewardpoint');
+        if (isset($parameters['spend_point']) && $enableNamRewardPoint) {
             $this->RETURN_MESSAGE = $this->simiObjectManager
                     ->get('Nam\RewardPoint\Helper\RewardPoint')->spendPoint($parameters['spend_point']);
         }
@@ -198,7 +199,7 @@ class Quoteitems extends Apiabstract
         $data       = $this->getData();
         $parameters = $data['params'];
         $page       = 1;
-        
+
         $limit = self::DEFAULT_LIMIT;
         $offset = 0;
         $this->setPageSize($parameters, $limit, $offset, $collection, $page);
@@ -277,7 +278,7 @@ class Quoteitems extends Apiabstract
         );
         return $this->detail_list;
     }
-    
+
     private function setPageSize($parameters, &$limit, &$offset, $collection, &$page)
     {
         if (isset($parameters[self::PAGE]) && $parameters[self::PAGE]) {
@@ -330,21 +331,21 @@ class Quoteitems extends Apiabstract
     {
         $result          = parent::getList($info, $all_ids, $total, $page_size, $from);
         $result['total'] = $this->simiObjectManager->get('Simi\Simiconnector\Helper\Total')->getTotal();
-        
+
         if($this->estimateAddress && $this->estimateShipping) {
             $result['estimate_shipping'] = [
                 'address' => $this->estimateAddress,
                 'shipping_method' => $this->estimateShipping
             ];
         }
-        
+
         if ($this->RETURN_MESSAGE) {
             $result['message'] = [$this->RETURN_MESSAGE];
         }
         $session              = $this->_getSession();
         $result['cart_total'] = $this->_getCart()->getItemsCount();
         $result['quote_id']   = $session->getQuoteId();
-        
+
         $customerSession = $this->simiObjectManager->get('Magento\Customer\Model\Session');
         $result['customer_email'] = $customerSession->isLoggedIn()?
             $customerSession->getCustomer()->getEmail():
@@ -352,17 +353,17 @@ class Quoteitems extends Apiabstract
 
         return $result;
     }
-    
+
     public function loadProductWithId($id)
     {
         $categoryModel    = $this->simiObjectManager
                 ->create('Magento\Catalog\Model\Product')->load($id);
         return $categoryModel;
     }
-    
+
     protected function estimateShipping() {
         $quote              = $this->_getQuote();
-        
+
         $customerSession = $this->simiObjectManager->get('Magento\Customer\Model\Session');
         if ($quote->getItemsCount() > 0 && $customerSession->isLoggedIn()) {
             $defaultShippingId = $customerSession->getCustomer()->getDefaultShipping();

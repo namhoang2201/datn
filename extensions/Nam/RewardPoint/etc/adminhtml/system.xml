@@ -11,11 +11,21 @@
             <resource>Nam_Nam::config_nam</resource>
             <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>General Configurations</label>
-                <field id="amount_earn" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Amount money to earn 1 point</label>
+                <field id="enable_rewardpoint" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Nam RewardPoint ?</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="amount_spend" translate="label" type="text" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="amount_earn" translate="label" type="text" sortOrder="19" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Amount money to earn 1 point</label>
+                    <depends>
+                        <field id="*/*/enable_rewardpoint">1</field>
+                    </depends>
+                </field>
+                <field id="amount_spend" translate="label" type="text" sortOrder="29" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Amount money discount when spend 1 point</label>
+                    <depends>
+                        <field id="*/*/enable_rewardpoint">1</field>
+                    </depends>
                 </field>
             </group>
         </section>

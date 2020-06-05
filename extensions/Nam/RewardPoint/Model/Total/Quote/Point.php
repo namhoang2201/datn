@@ -32,25 +32,29 @@ class Point extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     public function collect(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment, \Magento\Quote\Model\Quote\Address\Total $total)
     {
         parent::collect($quote, $shippingAssignment, $total);
-//        $baseDiscount = 5;
-        // get point_using ( customer spend point ) from quote table
-        $point_using = $quote->getNpPointUsing();
-        // get amount discount by 1 point
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $discount_by_1_point = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')
-            ->getValue('rewardpoint/general/amount_spend');
-        // calculate base_discount
-        $baseDiscount = $point_using * floatval($discount_by_1_point);
+        $enableNamRewardPoint = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('rewardpoint/general/enable_rewardpoint');
+        if($enableNamRewardPoint){
+            //        $baseDiscount = 5;
+            // get point_using ( customer spend point ) from quote table
+            $point_using = $quote->getNpPointUsing();
+            // get amount discount by 1 point
+            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+            $discount_by_1_point = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')
+                ->getValue('rewardpoint/general/amount_spend');
+            // calculate base_discount
+            $baseDiscount = $point_using * floatval($discount_by_1_point);
 
-        $discount = $this->_priceCurrency->convert($baseDiscount);
-        $total->addTotalAmount('nam_rewardpoint_discount', -$discount);
-        $total->addBaseTotalAmount('nam_rewardpoint_discount', -$baseDiscount);
-        if($total->getBaseGrandTotal() - $baseDiscount <= 0){
-            $total->setBaseGrandTotal(0);
-        }else{
-            $total->setBaseGrandTotal($total->getBaseGrandTotal() - $baseDiscount);
+            $discount = $this->_priceCurrency->convert($baseDiscount);
+            $total->addTotalAmount('nam_rewardpoint_discount', -$discount);
+            $total->addBaseTotalAmount('nam_rewardpoint_discount', -$baseDiscount);
+            if($total->getBaseGrandTotal() - $baseDiscount <= 0){
+                $total->setBaseGrandTotal(0);
+            }else{
+                $total->setBaseGrandTotal($total->getBaseGrandTotal() - $baseDiscount);
+            }
+            $quote->setCustomDiscount(-$discount);
         }
-        $quote->setCustomDiscount(-$discount);
         return $this;
     }
 

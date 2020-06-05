@@ -118,28 +118,32 @@ class NamSystemRestModify implements ObserverInterface
             if ($isTotal && $quoteId) {
                 $contentArray['simi_quote_id'] = $quoteId;
 
-                // get balance point of current customer show at cart detail
                 $simiObjectManager = \Magento\Framework\App\ObjectManager::getInstance();
-                $balance_point = $simiObjectManager->get('Magento\Customer\Model\Session')->getCustomer()->getData('reward_point');
-                $contentArray['balance_rewardpoint'] = intval($balance_point);
-                // get point using from quote table to apply to cart
-                $quoteObject = $this->simiObjectManager->get('Magento\Quote\Model\Quote')
-                    ->load($quoteId);
-                $contentArray['np_point_using'] = intval($quoteObject->getData('np_point_using'));
-                // calculate point will earn but not save to quote
-                $grandTotal = $quoteObject->getShippingAddress()->getGrandTotal();
-                $amount_earn_1_point = $this->simiObjectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')
-                    ->getValue('rewardpoint/general/amount_earn');
-                $numberPointWillEarn = 0;
-                if($amount_earn_1_point > 0){
-                    $numberPointWillEarn = floor($grandTotal / $amount_earn_1_point);
+                $enableNamRewardPoint = $simiObjectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('rewardpoint/general/enable_rewardpoint');
+                $contentArray['enable_rewardpoint'] = $enableNamRewardPoint;
+                if($enableNamRewardPoint){
+                    // get balance point of current customer show at cart detail
+                    $balance_point = $simiObjectManager->get('Magento\Customer\Model\Session')->getCustomer()->getData('reward_point');
+                    $contentArray['balance_rewardpoint'] = intval($balance_point);
+                    // get point using from quote table to apply to cart
+                    $quoteObject = $this->simiObjectManager->get('Magento\Quote\Model\Quote')
+                        ->load($quoteId);
+                    $contentArray['np_point_using'] = intval($quoteObject->getData('np_point_using'));
+                    // calculate point will earn but not save to quote
+                    $grandTotal = $quoteObject->getShippingAddress()->getGrandTotal();
+                    $amount_earn_1_point = $this->simiObjectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')
+                        ->getValue('rewardpoint/general/amount_earn');
+                    $numberPointWillEarn = 0;
+                    if($amount_earn_1_point > 0){
+                        $numberPointWillEarn = floor($grandTotal / $amount_earn_1_point);
+                    }
+                    $quoteObject->setNpPointWillEarn($numberPointWillEarn);
+                    $quoteObject->save();
+                    $contentArray['np_point_will_earn'] = $numberPointWillEarn;
+                    $discount_by_1_point = $simiObjectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')
+                        ->getValue('rewardpoint/general/amount_spend');
+                    $contentArray['discount_by_1_point'] = floatval($discount_by_1_point);
                 }
-                $quoteObject->setNpPointWillEarn($numberPointWillEarn);
-                $quoteObject->save();
-                $contentArray['np_point_will_earn'] = $numberPointWillEarn;
-                $discount_by_1_point = $simiObjectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')
-                ->getValue('rewardpoint/general/amount_spend');
-                $contentArray['discount_by_1_point'] = floatval($discount_by_1_point);
 
                 try {
                     $quoteModel = $this->simiObjectManager->create('Magento\Quote\Model\Quote')

@@ -240,6 +240,8 @@ class Cart extends Component {
     get cartInner() {
         const { productList, props, total, checkoutButton, couponView, namRewardPoint } = this;
         const { cart: { isLoading }, isCartEmpty,cart } = props;
+        // varialbe check if Nam Reward Point extension is enabled or not
+        const enableRewardPoint = cart.totals.enable_rewardpoint === '1';
 
         if (isCartEmpty || !cart.details || !parseInt(cart.details.items_count)) {
             if (isLoading)
@@ -279,7 +281,7 @@ class Cart extends Component {
                 </div>
                 <div className={`body ${Identify.isRtl() ? 'body-cart-rtl' : ''}`}>{productList}</div>
                 {couponView}
-                {this.props.isSignedIn&&namRewardPoint}
+                {this.props.isSignedIn && enableRewardPoint && namRewardPoint}
                 {total}
                 {checkoutButton}
             </Fragment>
