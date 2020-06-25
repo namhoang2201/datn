@@ -6,4 +6,4 @@ Tính năng chính:
 + Scan and Go
 + Reward Point
 
-Dòng code cuối cùng: 14h42 19/5/2020 Kỷ niệm 130 năm ngày sinh Bác Hồ
+Ngày hoàn thành: 14h42 19/5/2020 Kỷ niệm 130 năm ngày sinh Bác Hồ
